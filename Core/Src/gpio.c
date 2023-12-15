@@ -58,7 +58,7 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, FUN_CONFIRM_LED_Pin|RELAY_A_Pin|RELAY_B_Pin|FAN_LED_Pin
                           |TAPE_LED_Pin|KILL_LED_Pin|KEEP_TEMP_LED_Pin|ADD_DEC_LED_Pin
-                          |RELAY_C_Pin, GPIO_PIN_RESET);
+                          |RELAY_C_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pins : PBPin PBPin */
   GPIO_InitStruct.Pin = SCL_Pin|SDA_Pin;
