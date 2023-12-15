@@ -9,7 +9,7 @@ static void Run_Display_Handler(uint8_t temp_value);
 
 
 uint8_t relay_id_led,keep_temp_flag ;
-uint8_t fun_key_counter,cancel_fun_key_counter;
+uint8_t fun_key_counter;
 
 /*
 *********************************************************************************************************
@@ -51,7 +51,7 @@ void bsp_Idle(void)
 */
 void Key_Handler(uint8_t key_value)
 {
-  static uint8_t set_temp_flag,sort_key=0xff;
+  static uint8_t set_temp_flag;
   switch(key_value){
 
 
@@ -75,7 +75,7 @@ void Key_Handler(uint8_t key_value)
                KEY_FUN_CONFIRM_LED_ON() ;  
 		       relay_id_led = relay_fan_led_on;
 		       tpd_t.gTimer_select_fun=0;
-			   fun_key_counter++;
+			   fun_key_counter=1;
 			   
 
 		    break;
@@ -84,7 +84,7 @@ void Key_Handler(uint8_t key_value)
 				  KEY_FUN_CONFIRM_LED_ON() ; 
 				relay_id_led = relay_tape_led_on;
 				tpd_t.gTimer_select_fun=0;
-				fun_key_counter++;
+				 fun_key_counter=1;
 
 		    break;
 
@@ -92,7 +92,7 @@ void Key_Handler(uint8_t key_value)
 				  KEY_FUN_CONFIRM_LED_ON() ;  
 				relay_id_led = relay_kill_led_on;
 				tpd_t.gTimer_select_fun=0;
-				fun_key_counter++;
+				 fun_key_counter=1;
 				
 		    break;
 
@@ -101,9 +101,8 @@ void Key_Handler(uint8_t key_value)
 			  KEY_FUN_CONFIRM_LED_ON() ;  
 			relay_id_led = relay_keep_temp_led_on;
 			tpd_t.gTimer_select_fun=0;
-			 fun_key_counter++;
+			 fun_key_counter=1;
 			 
-			//pro_t.key_fun=0;
 		    break;
 
 			default:
@@ -117,8 +116,7 @@ void Key_Handler(uint8_t key_value)
 
 	 case confirm_short_key: // confirm key
 
-	  if(sort_key != fun_key_counter){
-	  	 sort_key = fun_key_counter;
+	  if(fun_key_counter ==1){
 	   if(relay_id_led == relay_keep_temp_led_on &&  keep_temp_flag ==0){ //"+" tempeature value 
 
 	         
@@ -127,7 +125,7 @@ void Key_Handler(uint8_t key_value)
 				 tpd_t.gTimer_select_fun =10;
 			     pro_t.set_keep_temp = 0;
 				 pro_t.key_short_confirm_flag =1;
-				 cancel_fun_key_counter=1;
+			
 				 KEY_FUN_CONFIRM_LED_ON() ;  
 
 			 }
@@ -136,8 +134,8 @@ void Key_Handler(uint8_t key_value)
 			  keep_temp_flag =1;
 			  tpd_t.gTimer_select_fun=0;
 	          ADD_DEC_LED_ON();
-			  fun_key_counter++;
-			   cancel_fun_key_counter=0;
+		
+			  
 
             }
 
@@ -148,8 +146,8 @@ void Key_Handler(uint8_t key_value)
 			  tpd_t.digital_numbers--; //scope : 16~30度
 			  if(tpd_t.digital_numbers <16) tpd_t.digital_numbers=16;
 			  Run_Keep_Heat_Setup_Digital_Numbers();
-			  fun_key_counter++;
-			   cancel_fun_key_counter=0;
+			
+			   
 
 		}
 		else{
@@ -170,7 +168,7 @@ void Key_Handler(uint8_t key_value)
 			ADD_DEC_LED_OFF();
 		
 		   pro_t.set_keep_temp = 1;
-		   fun_key_counter--;
+		
 		   pro_t.set_keep_tmep_value = tpd_t.digital_numbers;
 			   if(pro_t.set_keep_tmep_value >= tpd_t.temperature_value ){
                    tpd_t.relay_keep_temp_flag =1;
@@ -242,6 +240,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
        }
        else{
 	   	  tpd_t.gTimer_select_fun =10;
+		  fun_key_counter=0;
 
 	      
 		  if(pro_t.key_short_confirm_flag ==1){
@@ -329,6 +328,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 		else{
 
              tpd_t.gTimer_select_fun =10;
+			  fun_key_counter=0;
 	
              if(pro_t.key_short_confirm_flag ==1){
                  pro_t.key_short_confirm_flag =0;
@@ -434,6 +434,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 		}
 		else{
 			 tpd_t.gTimer_select_fun =10;
+			  fun_key_counter=0;
 			 
 			if(pro_t.key_short_confirm_flag ==1){
 				pro_t.key_short_confirm_flag =0;
@@ -544,17 +545,12 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
         else{
 			tpd_t.gTimer_select_fun=20;
             keep_temp_flag =0;
+		    fun_key_counter=0;
 		    pro_t.key_short_confirm_flag=0;
 		    ADD_DEC_LED_OFF();
-			if(set_keep_temp_counter !=fun_key_counter &&  cancel_fun_key_counter==0){
-			   if(pro_t.set_keep_temp ==0)fun_key_counter --;
-			   set_keep_temp_counter =fun_key_counter;
+			
 
-			}
-
-		
-       
-			if(tpd_t.relay_keep_temp_flag ==1){
+		   if(tpd_t.relay_keep_temp_flag ==1){
 				KEEP_HEAT_LED_ON();
 				RELAY_KEEP_TEMP_SetHigh();
 				}
