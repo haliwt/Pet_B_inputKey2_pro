@@ -96,6 +96,7 @@ int main(void)
 
   /* USER CODE END 2 */
    HAL_TIM_Base_Start_IT(&htim14);//HAL_TIM_Base_Start(&htim3);
+   Feed_Dog();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)

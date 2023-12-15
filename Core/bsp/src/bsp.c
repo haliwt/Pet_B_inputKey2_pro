@@ -123,6 +123,7 @@ void Key_Handler(uint8_t key_value)
 				 tpd_t.gTimer_select_fun =10;
 			     pro_t.set_keep_temp = 0;
 				 pro_t.key_short_confirm_flag =1;
+				 KEY_FUN_CONFIRM_LED_ON() ;  
 
 			 }
              else{
@@ -130,6 +131,7 @@ void Key_Handler(uint8_t key_value)
 			  keep_temp_flag =1;
 			  tpd_t.gTimer_select_fun=0;
 	          ADD_DEC_LED_ON();
+			  
 
             }
 
@@ -166,12 +168,16 @@ void Key_Handler(uint8_t key_value)
                    tpd_t.relay_keep_temp_flag =1;
 			       KEEP_HEAT_LED_ON();
 	               RELAY_KEEP_TEMP_SetHigh();
+				   KEY_FUN_CONFIRM_LED_ON() ;  
+				    ADD_DEC_LED_OFF();
 
 			  }
               else{
                   tpd_t.relay_keep_temp_flag =0;
 			      KEEP_HEAT_LED_OFF();
 	              RELAY_KEEP_TEMP_SetLow();
+				  KEY_FUN_CONFIRM_LED_ON() ;
+				   ADD_DEC_LED_OFF();
 
               }
 		}
