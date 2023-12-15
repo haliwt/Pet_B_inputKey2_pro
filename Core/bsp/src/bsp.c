@@ -10,7 +10,7 @@ static void Run_Display_Handler(uint8_t temp_value);
 
 uint8_t relay_id_led ;
 uint8_t fun_key_counter,display_keep_temp_value;
-
+uint8_t  disp_keep_temp_value ;
 /*
 *********************************************************************************************************
 *	函 数 名: bsp_Idle
@@ -160,7 +160,7 @@ void Key_Handler(uint8_t key_value)
 
           if( pro_t.set_keep_temp == 1){
 		  	  pro_t.gTimer_pro_disp_temp=0;
-		      pro_t.keep_temp_flag =2;
+		      disp_keep_temp_value =1;
 
           }
 
@@ -218,14 +218,27 @@ void Main_Process(void)
 {
    
 	 Relay_Fun(relay_id_led);
-    
 
-	if(pro_t.gTimer_pro_disp > 9){ //100ms
+	if(disp_keep_temp_value ==1){
+    
+		if(pro_t.gTimer_pro_disp_temp < 4){
+		    Run_Keep_Heat_Setup_Digital_Numbers(pro_t.set_keep_tmep_value);
+
+	    }
+		else{
+		   disp_keep_temp_value =0;
+		   tpd_t.gTimer_display =8;
+		}
+
+	}
+    else{
+	if(pro_t.gTimer_pro_disp > 19){ //100ms
 	    pro_t.gTimer_pro_disp =0;
 		Run_Display_Handler(pro_t.keep_temp_flag);
 		
 
 	}
+    }
 
 }
 
@@ -659,7 +672,7 @@ static void Run_Display_Handler(uint8_t temp_value)
 
 	 case 0:
 		
-	if(tpd_t.gTimer_read_adc >12 || tpd_t.power_on_times < 50){
+	if(tpd_t.gTimer_read_adc >12 ){
 	  tpd_t.gTimer_read_adc =0;
       if(tpd_t.power_on_times < 10){
            Read_NTC_Temperature_Power_On();
@@ -668,7 +681,7 @@ static void Run_Display_Handler(uint8_t temp_value)
 	      Read_NTC_Temperature_Value_Handler();
     }
 	
-	if(tpd_t.gTimer_display > 6 || tpd_t.power_on_times < 50){
+	if(tpd_t.gTimer_display > 20){
       tpd_t.gTimer_display=0; 
 	  tpd_t.power_on_times++;
         
@@ -701,17 +714,7 @@ static void Run_Display_Handler(uint8_t temp_value)
 
 	break;
 
-	case 2:
-		if(pro_t.gTimer_pro_disp_temp < 4){
-		    Run_Keep_Heat_Setup_Digital_Numbers(pro_t.set_keep_tmep_value);
-
-	    }
-		else{
-			pro_t.keep_temp_flag=0;
-			tpd_t.gTimer_display =8;
-		}
-
-	break;
+	
    }
 
 }
