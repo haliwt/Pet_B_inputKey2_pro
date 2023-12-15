@@ -200,7 +200,7 @@ uint8_t KEY_Scan(void)
 		{
 			if(key_t.read == _KEY_ALL_OFF)
 			{
-				if(++key_t.off_time>30)//50 //100
+				if(++key_t.off_time>50)//50 //100
 				{
 					key_t.state   = start;
                    

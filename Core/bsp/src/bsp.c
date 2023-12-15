@@ -121,10 +121,12 @@ void Key_Handler(uint8_t key_value)
              if(tpd_t.relay_keep_temp_flag ==1){
                  tpd_t.relay_keep_temp_flag =0;
 				 tpd_t.gTimer_select_fun =10;
+			     pro_t.set_keep_temp = 0;
+				 pro_t.key_short_confirm_flag =1;
 
 			 }
              else{
-			  
+			  tpd_t.relay_keep_temp_flag =1;
 			  keep_temp_flag =1;
 			  tpd_t.gTimer_select_fun=0;
 	          ADD_DEC_LED_ON();
@@ -158,12 +160,8 @@ void Key_Handler(uint8_t key_value)
 		
 			ADD_DEC_LED_OFF();
 		
-			
-		    if(tpd_t.relay_keep_temp_flag ==0){
-				tpd_t.relay_keep_temp_flag =1;
-				
-			   pro_t.set_keep_temp = 1;
-		       pro_t.set_keep_tmep_value = tpd_t.digital_numbers;
+		   pro_t.set_keep_temp = 1;
+		   pro_t.set_keep_tmep_value = tpd_t.digital_numbers;
 			   if(pro_t.set_keep_tmep_value >= tpd_t.temperature_value ){
                    tpd_t.relay_keep_temp_flag =1;
 			       KEEP_HEAT_LED_ON();
@@ -176,19 +174,7 @@ void Key_Handler(uint8_t key_value)
 	              RELAY_KEEP_TEMP_SetLow();
 
               }
-			}
-			else{
-				 pro_t.set_keep_temp = 0;
-
-				tpd_t.relay_keep_temp_flag =0;
-			    KEEP_HEAT_LED_OFF();
-	            RELAY_KEEP_TEMP_SetLow();
-
-
-			}
-		   
-
-	   }
+		}
 
 	 break;
   
@@ -528,7 +514,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 	case relay_keep_temp_led_on: //keep temperature be set up value 16~30 degree
 
 	    //KEEP HEAT Display of LED 
-       if(tpd_t.gTimer_select_fun < 12 && pro_t.key_long_confirm_flag ==0){
+       if(tpd_t.gTimer_select_fun < 6 && pro_t.key_short_confirm_flag ==0){
 
 	       if(keep_temp_flag ==0){
 		   	
@@ -544,13 +530,14 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
         else{
 			tpd_t.gTimer_select_fun=20;
             keep_temp_flag =0;
+		    pro_t.key_short_confirm_flag=0;
 		    ADD_DEC_LED_OFF();
        
 			if(tpd_t.relay_keep_temp_flag ==1){
 				KEEP_HEAT_LED_ON();
 				RELAY_KEEP_TEMP_SetHigh();
 				}
-				else{
+				else if(tpd_t.relay_keep_temp_flag ==0){
 				KEEP_HEAT_LED_OFF();
 				RELAY_KEEP_TEMP_SetLow();
 
