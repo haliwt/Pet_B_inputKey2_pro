@@ -56,10 +56,12 @@ typedef struct{
    uint8_t key_long_confirm_flag;
    uint8_t set_keep_temp;
    uint8_t set_keep_tmep_value;
+   uint8_t keep_temp_flag;
    
    uint8_t gTimer_pro_feed_dog;
    uint8_t gTimer_pro_key;
    uint8_t gTimer_pro_disp;
+   uint8_t gTimer_pro_disp_temp;
 
 
 }main_prcess_t;

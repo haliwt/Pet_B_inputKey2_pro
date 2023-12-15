@@ -53,7 +53,7 @@ void Run_InputKey_Model(uint8_t keyvalue)
 			  tpd_t.digital_numbers++; //scope : 0~40度
 			  if(tpd_t.digital_numbers>40) tpd_t.digital_numbers=0;
 			   Key_Confirm_Handler(KEEP_HEAT_LED);
-			   Run_Keep_Heat_Setup_Digital_Numbers();
+			   Run_Keep_Heat_Setup_Digital_Numbers(tpd_t.digital_numbers);
 			   tpd_t.run_process_tag= KEY_FUNCTION_ITEM;
 
 		}
@@ -77,7 +77,7 @@ void Run_InputKey_Model(uint8_t keyvalue)
 			   Key_Confirm_Handler(KEEP_HEAT_LED);
 			  tpd_t.digital_numbers--; //scope : 0~40度--; //scope : 0 ~40 degree
 			  if(tpd_t.digital_numbers < 0)  tpd_t.digital_numbers=40; //scope : 0~80度=80;
-			  Run_Keep_Heat_Setup_Digital_Numbers();
+			  Run_Keep_Heat_Setup_Digital_Numbers(tpd_t.digital_numbers);
                tpd_t.run_process_tag= KEY_CONFIRM_ITEM;
 			  
 		}

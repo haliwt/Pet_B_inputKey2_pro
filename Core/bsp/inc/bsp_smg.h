@@ -5,7 +5,7 @@
 
 
 
-void Run_Keep_Heat_Setup_Digital_Numbers(void);
+void Run_Keep_Heat_Setup_Digital_Numbers(uint8_t value);
 
 
 

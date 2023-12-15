@@ -8,8 +8,8 @@ static void Run_Display_Handler(uint8_t temp_value);
 
 
 
-uint8_t relay_id_led,keep_temp_flag ;
-uint8_t fun_key_counter;
+uint8_t relay_id_led ;
+uint8_t fun_key_counter,display_keep_temp_value;
 
 /*
 *********************************************************************************************************
@@ -57,12 +57,13 @@ void Key_Handler(uint8_t key_value)
 
      case fun_key:  //fun key 
 
-         if(keep_temp_flag ==1){
+         if(pro_t.keep_temp_flag ==1){
 		 	
 		 	  tpd_t.gTimer_select_fun=0;
               tpd_t.digital_numbers++; //scope : 16~30度
+              if(tpd_t.digital_numbers <16)tpd_t.digital_numbers =16;
 			  if(tpd_t.digital_numbers>30) tpd_t.digital_numbers=30;
-			  Run_Keep_Heat_Setup_Digital_Numbers();
+			  Run_Keep_Heat_Setup_Digital_Numbers(tpd_t.digital_numbers);
 			  
 
 		 }
@@ -117,7 +118,7 @@ void Key_Handler(uint8_t key_value)
 	 case confirm_short_key: // confirm key
 
 	  if(fun_key_counter ==1){
-	   if(relay_id_led == relay_keep_temp_led_on &&  keep_temp_flag ==0){ //"+" tempeature value 
+	   if(relay_id_led == relay_keep_temp_led_on &&  pro_t.keep_temp_flag ==0){ //"+" tempeature value 
 
 	         
              if(tpd_t.relay_keep_temp_flag ==1){
@@ -131,7 +132,7 @@ void Key_Handler(uint8_t key_value)
 			 }
              else{
 			  tpd_t.relay_keep_temp_flag =1;
-			  keep_temp_flag =1;
+			  pro_t.keep_temp_flag =1;
 			  tpd_t.gTimer_select_fun=0;
 	          ADD_DEC_LED_ON();
 		
@@ -140,12 +141,12 @@ void Key_Handler(uint8_t key_value)
             }
 
 	   }
-	   else if(keep_temp_flag ==1){
+	   else if(pro_t.keep_temp_flag ==1){
 	   
               tpd_t.gTimer_select_fun=0;
 			  tpd_t.digital_numbers--; //scope : 16~30度
 			  if(tpd_t.digital_numbers <16) tpd_t.digital_numbers=16;
-			  Run_Keep_Heat_Setup_Digital_Numbers();
+			  Run_Keep_Heat_Setup_Digital_Numbers(tpd_t.digital_numbers);
 			
 			   
 
@@ -155,15 +156,25 @@ void Key_Handler(uint8_t key_value)
 	    	pro_t.key_short_confirm_flag =1;
 		}
 	  }
+	  else{
+
+          if( pro_t.set_keep_temp == 1){
+		  	  pro_t.gTimer_pro_disp_temp=0;
+		      pro_t.keep_temp_flag =2;
+
+          }
+
+
+	  }
      
 	 break;
 
 	 case confirm_long_key: //confirm long by pressed 
 
-	    if(keep_temp_flag ==1){
+	    if(pro_t.keep_temp_flag ==1){
 
 	        tpd_t.gTimer_select_fun=20;
-			keep_temp_flag =0;
+			pro_t.keep_temp_flag =0;
 		
 			ADD_DEC_LED_OFF();
 		
@@ -211,7 +222,7 @@ void Main_Process(void)
 
 	if(pro_t.gTimer_pro_disp > 9){ //100ms
 	    pro_t.gTimer_pro_disp =0;
-		Run_Display_Handler(keep_temp_flag);
+		Run_Display_Handler(pro_t.keep_temp_flag);
 		
 
 	}
@@ -280,7 +291,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 	  }
       
 
-    if(pro_t.gTimer_pro_key > 1){//20ms
+    if(pro_t.gTimer_pro_key > 2){//30ms
             pro_t.gTimer_pro_key =0;
 		 if(tpd_t.relay_tape_flag ==1){
 		 	 TAPE_LED_ON();
@@ -317,7 +328,9 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 	
 		}
 
-        }
+		 
+
+       }
     break;
 
 	case relay_tape_led_on:
@@ -531,7 +544,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 	    //KEEP HEAT Display of LED 
        if(tpd_t.gTimer_select_fun < 6 && pro_t.key_short_confirm_flag ==0){
 
-	       if(keep_temp_flag ==0){
+	       if(pro_t.keep_temp_flag ==0){
 		   	
 	   	      Keep_Heat_Led_Filcker();
 	       }
@@ -544,7 +557,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
        	}
         else{
 			tpd_t.gTimer_select_fun=20;
-            keep_temp_flag =0;
+            pro_t.keep_temp_flag =0;
 		    fun_key_counter=0;
 		    pro_t.key_short_confirm_flag=0;
 		    ADD_DEC_LED_OFF();
@@ -680,17 +693,23 @@ static void Run_Display_Handler(uint8_t temp_value)
         
     }
 
-	if(first_power_on==0){
-		first_power_on++;
-       KEY_FUN_CONFIRM_LED_ON();
-
-	}
-
     break;
 
 	case 1:
-      Run_Keep_Heat_Setup_Digital_Numbers();
+      Run_Keep_Heat_Setup_Digital_Numbers(tpd_t.digital_numbers);
 			
+
+	break;
+
+	case 2:
+		if(pro_t.gTimer_pro_disp_temp < 4){
+		    Run_Keep_Heat_Setup_Digital_Numbers(pro_t.set_keep_tmep_value);
+
+	    }
+		else{
+			pro_t.keep_temp_flag=0;
+			tpd_t.gTimer_display =8;
+		}
 
 	break;
    }
