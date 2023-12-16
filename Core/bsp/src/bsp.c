@@ -225,9 +225,31 @@ void Main_Process(void)
    
 	 Relay_Fun(relay_id_led);
 
-	if(disp_keep_temp_value ==1 || disp_keep_temp_value ==2){
+
 
 	   switch(disp_keep_temp_value ){
+
+	   case 0:
+	
+		
+			if(tpd_t.gTimer_read_adc >12 ){
+			  tpd_t.gTimer_read_adc =0;
+		     
+			      Read_NTC_Temperature_Value_Handler();
+		    }
+			
+			if(tpd_t.gTimer_display > 15 ){
+		      tpd_t.gTimer_display=0; 
+			
+		        
+		         Smg_Display_Temp_Degree_Handler();
+		        
+		    }
+
+		
+
+
+	   break;
 
 	   case 1:
     
@@ -258,9 +280,9 @@ void Main_Process(void)
 
 	   }
 
-	}
-
 }
+
+
 
 /*********************************************************************************************************
 *	函 数 名: void Main_Process(void)

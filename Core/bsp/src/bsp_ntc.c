@@ -393,7 +393,7 @@ static void Display_Speicial_Temperature_Value(uint8_t temp)
 
          // zero_d =2;
         array_subscript =  Calculate_Display_Temperature_Value(R10K_0_0,tpd_t.ntc_voltage_value,2);
-        HAL_Delay(200);
+       
         tpd_t.temperature_value = tpd_t.temperature_rectify_value ;
 
     break;
@@ -401,7 +401,7 @@ static void Display_Speicial_Temperature_Value(uint8_t temp)
 	
    case degree_one :
    	    array_subscript =  Calculate_Display_Temperature_Value(R10K_1_4,tpd_t.ntc_voltage_value,4);
-		HAL_Delay(200);
+	
         switch(array_subscript){
 
 		 case 0:
@@ -430,7 +430,7 @@ static void Display_Speicial_Temperature_Value(uint8_t temp)
    
    case degree_two:
    	   array_subscript =  Calculate_Display_Temperature_Value(R10K_5_7,tpd_t.ntc_voltage_value,3);
-	   HAL_Delay(200);
+	
 	   switch(array_subscript){
 
 		 case 0:
@@ -459,7 +459,7 @@ static void Display_Speicial_Temperature_Value(uint8_t temp)
 
          array_subscript =  Calculate_Display_Temperature_Value(R10K_8_9,tpd_t.ntc_voltage_value,2);
 		 
-  		 HAL_Delay(200);
+  		
 		 switch(array_subscript){
    
 		   case 0:
@@ -481,7 +481,7 @@ static void Display_Speicial_Temperature_Value(uint8_t temp)
    case degree_four:
 
          array_subscript =  Calculate_Display_Temperature_Value(R10K_10_12,tpd_t.ntc_voltage_value,3);
-		  HAL_Delay(200);
+	
 		 switch(array_subscript){
    
 		   case 0:
@@ -506,7 +506,7 @@ static void Display_Speicial_Temperature_Value(uint8_t temp)
 
    case degree_five :
 		 array_subscript =  Calculate_Display_Temperature_Value(R10K_13_15,tpd_t.ntc_voltage_value,3);
-		  HAL_Delay(200);
+		
 		 switch(array_subscript){
    
 		   case 0:
@@ -529,7 +529,7 @@ static void Display_Speicial_Temperature_Value(uint8_t temp)
    
    case degree_six:
    	     array_subscript =  Calculate_Display_Temperature_Value(R10K_16_18,tpd_t.ntc_voltage_value,3);
-		  HAL_Delay(200);
+		 
 		 switch(array_subscript){
    
 		   case 0:
@@ -553,7 +553,7 @@ static void Display_Speicial_Temperature_Value(uint8_t temp)
    
    case degree_seven :
    	     array_subscript =  Calculate_Display_Temperature_Value(R10K_19_20,tpd_t.ntc_voltage_value,2);
-		  HAL_Delay(200);
+		 
 		 switch(array_subscript){
    
 		   case 0:
@@ -574,7 +574,7 @@ static void Display_Speicial_Temperature_Value(uint8_t temp)
   
    case degree_eight :
    	     array_subscript =  Calculate_Display_Temperature_Value(R10K_21_23,tpd_t.ntc_voltage_value,3);
-		  HAL_Delay(200);
+		
 		 switch(array_subscript){
    
 		   case 0:
@@ -599,7 +599,7 @@ static void Display_Speicial_Temperature_Value(uint8_t temp)
    
    case degree_nine :
    	    array_subscript =  Calculate_Display_Temperature_Value(R10K_24_26,tpd_t.ntc_voltage_value,3);
-		 HAL_Delay(200);
+		
 		 switch(array_subscript){
    
 		   case 0:
@@ -623,7 +623,7 @@ static void Display_Speicial_Temperature_Value(uint8_t temp)
    
    case degree_ten :
    	 array_subscript =  Calculate_Display_Temperature_Value(R10K_27_29,tpd_t.ntc_voltage_value,3);
-	  HAL_Delay(200);
+	 
 		 switch(array_subscript){
    
 		   case 0:
@@ -647,7 +647,7 @@ static void Display_Speicial_Temperature_Value(uint8_t temp)
    
    case  degree_eleven :
    		 array_subscript =  Calculate_Display_Temperature_Value(R10K_30_32,tpd_t.ntc_voltage_value,3);
-		  HAL_Delay(200);
+		
 		 switch(array_subscript){
    
 		   case 0:
@@ -671,7 +671,7 @@ static void Display_Speicial_Temperature_Value(uint8_t temp)
    
    case degree_twelve :
    	   	 array_subscript =  Calculate_Display_Temperature_Value(R10K_33_35,tpd_t.ntc_voltage_value,3);
-		  HAL_Delay(200);
+	
 		 switch(array_subscript){
    
 		   case 0:
@@ -695,7 +695,7 @@ static void Display_Speicial_Temperature_Value(uint8_t temp)
 
    case degree_thirteen :
    		 array_subscript =  Calculate_Display_Temperature_Value(R10K_36_38,tpd_t.ntc_voltage_value,3);
-		  HAL_Delay(200);
+		
 		 switch(array_subscript){
    
 		   case 0:
@@ -719,7 +719,7 @@ static void Display_Speicial_Temperature_Value(uint8_t temp)
    
    case degree_fourteen : //40 degree
        array_subscript =  Calculate_Display_Temperature_Value(R10K_39_41,tpd_t.ntc_voltage_value,3);
-	    HAL_Delay(200);
+	 
 		 switch(array_subscript){
    
 		   case 0:
