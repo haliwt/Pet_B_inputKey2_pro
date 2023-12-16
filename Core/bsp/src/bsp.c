@@ -606,6 +606,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 		    fun_key_counter=0;
 		    pro_t.key_short_confirm_flag=0;
 		    ADD_DEC_LED_OFF();
+		    KEY_FUN_CONFIRM_LED_ON() ;
 			
 			if(pro_t.gTimer_pro_select > 2){
 					pro_t.gTimer_pro_select=0;
@@ -668,18 +669,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 	
 	
 		 }
-
-		 
-//	    if(tpd_t.relay_keep_temp_flag ==1){
-//			KEEP_HEAT_LED_ON();
-//	        RELAY_KEEP_TEMP_SetHigh();
-//		}
-//		else{
-//	        KEEP_HEAT_LED_OFF();
-//	        RELAY_KEEP_TEMP_SetLow();
-//	
-//		}
-		}
+	 }
 
     break;
 
