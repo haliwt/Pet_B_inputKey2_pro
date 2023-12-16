@@ -7,7 +7,7 @@ key_types key_t;
  uint16_t  K2=0;
   uint8_t 	 	value1 ;
   uint8_t   	value2 ;
-
+uint8_t cnt;
 /***********************************************************
  *  *
     *Function Name: INT8U ReadKey(void)
@@ -23,7 +23,7 @@ uint8_t ReadKey(void)
  // static uint16_t  K1=0;
  // static uint16_t  K2=0;
 
-  static uint8_t cnt;
+//  static uint8_t cnt;
   //uint8_t 	 	value1 = 0;
  // uint8_t   	value2 = 0;
 
@@ -38,7 +38,6 @@ uint8_t ReadKey(void)
   else if( CONFIRM_KEY_VALUE()==KEY_DOWN){
 		cnt = 0;
 		K2++;   //Confirm_key press
-		tpd_t.gTimer_select_fun=0;
   }
   else if(FUN_KEY_VALUE()==0 && CONFIRM_KEY_VALUE()==0){ //oneself key 
 		cnt++;
@@ -48,7 +47,7 @@ uint8_t ReadKey(void)
 		}
 		
 		cnt = 0;//
-		if(K1>40){ //KEY_FUN
+		if(K1>20){ //KEY_FUN
 			value1 = 0x01;	//short time power press ---power on 
 		}
 		else{
@@ -57,12 +56,12 @@ uint8_t ReadKey(void)
 		}
 
 		//KEY_CONFIRM 
-		if(K2>40 && K2< 20000){//short time modes press 
+		if(K2>20 && K2< 60000){//short time modes press 
             value2 = 0x02;
 
 		}
-		else if(K2>20000){
-			value2 = 0x03;  //long time power press
+		else if(K2>60000){
+			value2 = 0x82;  //long time power press
 		}
 		else{ 
 			value2 = 0;
@@ -145,7 +144,7 @@ uint8_t KEY_Scan(void)
 			if(key_t.read == key_t.buffer) // adjust key be down ->continunce be pressed key
 			{
 
-			 if(++key_t.on_time>1000 ){
+			 if(++key_t.on_time>2000 ){
 
 					key_t.value = key_t.buffer^_KEY_ALL_OFF; // key.value = 0xFE ^ 0xFF = 0x01
 					key_t.on_time = 0;                        //key .value = 0xEF ^ 0XFF = 0X10
@@ -166,7 +165,7 @@ uint8_t KEY_Scan(void)
 		{
 			if(key_t.read == key_t.buffer) //again adjust key if be pressed down 
 			{
-				if(++key_t.on_time>50000 )// 500 long key be down
+				if(++key_t.on_time>60000 )// 500 long key be down
 				{
 					
 					key_t.value = key_t.value|0x80; //key.value(power_on) = 0x01 | 0x80  =0x81  
@@ -177,7 +176,7 @@ uint8_t KEY_Scan(void)
 			}
 			else if(key_t.read == _KEY_ALL_OFF)  // loose hand 
 				{
-					if(++key_t.off_time>30) //8 //30 don't holding key dithering
+					if(++key_t.off_time>10) //8 //30 don't holding key dithering
 					{
 						key_t.value = key_t.buffer^_KEY_ALL_OFF; // key.value = 0x1E ^ 0x1f = 0x01
 						
@@ -200,7 +199,7 @@ uint8_t KEY_Scan(void)
 		{
 			if(key_t.read == _KEY_ALL_OFF)
 			{
-				if(++key_t.off_time>50)//50 //100
+				if(++key_t.off_time>15)//50 //100
 				{
 					key_t.state   = start;
                    

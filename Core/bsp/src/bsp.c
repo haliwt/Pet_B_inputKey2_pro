@@ -232,12 +232,12 @@ void Main_Process(void)
 
 	}
     else{
-	if(pro_t.gTimer_pro_disp > 19){ //100ms
-	    pro_t.gTimer_pro_disp =0;
+	//if(pro_t.gTimer_pro_disp > 19){ //100ms
+	 //   pro_t.gTimer_pro_disp =0;
 		Run_Display_Handler(pro_t.keep_temp_flag);
 		
 
-	}
+	//}
     }
 
 }
@@ -674,14 +674,14 @@ static void Run_Display_Handler(uint8_t temp_value)
 		
 	if(tpd_t.gTimer_read_adc >12 ){
 	  tpd_t.gTimer_read_adc =0;
-      if(tpd_t.power_on_times < 10){
-           Read_NTC_Temperature_Power_On();
-      }
-	  else	
+//      if(tpd_t.power_on_times < 10){
+//           Read_NTC_Temperature_Power_On();
+//      }
+//	  else	
 	      Read_NTC_Temperature_Value_Handler();
-    }
-	
-	if(tpd_t.gTimer_display > 20){
+    
+  }
+	if(tpd_t.gTimer_display > 15){
       tpd_t.gTimer_display=0; 
 	  tpd_t.power_on_times++;
         
@@ -703,9 +703,9 @@ static void Run_Display_Handler(uint8_t temp_value)
             }
 
 		 }
-        
-    }
-
+	 }  
+    
+    
     break;
 
 	case 1:
