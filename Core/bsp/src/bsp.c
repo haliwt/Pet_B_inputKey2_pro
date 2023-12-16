@@ -120,22 +120,24 @@ void Key_Handler(uint8_t key_value)
 	  if(fun_key_counter ==1){
 	   if(relay_id_led == relay_keep_temp_led_on &&  pro_t.keep_temp_flag ==0){ //"+" tempeature value 
 
-	         
-             if(tpd_t.relay_keep_temp_flag ==1){
+
+	       
+
+			 if(pro_t.set_keep_temp == 1){
+			 	 pro_t.set_keep_temp=0;
                  tpd_t.relay_keep_temp_flag =0;
 				 tpd_t.gTimer_select_fun =10;
-			     pro_t.set_keep_temp = 0;
 				 pro_t.key_short_confirm_flag =1;
 			
-				 KEY_FUN_CONFIRM_LED_ON() ;  
+				 KEY_FUN_CONFIRM_LED_OFF() ;  
 
 			 }
              else{
-			  tpd_t.relay_keep_temp_flag =1;
+			 // tpd_t.relay_keep_temp_flag =1;
 			  pro_t.keep_temp_flag =1;
 			  tpd_t.gTimer_select_fun=0;
 	          ADD_DEC_LED_ON();
-		
+		      fun_key_counter =1;
 			  
 
             }
@@ -163,6 +165,10 @@ void Key_Handler(uint8_t key_value)
 		      disp_keep_temp_value =1;
 
           }
+		  else{
+			 disp_keep_temp_value =2;
+
+		  }
 
 
 	  }
@@ -219,7 +225,11 @@ void Main_Process(void)
    
 	 Relay_Fun(relay_id_led);
 
-	if(disp_keep_temp_value ==1){
+	if(disp_keep_temp_value ==1 || disp_keep_temp_value ==2){
+
+	   switch(disp_keep_temp_value ){
+
+	   case 1:
     
 		if(pro_t.gTimer_pro_disp_temp < 4){
 		    Run_Keep_Heat_Setup_Digital_Numbers(pro_t.set_keep_tmep_value);
@@ -229,6 +239,24 @@ void Main_Process(void)
 		   disp_keep_temp_value =0;
 		   tpd_t.gTimer_display =8;
 		}
+
+	   break;
+
+	   case 2:
+	   	
+	       if(pro_t.gTimer_pro_disp_temp < 4){
+			   Run_Keep_Heat_Setup_Digital_Numbers(0x00);
+	   
+		   }
+		   else{
+			  disp_keep_temp_value =0;
+			  tpd_t.gTimer_display =8;
+		   }
+
+
+	   break;
+
+	   }
 
 	}
     else{
@@ -285,7 +313,8 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 		  }
           else{
 
-
+			if(pro_t.gTimer_pro_select > 2){
+					pro_t.gTimer_pro_select=0;
 			 if(tpd_t.relay_fan_flag ==1){
 					
 				FAN_LED_ON();
@@ -298,7 +327,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 			 RELAY_FAN_SetLow();
 			  
 			}
-
+		}
 		  }
 	
 	  }
@@ -376,7 +405,8 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 			   }
 		      }
 			   else{
-
+					if(pro_t.gTimer_pro_select > 2){
+					pro_t.gTimer_pro_select=0;
 					if(tpd_t.relay_tape_flag ==1){
 						TAPE_LED_ON();
 			 			RELAY_TAPE_SetHigh();
@@ -388,7 +418,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 
 
 					}
-
+				}
 
 			   }
 			
@@ -460,9 +490,9 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 		}
 		else{
 			 tpd_t.gTimer_select_fun =10;
-			  fun_key_counter=0;
+			 fun_key_counter=0;
 			 
-			if(pro_t.key_short_confirm_flag ==1){
+		  if(pro_t.key_short_confirm_flag ==1){
 				pro_t.key_short_confirm_flag =0;
 				
 				if(tpd_t.relay_kill_flag ==0){
@@ -480,7 +510,8 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 	           }
 		   }
 		   else{
-
+                if(pro_t.gTimer_pro_select > 2){
+					pro_t.gTimer_pro_select=0;
 				if(tpd_t.relay_kill_flag ==1){
 				KILL_LED_ON();
 				RELAY_KILL_SetHigh();
@@ -493,11 +524,12 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 
 				}
 			}
+		   }
 
 		}
   
 
-		 if(pro_t.gTimer_pro_key > 1){//20ms
+		 if(pro_t.gTimer_pro_key > 2){//20ms
       		pro_t.gTimer_pro_key =0;
         if(tpd_t.relay_fan_flag == 1){
 
@@ -575,6 +607,8 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 		    pro_t.key_short_confirm_flag=0;
 		    ADD_DEC_LED_OFF();
 			
+			if(pro_t.gTimer_pro_select > 2){
+					pro_t.gTimer_pro_select=0;
 
 		   if(tpd_t.relay_keep_temp_flag ==1){
 				KEEP_HEAT_LED_ON();
@@ -585,6 +619,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 				RELAY_KEEP_TEMP_SetLow();
 
 			  }
+		  }
 
         }
           

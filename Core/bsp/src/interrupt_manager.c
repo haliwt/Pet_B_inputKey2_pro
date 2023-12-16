@@ -20,6 +20,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	     pro_t.gTimer_pro_key++;
          pro_t.gTimer_pro_disp++;
 	    tpd_t.gTimer_smg_turn_on ++;
+		pro_t.gTimer_pro_select++;
 	   if(tm1>49){ //50 *10ms =500ms
 	   	 tm1=0;
          led_t.gTimer_flicker ++;

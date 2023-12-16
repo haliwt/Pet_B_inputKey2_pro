@@ -63,6 +63,7 @@ typedef struct{
    uint8_t gTimer_pro_key;
    uint8_t gTimer_pro_disp;
    uint8_t gTimer_pro_disp_temp;
+   uint8_t gTimer_pro_select;
 
 
 }main_prcess_t;
