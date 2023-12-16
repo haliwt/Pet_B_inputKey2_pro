@@ -259,14 +259,6 @@ void Main_Process(void)
 	   }
 
 	}
-    else{
-	//if(pro_t.gTimer_pro_disp > 19){ //100ms
-	 //   pro_t.gTimer_pro_disp =0;
-		Run_Display_Handler(pro_t.keep_temp_flag);
-		
-
-	//}
-    }
 
 }
 
