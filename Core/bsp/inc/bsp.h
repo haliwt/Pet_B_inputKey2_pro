@@ -17,6 +17,7 @@
 #include "bsp_smg.h"
 #include "bsp_delay.h"
 #include "bsp_relay.h"
+#include "bsp_adc.h"
 
 
 typedef enum{
