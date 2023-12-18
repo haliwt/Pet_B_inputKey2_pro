@@ -308,7 +308,9 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 	   	  tpd_t.gTimer_select_fun =10;
 		  fun_key_counter=0;
 
-	      
+
+		 if(pro_t.gTimer_pro_select > 4){ //50ms
+				pro_t.gTimer_pro_select=0;
 		  if(pro_t.key_short_confirm_flag ==1){
 		  	   pro_t.key_short_confirm_flag =0;
 			   if(tpd_t.relay_fan_flag ==0){
@@ -327,8 +329,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 		  }
           else{
 
-			if(pro_t.gTimer_pro_select > 2){
-					pro_t.gTimer_pro_select=0;
+			
 			 if(tpd_t.relay_fan_flag ==1){
 					
 				FAN_LED_ON();
@@ -342,9 +343,9 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 			  
 			}
 		}
-		  }
+		}
+       }
 	
-	  }
       
 
     if(pro_t.gTimer_pro_key > 2){//30ms
@@ -398,6 +399,9 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 
              tpd_t.gTimer_select_fun =10;
 			  fun_key_counter=0;
+
+			 if(pro_t.gTimer_pro_select > 5){
+					pro_t.gTimer_pro_select=0;
 	
              if(pro_t.key_short_confirm_flag ==1){
                  pro_t.key_short_confirm_flag =0;
@@ -419,8 +423,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 			   }
 		      }
 			   else{
-					if(pro_t.gTimer_pro_select > 2){
-					pro_t.gTimer_pro_select=0;
+					
 					if(tpd_t.relay_tape_flag ==1){
 						TAPE_LED_ON();
 			 			RELAY_TAPE_SetHigh();
