@@ -770,19 +770,27 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 	   		 if(i==0){
                if(*(pt+0) < key){
 
-			    temp_decimal_point = key - *(pt+i);
+			    if(key- *(pt+0) >30){
 
-		        temp_decimal_point = temp_decimal_point +5;
+				   tpd_t.temperature_rectify_value =-1;
+				  
 
-   		       tpd_t.temperature_decimal_point_value =  temp_decimal_point/10  ;
+				}
+                else{
+					 tpd_t.temperature_rectify_value =0;
+                   }
+				
+				    temp_decimal_point = key - *(pt+i);
+
+			        temp_decimal_point = temp_decimal_point +5;
+
+	   		       tpd_t.temperature_decimal_point_value =  temp_decimal_point/10  ;
+
+               }
 
                 temp_temperature_value  = i;
 
 				return temp_temperature_value ;
-
-
-
-			   }
 
 
 			}

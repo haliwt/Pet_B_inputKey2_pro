@@ -60,13 +60,14 @@ typedef struct _touchpad_t{
    uint8_t gTimer_smg_turn_on ;
 
    uint8_t power_on_times;
-   uint8_t temperature_rectify_value;
+  
    uint8_t temp_degree;
    
    
    
 
 	//taouchpad
+	 int8_t temperature_rectify_value;
 	 int8_t digital_numbers;
 	 uint16_t ntc_voltage_value;
 
