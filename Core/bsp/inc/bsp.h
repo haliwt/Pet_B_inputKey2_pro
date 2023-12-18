@@ -32,17 +32,17 @@ typedef enum{
 
 typedef enum{
 
-    relay_a = 0x01,
-	relay_b ,
-	relay_c ,
-	relay_temp 
+    relay_a_tape_led = 0x01 ,
+	relay_b_fan ,
+	relay_c_kill ,
+	relay_keep_temp 
 
 }relay_id_state;
 
 typedef enum{
 
-    relay_fan_led_on =0x01,
-	relay_tape_led_on,
+    relay_tape_led_on=0x01,
+	relay_fan_led_on ,
 	relay_kill_led_on,
 	relay_keep_temp_led_on,
 	

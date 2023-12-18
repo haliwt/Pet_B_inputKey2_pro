@@ -38,12 +38,12 @@ void Led_Display_Content_Fun(uint8_t selitem)
 		if(tpd_t.confirm_key_select_item_tape == tape_enable){
 			TAPE_LED_ON();
 		    
-		    RELAY_TAPE_SetHigh()	;
+		    RELAY_TAPE_SetHigh_TO_FAN()	;
 
 		}
 		else{
     		TAPE_LED_OFF();
-    		RELAY_TAPE_SetLow();
+    		RELAY_TAPE_SetLow_TO_FAN();
 
 		}
 
@@ -86,22 +86,22 @@ void Led_Display_Content_Fun(uint8_t selitem)
       if(tpd_t.confirm_key_select_item_fan == fan_enable){
 		FAN_LED_ON();//FAN_LED_ON();
 		
-		RELAY_FAN_SetHigh()	;
+		RELAY_FAN_SetHigh_TO_KILL()	;
 		}
 		else{
 		FAN_LED_OFF();//FAN_LED_OFF();
-		RELAY_FAN_SetLow()	;
+		RELAY_FAN_SetLow_TO_KILL()	;
 
 		}
 
         
 
 		if(tpd_t.confirm_key_select_item_sterilization == sterilization_enable ){
-            RELAY_KILL_SetHigh();
+            RELAY_KILL_SetHigh_TO_TAPE_LED();
 		    KILL_LED_ON();
 		}
 		else{
-            RELAY_KILL_SetLow();
+            RELAY_KILL_SetLow_TO_TAPE_LED();
 		    KILL_LED_OFF();//KILL_LED_OFF();
 
         }
@@ -135,23 +135,23 @@ void Led_Display_Content_Fun(uint8_t selitem)
       //FAN 
       if(tpd_t.confirm_key_select_item_fan == fan_enable){
 		FAN_LED_ON();//FAN_LED_ON();
-		RELAY_FAN_SetHigh()	;
+		RELAY_FAN_SetHigh_TO_KILL()	;
 		}
 		else{
 		FAN_LED_OFF();//FAN_LED_OFF();
-		RELAY_FAN_SetLow()	;
+		RELAY_FAN_SetLow_TO_KILL()	;
 
 		}
 
        //TAPE
 		if(tpd_t.confirm_key_select_item_tape == tape_enable){
 		TAPE_LED_ON();
-		RELAY_TAPE_SetHigh()	;
+		RELAY_TAPE_SetHigh_TO_FAN()	;
 
 		}
 		else{
 			TAPE_LED_OFF();//TAPE_LED_OFF();
-		   RELAY_TAPE_SetLow()	;
+		   RELAY_TAPE_SetLow_TO_FAN()	;
 		}
         //KEEP HEAT
 		if(tpd_t.confirm_key_select_item_keep_heat == keep_heat_enable){
@@ -184,11 +184,11 @@ void Led_Display_Content_Fun(uint8_t selitem)
         //FAN
        if(tpd_t.confirm_key_select_item_fan == fan_enable){
 		FAN_LED_ON();
-		RELAY_FAN_SetHigh();
+		RELAY_FAN_SetHigh_TO_KILL();
 		}
 		else{
 		FAN_LED_OFF();
-		RELAY_FAN_SetLow();
+		RELAY_FAN_SetLow_TO_KILL();
 
 		}
 
@@ -196,25 +196,25 @@ void Led_Display_Content_Fun(uint8_t selitem)
 		if(tpd_t.confirm_key_select_item_tape == tape_enable){
     		TAPE_LED_ON();
     		
-    		RELAY_TAPE_SetHigh();
+    		RELAY_TAPE_SetHigh_TO_FAN();
 
     	}
     	else{
     		TAPE_LED_OFF();//TAPE_LED_OFF();
     		
-    		RELAY_TAPE_SetLow();
+    		RELAY_TAPE_SetLow_TO_FAN();
     		
 
 		}
         //STERILIZATION 
 		if(tpd_t.confirm_key_select_item_sterilization == sterilization_enable ){
 		    KILL_LED_ON();
-            RELAY_KILL_SetHigh()	;
+            RELAY_KILL_SetHigh_TO_TAPE_LED()	;
             
 		}
 		else{
     		KILL_LED_OFF();//KILL_LED_OFF();
-    		RELAY_KILL_SetLow()	;
+    		RELAY_KILL_SetLow_TO_TAPE_LED()	;
 
          }
 
@@ -462,23 +462,23 @@ void Key_Confirm_Handler(uint8_t selitem)
    	    if(tpd_t.confirm_key_select_item_tape == tape_enable){
 	      TAPE_LED_ON();
 		  
-		  RELAY_TAPE_SetHigh()	;
+		  RELAY_TAPE_SetHigh_TO_FAN()	;
 
 	  }
 	  else{
 	      TAPE_LED_OFF();
 		 
-	      RELAY_TAPE_SetLow()	;
+	      RELAY_TAPE_SetLow_TO_FAN()	;
 
 	  	}
 
    		
      if(tpd_t.confirm_key_select_item_sterilization == sterilization_enable ){
-            RELAY_KILL_SetHigh();
+            RELAY_KILL_SetHigh_TO_TAPE_LED();
             KILL_LED_ON();
           }
           else{
-             RELAY_KILL_SetLow();
+             RELAY_KILL_SetLow_TO_TAPE_LED();
              KILL_LED_OFF();
           }
        
@@ -498,13 +498,13 @@ void Key_Confirm_Handler(uint8_t selitem)
        if(fan_confirm_flag==1){
     	  tpd_t.confirm_key_select_item_fan = fan_enable ;
           FAN_LED_ON(); 
-    	  RELAY_FAN_SetHigh()	;
+    	  RELAY_FAN_SetHigh_TO_KILL()	;
 
         }
         else{
             tpd_t.confirm_key_select_item_fan = confirm_disable ;
               FAN_LED_OFF(); 
-             RELAY_FAN_SetLow() ;
+             RELAY_FAN_SetLow_TO_KILL() ;
         }
      
     
@@ -514,20 +514,20 @@ void Key_Confirm_Handler(uint8_t selitem)
    case TAPE_LED:
    	   if(tpd_t.confirm_key_select_item_fan == fan_enable){
    	     FAN_LED_ON();
-		  RELAY_FAN_SetHigh()   ;
+		  RELAY_FAN_SetHigh_TO_KILL()   ;
    	   }
 	   else{
 	     FAN_LED_OFF();
-		 RELAY_FAN_SetLow()   ;
+		 RELAY_FAN_SetLow_TO_KILL()   ;
 
 	   }
 
 	    if(tpd_t.confirm_key_select_item_sterilization == sterilization_enable ){
-         RELAY_KILL_SetHigh();
+         RELAY_KILL_SetHigh_TO_TAPE_LED();
          KILL_LED_ON();
        }
 	   else{
-          RELAY_KILL_SetLow();
+          RELAY_KILL_SetLow_TO_TAPE_LED();
 	      KILL_LED_OFF();
        }
 	
@@ -550,13 +550,13 @@ void Key_Confirm_Handler(uint8_t selitem)
     	  tpd_t.confirm_key_select_item_tape = tape_enable;
     	 
        	  TAPE_LED_ON();
-    	  RELAY_TAPE_SetHigh()	;
+    	  RELAY_TAPE_SetHigh_TO_FAN()	;
       }
       else{
           tpd_t.confirm_key_select_item_tape = confirm_disable ;
 
            TAPE_LED_OFF();
-           RELAY_TAPE_SetLow() ;
+           RELAY_TAPE_SetLow_TO_FAN() ;
        }
 	  
     tpd_t.run_process_tag=KEY_NULL;
@@ -565,23 +565,23 @@ void Key_Confirm_Handler(uint8_t selitem)
    case STERILIZATION_LED:
    	   if(tpd_t.confirm_key_select_item_fan == fan_enable){
    	     FAN_LED_ON();
-		 RELAY_FAN_SetHigh()   ;
+		 RELAY_FAN_SetHigh_TO_KILL()   ;
    	   }
 	   else{
 	     FAN_LED_OFF();
-		 RELAY_FAN_SetLow()   ;
+		 RELAY_FAN_SetLow_TO_KILL()   ;
 	   }
 
       if(tpd_t.confirm_key_select_item_tape == tape_enable){
 	      TAPE_LED_ON();
 		  
-	  	  RELAY_TAPE_SetHigh()   ;
+	  	  RELAY_TAPE_SetHigh_TO_FAN()   ;
 
 	  }
 	  else{
 	      TAPE_LED_OFF();
 		
-	       RELAY_TAPE_SetLow()   ;
+	       RELAY_TAPE_SetLow_TO_FAN()   ;
 
 	  }
 	 
@@ -602,13 +602,13 @@ void Key_Confirm_Handler(uint8_t selitem)
        if(kill_confirm_flag==1){
     	   tpd_t.confirm_key_select_item_sterilization = sterilization_enable ;
            KILL_LED_ON();
-           RELAY_KILL_SetHigh();
+           RELAY_KILL_SetHigh_TO_TAPE_LED();
        }
        else{
          tpd_t.confirm_key_select_item_sterilization = confirm_disable ;
 
           KILL_LED_OFF();
-          RELAY_KILL_SetLow();
+          RELAY_KILL_SetLow_TO_TAPE_LED();
 
 
        }
@@ -621,11 +621,11 @@ void Key_Confirm_Handler(uint8_t selitem)
 
        if(tpd_t.confirm_key_select_item_fan == fan_enable){
    	     FAN_LED_ON();
-		 RELAY_FAN_SetHigh()   ;
+		 RELAY_FAN_SetHigh_TO_KILL()   ;
    	   }
 	   else{
 	     FAN_LED_OFF();
-		 RELAY_FAN_SetLow()   ;
+		 RELAY_FAN_SetLow_TO_KILL()   ;
 
 	   }
 
@@ -633,23 +633,23 @@ void Key_Confirm_Handler(uint8_t selitem)
 	      TAPE_LED_ON();
 		  
 	  
-	      RELAY_TAPE_SetHigh()   ;
+	      RELAY_TAPE_SetHigh_TO_FAN()   ;
 
 	  }
 	  else{
 	      TAPE_LED_OFF();
 		
 	  
-		  RELAY_TAPE_SetLow()	;
+		  RELAY_TAPE_SetLow_TO_FAN()	;
 	  	}
    	    
        if(tpd_t.confirm_key_select_item_sterilization == sterilization_enable ){
-         RELAY_KILL_SetHigh();
+         RELAY_KILL_SetHigh_TO_TAPE_LED();
          KILL_LED_ON();
        }
 	   else{
 	      KILL_LED_OFF();
-          RELAY_KILL_SetLow();
+          RELAY_KILL_SetLow_TO_TAPE_LED();
 
        }
 
