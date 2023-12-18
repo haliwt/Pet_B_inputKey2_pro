@@ -1,5 +1,5 @@
 #include "bsp_key.h"
-#include "bsp_ctl.h"
+#include "bsp.h"
 
 key_types key_t;
 
@@ -19,7 +19,7 @@ uint8_t cnt;
 uint8_t ReadKey(void)
 {
 
- 
+  static uint8_t long_key_flag;
  // static uint16_t  K1=0;
  // static uint16_t  K2=0;
 
@@ -33,11 +33,22 @@ uint8_t ReadKey(void)
 	
   if(FUN_KEY_VALUE() ==KEY_DOWN ){ //KEY1 =POWER_KEY ,KEY2 = MODES
 		cnt = 0;
+		long_key_flag =0;
 		K1++;	 //Fun_key press 
   }
-  else if( CONFIRM_KEY_VALUE()==KEY_DOWN){
+  else if( CONFIRM_KEY_VALUE()==KEY_DOWN && long_key_flag ==0){
 		cnt = 0;
 		K2++;   //Confirm_key press
+		if(pro_t.keep_temp_flag ==1){
+           if(K2 > 20000){
+              K2=0;
+			  long_key_flag =1;
+			  
+			  return 0x82;
+            }
+
+
+		}
   }
   else if(FUN_KEY_VALUE()==0 && CONFIRM_KEY_VALUE()==0){ //oneself key 
 		cnt++;
