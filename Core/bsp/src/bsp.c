@@ -170,6 +170,7 @@ void Key_Handler(uint8_t key_value)
 
           }
 		  else{
+		  	  pro_t.gTimer_pro_disp_temp=0;
 			 disp_keep_temp_value =2;
 
 		  }
@@ -613,7 +614,6 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
             pro_t.keep_temp_flag =0;
 		    fun_key_counter=0;
 			
-			//disp_keep_temp_value =0;
 			pro_t.long_key_flag =0;
 		    pro_t.key_short_confirm_flag=0;
 		    ADD_DEC_LED_OFF();
