@@ -7,6 +7,7 @@
 
 void Run_Keep_Heat_Setup_Digital_Numbers(uint8_t value);
 
+void Repeat_Keep_Heat_Setup_Digital_Numbers(uint8_t value);
 
 
 

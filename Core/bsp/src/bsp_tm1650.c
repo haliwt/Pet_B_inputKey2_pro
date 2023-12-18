@@ -261,6 +261,7 @@ void Smg_Display_Temp_Degree_Handler(void)
 
       decade_temp  = tpd_t.temperature_value / 10;
       uint_temp =   tpd_t.temperature_value  % 10;
+	
 
 	  decimal_point =   tpd_t.temperature_decimal_point_value ;
    
@@ -333,7 +334,65 @@ void Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
 
 
    	}
-	else if(tpd_t.gTimer_smg_turn_on >99    && tpd_t.gTimer_smg_turn_on < 110){
+	else if(tpd_t.gTimer_smg_turn_on >100  && tpd_t.gTimer_smg_turn_on < 105){
+
+	     TM1650_Write_Data(0x48,0x00);
+    }
+	else{
+	  tpd_t.gTimer_smg_turn_on =0;
+	    TM1650_Write_Data(0x48,0x71);//初始化为7级灰度，开显示,power off TM1650_Set(0x48,0x30);
+	     
+		
+		TM1650_Write_Data(0x68,segNumber[decade_temp]);//bit one  
+	   
+
+		TM1650_Write_Data(0x6A,segNumber[uint_temp]+seg_h);//bit two
+
+
+	    TM1650_Write_Data(0x6C,segNumber[decimal_point]);//decimal_point
+
+	}
+	
+
+}
+
+
+
+/******************************************************************************
+ ** 
+ ** Function Name: void Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
+ ** Function:    
+ ** Input Ref: number :display times numbers 
+ ** Return Ref:
+ ** 
+ ******************************************************************************/
+void Repeat_Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
+{
+
+    uint8_t decade_temp=0,uint_temp=0,decimal_point;
+
+
+      decade_temp  = numbers / 10;
+      uint_temp =   numbers  % 10;
+
+	  decimal_point =   0;//tpd_t.temperature_decimal_point_value ;
+   
+ 
+   if(tpd_t.gTimer_smg_turn_on < 40){ //20*10 =200ms
+	     TM1650_Write_Data(0x48,0x71);//初始化为7级灰度，开显示,power off TM1650_Set(0x48,0x30);
+	     
+		
+		TM1650_Write_Data(0x68,segNumber[decade_temp]);//bit one  
+	   
+
+		TM1650_Write_Data(0x6A,segNumber[uint_temp]+seg_h);//bit two
+
+
+	    TM1650_Write_Data(0x6C,segNumber[decimal_point]);//decimal_point
+
+
+   	}
+	else if(tpd_t.gTimer_smg_turn_on >39  && tpd_t.gTimer_smg_turn_on < 81){
 
 	     TM1650_Write_Data(0x48,0x00);
     }
@@ -344,6 +403,7 @@ void Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
 	
 
 }
+
 
 
 

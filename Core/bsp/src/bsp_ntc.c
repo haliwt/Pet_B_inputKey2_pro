@@ -31,7 +31,7 @@ static void Read_Ntc_Decimal_Point_Numbers(void);
 
 static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t key,uint8_t length);
 
-static void Display_Speicial_Temperature_Value(uint8_t temp);
+//static void Display_Speicial_Temperature_Value(uint8_t temp);
 
 
 uint8_t search_key;
@@ -363,6 +363,7 @@ void Read_NTC_Temperature_Value_Handler(void)
    	 tpd_t.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
 
 	 Display_Speicial_Temperature_Value(tpd_t.temp_degree);
+	
 
 	#endif 
     #if 0
@@ -383,7 +384,7 @@ void Read_NTC_Temperature_Value_Handler(void)
 	*Return Ref:NO
 	*
 ******************************************************************************/
-static void Display_Speicial_Temperature_Value(uint8_t temp)
+void Display_Speicial_Temperature_Value(uint8_t temp)
 {
    static uint8_t array_subscript;
 

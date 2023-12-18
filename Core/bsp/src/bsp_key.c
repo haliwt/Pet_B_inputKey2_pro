@@ -31,7 +31,7 @@ uint8_t ReadKey(void)
 //		return value1;
 //	T1msFlag = 0;
 	
-  if(FUN_KEY_VALUE() ==KEY_DOWN ){ //KEY1 =POWER_KEY ,KEY2 = MODES
+  if(FUN_KEY_VALUE() ==KEY_DOWN && CONFIRM_KEY_VALUE()==KEY_UP){ //KEY1 =POWER_KEY ,KEY2 = MODES
 		cnt = 0;
 		pro_t.long_key_flag =0;
 		K1++;	 //Fun_key press 
@@ -40,8 +40,12 @@ uint8_t ReadKey(void)
 		cnt = 0;
 		K2++;   //Confirm_key press
 		if(pro_t.keep_temp_flag ==1){
-           if(K2 > 20000){
+           if(K2 > 50000){
               K2=0;
+			  cnt = 0;
+		      K1 = 0;
+			  value1=0;
+			  value2=0;
 			  pro_t.long_key_flag =1;
 			  
 			  return 0x82;
@@ -50,7 +54,7 @@ uint8_t ReadKey(void)
 
 		}
   }
-  else if(FUN_KEY_VALUE()==0 && CONFIRM_KEY_VALUE()==0){ //oneself key 
+  else if(FUN_KEY_VALUE()==0 && CONFIRM_KEY_VALUE()==0 && pro_t.long_key_flag ==0){ //oneself key 
 		cnt++;
 		if(cnt<50){ //按键松开消抖,一定要大于短按键次数 > 20
 		    return 0; 
@@ -67,13 +71,13 @@ uint8_t ReadKey(void)
 		}
 
 		//KEY_CONFIRM 
-		if(K2>40 && K2< 60000){//short time modes press 
+		if(K2>40 ){//short time modes press 
             value2 = 0x02;
 
 		}
-		else if(K2>60000){
-			value2 = 0x82;  //long time power press
-		}
+//		else if(K2>60000){
+//			value2 = 0x82;  //long time power press
+//		}
 		else{ 
 			value2 = 0;
 		}

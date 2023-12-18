@@ -60,6 +60,8 @@ void Key_Handler(uint8_t key_value)
          if(pro_t.keep_temp_flag ==1){
 		 	
 		 	  tpd_t.gTimer_select_fun=0;
+			  disp_keep_temp_value =0xff;
+			   pro_t.gTimer_pro_disp_temp=0; //display set keep temperature timer timing 
               tpd_t.digital_numbers++; //scope : 16~30度
               if(tpd_t.digital_numbers <16)tpd_t.digital_numbers =16;
 			  if(tpd_t.digital_numbers>30) tpd_t.digital_numbers=30;
@@ -146,6 +148,8 @@ void Key_Handler(uint8_t key_value)
 	   else if(pro_t.keep_temp_flag ==1){
 	   
               tpd_t.gTimer_select_fun=0;
+			  pro_t.gTimer_pro_disp_temp=0;
+	          disp_keep_temp_value = 0xff;
 			  tpd_t.digital_numbers--; //scope : 16~30度
 			  if(tpd_t.digital_numbers <16) tpd_t.digital_numbers=16;
 			  Run_Keep_Heat_Setup_Digital_Numbers(tpd_t.digital_numbers);
@@ -186,6 +190,8 @@ void Key_Handler(uint8_t key_value)
 		
 		   pro_t.set_keep_temp = 1; //set keep temperature is complete.
 		   pro_t.long_key_flag =0; //repeat by pressed key_confirm .
+		   disp_keep_temp_value =0;
+		   tpd_t.gTimer_read_adc >20;
 		
 		   pro_t.set_keep_tmep_value = tpd_t.digital_numbers;
 			   if(pro_t.set_keep_tmep_value >= tpd_t.temperature_value ){
@@ -193,7 +199,7 @@ void Key_Handler(uint8_t key_value)
 			       KEEP_HEAT_LED_ON();
 	               RELAY_KEEP_TEMP_SetHigh();
 				   KEY_FUN_CONFIRM_LED_ON() ;  
-				    ADD_DEC_LED_OFF();
+				   ADD_DEC_LED_OFF();
 
 			  }
               else{
@@ -236,14 +242,17 @@ void Main_Process(void)
 			if(tpd_t.gTimer_read_adc >12 ){
 			  tpd_t.gTimer_read_adc =0;
 		     
-			      Read_NTC_Temperature_Value_Handler();
+			    Read_NTC_Temperature_Value_Handler();
+				Smg_Display_Temp_Degree_Handler();
 		    }
 			
 			if(tpd_t.gTimer_display > 15 ){
 		      tpd_t.gTimer_display=0; 
 			
-		        
+		         Display_Speicial_Temperature_Value(tpd_t.temp_degree);
 		         Smg_Display_Temp_Degree_Handler();
+				 HAL_Delay(100);
+				 
 		        
 		    }
 
@@ -255,25 +264,27 @@ void Main_Process(void)
 	   case 1:
     
 		if(pro_t.gTimer_pro_disp_temp < 4){
-		    Run_Keep_Heat_Setup_Digital_Numbers(pro_t.set_keep_tmep_value);
+		    Repeat_Keep_Heat_Setup_Digital_Numbers(pro_t.set_keep_tmep_value);
 
 	    }
 		else{
 		   disp_keep_temp_value =0;
-		   tpd_t.gTimer_display =8;
+		   tpd_t.gTimer_read_adc  =20;
+			Smg_Display_Temp_Degree_Handler();
 		}
 
 	   break;
 
-	   case 2:
+	   case 2: //don't set up keep tempeature is 00 
 	   	
 	       if(pro_t.gTimer_pro_disp_temp < 4){
-			   Run_Keep_Heat_Setup_Digital_Numbers(0x00);
+			  Repeat_Keep_Heat_Setup_Digital_Numbers(0);
 	   
 		   }
 		   else{
 			  disp_keep_temp_value =0;
-			  tpd_t.gTimer_display =8;
+			   tpd_t.gTimer_read_adc  =20;
+			   Smg_Display_Temp_Degree_Handler();
 		   }
 
 
@@ -461,17 +472,6 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 
 
 		 }
-	
-//         if(tpd_t.relay_tape_flag ==1){
-//		 	 TAPE_LED_ON();
-//			 RELAY_TAPE_SetHigh();
-//			 
-//		 }
-//		 else{
-//		 	TAPE_LED_OFF();
-//            RELAY_TAPE_SetLow();
-//
-//		 }
 
 		 
 	     if(tpd_t.relay_kill_flag ==1){
@@ -575,17 +575,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 		 }
 
 		 
-//	     if(tpd_t.relay_kill_flag ==1){
-//		 	 KILL_LED_ON();
-//			 RELAY_KILL_SetHigh();
-//	        
-//		 }
-//		 else{
-//		 	 KILL_LED_OFF();
-//			 RELAY_KILL_SetLow();
-//	
-//	
-//		 }
+
 
 		 
 	    if(tpd_t.relay_keep_temp_flag ==1){
@@ -622,6 +612,8 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 			tpd_t.gTimer_select_fun=20;
             pro_t.keep_temp_flag =0;
 		    fun_key_counter=0;
+			disp_keep_temp_value =0;
+			pro_t.long_key_flag =0;
 		    pro_t.key_short_confirm_flag=0;
 		    ADD_DEC_LED_OFF();
 		    KEY_FUN_CONFIRM_LED_ON() ;
@@ -717,10 +709,11 @@ static void Run_Display_Handler(uint8_t temp_value)
 		
 	if(tpd_t.gTimer_read_adc >12 ){
 	  tpd_t.gTimer_read_adc =0;
-//      if(tpd_t.power_on_times < 10){
-//           Read_NTC_Temperature_Power_On();
-//      }
-//	  else	
+      if(tpd_t.power_on_times < 10){
+		  tpd_t.power_on_times++;
+           Read_NTC_Temperature_Power_On();
+      }
+	  else	
 	      Read_NTC_Temperature_Value_Handler();
     
   }

@@ -34,6 +34,7 @@ void Smg_Display_Temp_Degree_Handler(void);
 void I2C_SDA_OUT(void);
 void I2C_SDA_IN(void);//ÅäÖÃ³ÉÊä³ö
 void Smg_Display_Digital_Numbers_Changed(uint8_t numbers);
+void Repeat_Smg_Display_Digital_Numbers_Changed(uint8_t numbers);
 
 
 #endif 
