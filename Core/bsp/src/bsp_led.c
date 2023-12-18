@@ -425,6 +425,8 @@ void Keep_heat_SetUp_Led_Filcker(void)
 	}
 	else{
 		led_t.gTimer_keey_heat_flicker=0;
+		KEY_FUN_CONFIRM_LED_ON();
+		KEEP_HEAT_LED_ON();	
 
 	}
 

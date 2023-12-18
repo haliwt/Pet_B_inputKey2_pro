@@ -184,7 +184,8 @@ void Key_Handler(uint8_t key_value)
 		
 			ADD_DEC_LED_OFF();
 		
-		   pro_t.set_keep_temp = 1;
+		   pro_t.set_keep_temp = 1; //set keep temperature is complete.
+		   pro_t.long_key_flag =0; //repeat by pressed key_confirm .
 		
 		   pro_t.set_keep_tmep_value = tpd_t.digital_numbers;
 			   if(pro_t.set_keep_tmep_value >= tpd_t.temperature_value ){
