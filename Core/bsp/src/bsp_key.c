@@ -4,7 +4,7 @@
 key_types key_t;
 
  uint16_t  K1=0;
- uint16_t  K2=0;
+ uint32_t  K2=0;
   uint8_t 	 	value1 ;
   uint8_t   	value2 ;
 uint8_t cnt;
@@ -40,7 +40,7 @@ uint8_t ReadKey(void)
 		cnt = 0;
 		K2++;   //Confirm_key press
 		if(pro_t.keep_temp_flag ==1){
-           if(K2 > 65000){
+           if(K2 > 199000){
               K2=0;
 			  cnt = 0;
 		      K1 = 0;
@@ -56,13 +56,13 @@ uint8_t ReadKey(void)
   }
   else if(FUN_KEY_VALUE()==0 && CONFIRM_KEY_VALUE()==0 && pro_t.long_key_flag ==0){ //oneself key 
 		cnt++;
-		if(cnt<50){ //按键松开消抖,一定要大于短按键次数 > 20
+		if(cnt<30){ //按键松开消抖,一定要大于短按键次数 > 20
 		    return 0; 
 
 		}
 		
 		cnt = 0;//
-		if(K1>40){ //KEY_FUN
+		if(K1>20){ //KEY_FUN
 			value1 = 0x01;	//short time power press ---power on 
 		}
 		else{
@@ -71,7 +71,7 @@ uint8_t ReadKey(void)
 		}
 
 		//KEY_CONFIRM 
-		if(K2>40 ){//short time modes press 
+		if(K2>20 ){//short time modes press 
             value2 = 0x02;
 
 		}

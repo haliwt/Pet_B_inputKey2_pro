@@ -251,7 +251,7 @@ void Main_Process(void)
 			
 		        
 		         Smg_Display_Temp_Degree_Handler();
-				 HAL_Delay(100);
+				
 				 
 		        
 		    }
@@ -263,7 +263,7 @@ void Main_Process(void)
 
 	   case 1:
     
-		if(pro_t.gTimer_pro_disp_temp < 4){
+		if(pro_t.gTimer_pro_disp_temp < 3){
 		    Repeat_Keep_Heat_Setup_Digital_Numbers(pro_t.set_keep_tmep_value);
 
 	    }
@@ -277,7 +277,7 @@ void Main_Process(void)
 
 	   case 2: //don't set up keep tempeature is 00 
 	   	
-	       if(pro_t.gTimer_pro_disp_temp < 4){
+	       if(pro_t.gTimer_pro_disp_temp < 3){
 			  Repeat_Keep_Heat_Setup_Digital_Numbers(0);
 	   
 		   }
@@ -612,7 +612,8 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 			tpd_t.gTimer_select_fun=20;
             pro_t.keep_temp_flag =0;
 		    fun_key_counter=0;
-			disp_keep_temp_value =0;
+			
+			//disp_keep_temp_value =0;
 			pro_t.long_key_flag =0;
 		    pro_t.key_short_confirm_flag=0;
 		    ADD_DEC_LED_OFF();

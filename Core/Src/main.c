@@ -107,8 +107,15 @@ int main(void)
 	 bsp_Idle();
 	// key_value =  KEY_Scan();
 	 key_value = ReadKey();
-	 Key_Handler(key_value);
-	 Main_Process();
+	
+	 if(key_value ==0){
+	    Main_Process();
+	 }
+	 else{
+	    Key_Handler(key_value);
+
+
+	 }
   }
   /* USER CODE END 3 */
 }
