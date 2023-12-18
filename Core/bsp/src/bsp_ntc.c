@@ -786,9 +786,9 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 
 
 			}
-	 	    else if(*(pt+i) > key && (*(pt+i+1) < key)){
+	 	    else if(*(pt+i) >  key && (*(pt+i+1) < key)){ //high temperature degree is number is smaller
 
-            if(key- (*(pt+i+1)) >=20){ //10
+            if(key- (*(pt+i+1)) >=30){ //10
                  tpd_t.temperature_rectify_value =1;
 				 
             }
