@@ -249,7 +249,7 @@ void Main_Process(void)
 			if(tpd_t.gTimer_display > 15 ){
 		      tpd_t.gTimer_display=0; 
 			
-		         Display_Speicial_Temperature_Value(tpd_t.temp_degree);
+		        
 		         Smg_Display_Temp_Degree_Handler();
 				 HAL_Delay(100);
 				 

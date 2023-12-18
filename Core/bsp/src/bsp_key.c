@@ -40,7 +40,7 @@ uint8_t ReadKey(void)
 		cnt = 0;
 		K2++;   //Confirm_key press
 		if(pro_t.keep_temp_flag ==1){
-           if(K2 > 50000){
+           if(K2 > 65000){
               K2=0;
 			  cnt = 0;
 		      K1 = 0;
