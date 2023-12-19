@@ -93,6 +93,7 @@ int main(void)
   MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
    bsp_ctl_init();
+   delay_init(24);
 
   /* USER CODE END 2 */
    HAL_TIM_Base_Start_IT(&htim14);//HAL_TIM_Base_Start(&htim3);

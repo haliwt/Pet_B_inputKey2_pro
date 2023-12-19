@@ -76,7 +76,7 @@ extern LED_T led_t;
 
 
 void Led_Display_Content_Fun(uint8_t selitem);
-void Key_Confirm_Handler(uint8_t selitem);
+
 
 
 void Led_Test_Fun(void);

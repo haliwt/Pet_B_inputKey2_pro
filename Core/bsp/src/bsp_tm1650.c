@@ -50,7 +50,7 @@ const unsigned char segNumber[]={
 
 
 
-static void IIC_Init_TM1650(void);
+//static void IIC_Init_TM1650(void);
 static void IIC_Start_TM1650(void);
 static void IIC_Stop_TM1650(void);
 static void IIC_Ack_TM1650(void);
@@ -160,6 +160,7 @@ static void IIC_NAck_TM1650(void)
   SCL_SetLow();//最后要将时钟线拉低 允许数据变化
    
 }
+
 /******************************************************************************
  ** 
  ** Function Name: IIC_Wait_Ack_TM1650(void)

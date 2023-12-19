@@ -38,6 +38,7 @@ void bsp_ctl_init(void)
 	*Retrun Ref:NO
 	*
 ***********************************************************/
+#if 0
 void Run_InputKey_Model(uint8_t keyvalue)
 {
    
@@ -99,7 +100,7 @@ void Run_InputKey_Model(uint8_t keyvalue)
 		}
 
 }
-
+#endif 
 /***********************************************************
 	*
 	*Function Name: void Run_BoardCommand_Handler(void)
@@ -108,6 +109,7 @@ void Run_InputKey_Model(uint8_t keyvalue)
 	*Retrun Ref:NO
 	*
 ***********************************************************/
+#if 0
 void Run_BoardCommand_Handler(void)
 {
 
@@ -148,7 +150,7 @@ void Run_BoardCommand_Handler(void)
 
 }
 
-
+#endif 
 
 
 /***********************************************************

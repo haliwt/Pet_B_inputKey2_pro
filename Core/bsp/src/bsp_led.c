@@ -6,13 +6,7 @@ LED_T led_t;
 
 
 
-//static void Tape_Led_Filcker(void);
-//static void Fan_Led_Flicker(void);
-//static void Sterilization_Led_Filcker(void);
-//static void Keep_Heat_Led_Filcker(void);
 
-static void Add_Dec_Led_Filcker(void);
-//static void Keep_heat_SetUp_Led_Filcker(void);
 
 /*************************************************************************
 	*
@@ -374,7 +368,7 @@ void Keep_Heat_Led_Filcker(void)
 
 
 }
-
+#if 0
 
 static void Add_Dec_Led_Filcker(void)
 {
@@ -400,7 +394,7 @@ static void Add_Dec_Led_Filcker(void)
 
 
 }
-
+#endif 
 
 void Keep_heat_SetUp_Led_Filcker(void)
 {
@@ -445,6 +439,7 @@ void Keep_heat_SetUp_Led_Filcker(void)
 	*Return Ref:NO
 	*
 *************************************************************************/
+#if 0
 void Key_Confirm_Handler(uint8_t selitem)
 {
 
@@ -737,7 +732,7 @@ void Key_Confirm_Handler(uint8_t selitem)
 
 
 }
-
+#endif 
 
 
 

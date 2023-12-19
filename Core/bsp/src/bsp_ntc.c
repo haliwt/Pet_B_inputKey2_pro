@@ -228,10 +228,11 @@ static int8_t  Binary_Search(const uint8_t *array ,uint8_t key,uint8_t length)
 
 
       } 
+   
+	  return -1;
 
    
-}
-   
+} 
 /*************************************************************************
 	*
 	*Functin Name: static int8_t  Binary_Uint16_t_Search(const uint16_t *array ,uint16_t key,uint8_t length)
@@ -762,7 +763,7 @@ void Display_Speicial_Temperature_Value(uint8_t temp)
 static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t key,uint8_t length)
 {
       uint8_t i;
-	  static uint8_t  rectify_value;
+	
 	
 	  uint16_t temp_temperature_value;
       for(i=0;i<length;i++){
@@ -847,4 +848,11 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
       }
 	  
   }
+
+  
+  
+
+  
+  
+  
 
