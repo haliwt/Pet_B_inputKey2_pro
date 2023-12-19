@@ -53,15 +53,16 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOB, SCL_Pin|SDA_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(RELAY_D_GPIO_Port, RELAY_D_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(RELAY_D_GPIO_Port, RELAY_D_Pin, GPIO_PIN_SET);
 
   /*LED_KEY */
   HAL_GPIO_WritePin(GPIOA, FUN_CONFIRM_LED_Pin,GPIO_PIN_RESET);
 
+  /*Relay Output*/
+  HAL_GPIO_WritePin(GPIOA, RELAY_A_Pin|RELAY_B_Pin|RELAY_C_Pin, GPIO_PIN_RESET);
+
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, RELAY_A_Pin|RELAY_B_Pin|FAN_LED_Pin
-                          |TAPE_LED_Pin|KILL_LED_Pin|KEEP_TEMP_LED_Pin|ADD_DEC_LED_Pin
-                          |RELAY_C_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOA, FAN_LED_Pin|TAPE_LED_Pin|KILL_LED_Pin|KEEP_TEMP_LED_Pin|ADD_DEC_LED_Pin,GPIO_PIN_SET);
 
   /*Configure GPIO pins : PBPin PBPin */
   GPIO_InitStruct.Pin = SCL_Pin|SDA_Pin;

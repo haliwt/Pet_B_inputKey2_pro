@@ -3,7 +3,7 @@
 main_prcess_t pro_t;
 
 static void Relay_Fun(uint8_t relay_id_led_flag);
-static void Run_Display_Handler(uint8_t temp_value);
+//static void Run_Display_Handler(uint8_t temp_value);
 
 
 
@@ -23,7 +23,7 @@ uint8_t  disp_keep_temp_value ;
 void bsp_Idle(void)
 {
 	/* --- 喂狗 */
-    if(pro_t.gTimer_pro_feed_dog > 2){
+    if(pro_t.gTimer_pro_feed_dog > 3){
 	   pro_t.gTimer_pro_feed_dog=0;
 	   Feed_Dog();
 
@@ -51,7 +51,7 @@ void bsp_Idle(void)
 */
 void Key_Handler(uint8_t key_value)
 {
-  static uint8_t set_temp_flag;
+ 
   switch(key_value){
 
 
@@ -198,7 +198,7 @@ void Key_Handler(uint8_t key_value)
 		   pro_t.set_keep_temp = 1; //set keep temperature is complete.
 		   pro_t.long_key_flag =0; //repeat by pressed key_confirm .
 		   disp_keep_temp_value =0;
-		   tpd_t.gTimer_read_adc >20;
+		   tpd_t.gTimer_read_adc =20;
 		
 		   pro_t.set_keep_tmep_value = tpd_t.digital_numbers;
 			   if(pro_t.set_keep_tmep_value >= tpd_t.temperature_value ){
@@ -313,7 +313,7 @@ void Main_Process(void)
 static void Relay_Fun(uint8_t relay_id_led_flag)
 {
 
-  static uint8_t set_keep_temp_counter;
+
    switch(relay_id_led_flag){
 
     
@@ -727,10 +727,10 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 *	形    参: 输入按键的键值
 *	返 回 值: 无
 *********************************************************************************************************/
+#if 0
 static void Run_Display_Handler(uint8_t temp_value)
 {
 
-    static uint8_t first_power_on;
 
 	switch(temp_value){
 
@@ -783,5 +783,5 @@ static void Run_Display_Handler(uint8_t temp_value)
    }
 
 }
-
+#endif 
 

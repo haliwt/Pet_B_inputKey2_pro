@@ -67,7 +67,7 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-  
+  static uint8_t power_on ;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -97,6 +97,7 @@ int main(void)
   /* USER CODE END 2 */
    HAL_TIM_Base_Start_IT(&htim14);//HAL_TIM_Base_Start(&htim3);
    Feed_Dog();
+   
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -104,6 +105,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	if(power_on == 0){
+	   power_on++;
+	   Smg_Display_Temp_Degree_Handler();
+	}
 	 bsp_Idle();
 	// key_value =  KEY_Scan();
 	 key_value = ReadKey();
