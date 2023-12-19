@@ -458,7 +458,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 			 
 			
 			TAPE_LED_OFF_TO_FAN_LED() ;//FAN_LED_OFF_TO_TAPE_LED_OFF();
-			 RELAY_TAPE_SetHigh_TO_FAN();//RELAY_FAN_SetLow_TO_KILL();
+			 RELAY_TAPE_SetLow_TO_FAN();//RELAY_FAN_SetLow_TO_KILL();
 			  
 			}
 			}
