@@ -321,7 +321,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 
          //relay_a_tape
 		if(tpd_t.gTimer_select_fun < 6 && pro_t.key_short_confirm_flag ==0 ){
-			Fan_Led_Flicker();//Tape_Led_Flicker();//Sterilization_Led_Filcker();
+			Fan_Led_Flicker_To_Tape_Led_Filcker();//Tape_Led_Flicker_To_Fan_Led_Flicker();//Sterilization_Led_Filcker();
 		}
 		else{
 			 tpd_t.gTimer_select_fun =10;
@@ -332,15 +332,15 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 				
 				if(tpd_t.relay_tape_flag ==0){
 					tpd_t.relay_tape_flag =1;
-					 FAN_LED_ON();//TAPE_LED_ON();//KILL_LED_ON();
-					RELAY_KILL_SetHigh_TO_TAPE_LED();
+					FAN_LED_ON_TO_TAPE_LED_ON();//TAPE_LED_ON_TO_FAN_LED();//KILL_LED_ON();
+					RELAY_KILL_SetHigh_TO_TAPE();
 
 				}
 				else {
 
 					tpd_t.relay_tape_flag =0;
-					  FAN_LED_OFF(); //TAPE_LED_OFF();//KILL_LED_OFF();
-					RELAY_KILL_SetLow_TO_TAPE_LED();
+					FAN_LED_OFF_TO_TAPE_LED_OFF(); //TAPE_LED_OFF_TO_FAN_LED();//KILL_LED_OFF();
+					RELAY_KILL_SetLow_TO_TAPE();
 
 	           }
 		   }
@@ -348,13 +348,13 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
                 if(pro_t.gTimer_pro_select > 2){
 					pro_t.gTimer_pro_select=0;
 				if(tpd_t.relay_tape_flag ==1){
-				FAN_LED_ON();//TAPE_LED_ON();//KILL_LED_ON();
-				RELAY_KILL_SetHigh_TO_TAPE_LED();
+				FAN_LED_ON_TO_TAPE_LED_ON();//TAPE_LED_ON_TO_FAN_LED();//KILL_LED_ON();
+				RELAY_KILL_SetHigh_TO_TAPE();
 
 				}
 				else{
-			   FAN_LED_OFF(); //TAPE_LED_OFF();//KILL_LED_OFF();
-				RELAY_KILL_SetLow_TO_TAPE_LED();
+			   FAN_LED_OFF_TO_TAPE_LED_OFF(); //TAPE_LED_OFF_TO_FAN_LED();//KILL_LED_OFF();
+				RELAY_KILL_SetLow_TO_TAPE();
 
 
 				}
@@ -376,30 +376,35 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 				pro_t.gTimer_pro_key =0;
 			 if(tpd_t.relay_fan_flag == 1){
 	
-				TAPE_LED_ON(); //FAN_LED_ON();//FAN_LED_ON();
+				TAPE_LED_ON_TO_FAN_LED(); //FAN_LED_ON_TO_TAPE_LED_ON();//FAN_LED_ON_TO_TAPE_LED_ON();
 						 
-				 RELAY_FAN_SetHigh_TO_KILL()	 ;
-	
-			 }
-			 else{
-			  TAPE_LED_OFF();// FAN_LED_OFF();//FAN_LED_OFF();
-			   RELAY_FAN_SetLow_TO_KILL()	;
-	
-	
-			 }
-	
-			 
-			 if(tpd_t.relay_kill_flag ==1){
-				 KILL_LED_ON();
-				 //RELAY_KILL_SetHigh_TO_TAPE_LED();
+				// RELAY_FAN_SetHigh_TO_KILL()	 ;
+				RELAY_TAPE_SetHigh_TO_FAN();
 				
+	
 			 }
 			 else{
-				 KILL_LED_OFF();
-				 //RELAY_KILL_SetLow_TO_TAPE_LED();
-		
-		
+			  TAPE_LED_OFF_TO_FAN_LED();// FAN_LED_OFF_TO_TAPE_LED_OFF();//FAN_LED_OFF_TO_TAPE_LED_OFF();
+			  // RELAY_FAN_SetLow_TO_KILL()	;
+			  RELAY_TAPE_SetLow_TO_FAN();
+			  
+	
+	
 			 }
+	
+			 if(tpd_t.relay_kill_flag ==1){
+		 	 KILL_LED_ON();
+			// RELAY_KILL_SetHigh_TO_TAPE();
+			RELAY_FAN_SetHigh_TO_KILL();
+	        
+		 }
+		 else{
+		 	 KILL_LED_OFF();
+			// RELAY_KILL_SetLow_TO_TAPE();
+			RELAY_FAN_SetLow_TO_KILL();
+	
+	
+		 }
 	
 			 
 			if(tpd_t.relay_keep_temp_flag ==1){
@@ -422,7 +427,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 
 
       if(tpd_t.gTimer_select_fun < 6 &&  pro_t.key_short_confirm_flag ==0){
-        	Tape_Led_Flicker();//Fan_Led_Flicker();
+        	Tape_Led_Flicker_To_Fan_Led_Flicker();//Fan_Led_Flicker_To_Tape_Led_Filcker();
 	
        }
        else{
@@ -437,13 +442,13 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 			   if(tpd_t.relay_fan_flag ==0){
 			   	   tpd_t.relay_fan_flag = 1;
 				  
-				    TAPE_LED_OFF();//FAN_LED_ON();
+				    TAPE_LED_OFF_TO_FAN_LED();//FAN_LED_ON_TO_TAPE_LED_ON();
 				   RELAY_TAPE_SetHigh_TO_FAN();//RELAY_FAN_SetHigh_TO_KILL();
 			   }
 			   else {
 				   tpd_t.relay_fan_flag = 0;
 				  
-				   TAPE_LED_OFF();//FAN_LED_OFF();
+				   TAPE_LED_OFF_TO_FAN_LED();//FAN_LED_OFF_TO_TAPE_LED_OFF();
 				   RELAY_TAPE_SetLow_TO_FAN();//RELAY_FAN_SetLow_TO_KILL();
 
 			   }
@@ -453,13 +458,13 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 			
 			 if(tpd_t.relay_fan_flag ==1){
 					
-				TAPE_LED_ON();//FAN_LED_ON();
+				TAPE_LED_ON_TO_FAN_LED();//FAN_LED_ON_TO_TAPE_LED_ON();
 				RELAY_TAPE_SetHigh_TO_FAN();//RELAY_FAN_SetHigh_TO_KILL();
 			}
 			else if(tpd_t.relay_fan_flag ==0){
 			 
 			
-			TAPE_LED_OFF() ;//FAN_LED_OFF();
+			TAPE_LED_OFF_TO_FAN_LED() ;//FAN_LED_OFF_TO_TAPE_LED_OFF();
 			 RELAY_TAPE_SetHigh_TO_FAN();//RELAY_FAN_SetLow_TO_KILL();
 			  
 			}
@@ -472,25 +477,29 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
     if(pro_t.gTimer_pro_key > 2){//30ms
             pro_t.gTimer_pro_key =0;
 		 if(tpd_t.relay_tape_flag ==1){
-		 	 FAN_LED_ON();//TAPE_LED_ON();
+		 	 FAN_LED_ON_TO_TAPE_LED_ON();//TAPE_LED_ON_TO_FAN_LED();
 			// RELAY_TAPE_SetHigh_TO_FAN();
+			RELAY_KILL_SetHigh_TO_TAPE();
 			 
 		 }
 		 else{
-		 	FAN_LED_OFF();//TAPE_LED_OFF();
+		 	FAN_LED_OFF_TO_TAPE_LED_OFF();//TAPE_LED_OFF_TO_FAN_LED();
            // RELAY_TAPE_SetLow_TO_FAN();
+           RELAY_KILL_SetHigh_TO_TAPE();
 
 		 }
 
 		 
 	     if(tpd_t.relay_kill_flag ==1){
 		 	 KILL_LED_ON();
-			// RELAY_KILL_SetHigh_TO_TAPE_LED();
+			// RELAY_KILL_SetHigh_TO_TAPE();
+			RELAY_FAN_SetHigh_TO_KILL();
 	        
 		 }
 		 else{
 		 	 KILL_LED_OFF();
-			// RELAY_KILL_SetLow_TO_TAPE_LED();
+			// RELAY_KILL_SetLow_TO_TAPE();
+			RELAY_FAN_SetLow_TO_KILL();
 	
 	
 		 }
@@ -518,7 +527,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 
 		
 	     if(tpd_t.gTimer_select_fun < 6 && pro_t.key_short_confirm_flag ==0){
-				Sterilization_Led_Filcker();//Tape_Led_Flicker();
+				Sterilization_Led_Filcker();//Tape_Led_Flicker_To_Fan_Led_Flicker();
 			}
 			else{
 	
@@ -534,14 +543,14 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 				   if(tpd_t.relay_kill_flag==0){
 	
 					   tpd_t.relay_kill_flag=1;
-					   KILL_LED_ON();//TAPE_LED_ON();
+					   KILL_LED_ON();//TAPE_LED_ON_TO_FAN_LED();
 					    RELAY_FAN_SetHigh_TO_KILL()	 ;//RELAY_TAPE_SetHigh_TO_FAN();
 	
 				   }
 				   else{
 					     tpd_t.relay_kill_flag=0;
 	
-					    KILL_LED_OFF();//TAPE_LED_OFF();
+					    KILL_LED_OFF();//TAPE_LED_OFF_TO_FAN_LED();
 						 RELAY_FAN_SetLow_TO_KILL()	 ;//RELAY_TAPE_SetLow_TO_FAN();
 					  
 	
@@ -550,12 +559,12 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 				   else{
 						
 						if(tpd_t.relay_kill_flag ==1){
-							TAPE_LED_ON();
+							KILL_LED_ON();
 							 RELAY_FAN_SetHigh_TO_KILL()	 ;//RELAY_TAPE_SetHigh_TO_FAN();
 	
 						}
 						else{
-						 TAPE_LED_OFF();
+						 KILL_LED_OFF();
 						  RELAY_FAN_SetLow_TO_KILL()	 ;//RELAY_TAPE_SetLow_TO_FAN();
 	
 	
@@ -566,42 +575,38 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 				
 			}
 			
-
-
-
-
-		
-		
-
-		
-  
-
-		 if(pro_t.gTimer_pro_key > 2){//20ms
+	if(pro_t.gTimer_pro_key > 2){//20ms
       		pro_t.gTimer_pro_key =0;
-        if(tpd_t.relay_fan_flag == 1){
-
-			 FAN_LED_ON();//FAN_LED_ON();
-					 
-		    
-
-         }
-         else{
-		   FAN_LED_OFF();//FAN_LED_OFF();
-		  // RELAY_FAN_SetLow_TO_KILL()	;
-
-
-		 }
+       	 if(tpd_t.relay_fan_flag == 1){
 	
-         if(tpd_t.relay_tape_flag ==1){
-		 	 TAPE_LED_ON();
-			 RELAY_TAPE_SetHigh_TO_FAN();
-			 
-		 }
-		 else{
-		 	TAPE_LED_OFF();
-            RELAY_TAPE_SetLow_TO_FAN();
+				TAPE_LED_ON_TO_FAN_LED(); //FAN_LED_ON_TO_TAPE_LED_ON();//FAN_LED_ON_TO_TAPE_LED_ON();
+						 
+				// RELAY_FAN_SetHigh_TO_KILL()	 ;
+				RELAY_TAPE_SetHigh_TO_FAN();
+				
+	
+			 }
+			 else{
+			  TAPE_LED_OFF_TO_FAN_LED();// FAN_LED_OFF_TO_TAPE_LED_OFF();//FAN_LED_OFF_TO_TAPE_LED_OFF();
+			  // RELAY_FAN_SetLow_TO_KILL()	;
+			  RELAY_TAPE_SetLow_TO_FAN();
+			  
+	
+	
+			 }
+         
+		if(tpd_t.relay_tape_flag ==1){
+			FAN_LED_ON_TO_TAPE_LED_ON();//TAPE_LED_ON_TO_FAN_LED();
+			// RELAY_TAPE_SetHigh_TO_FAN();
+			RELAY_KILL_SetHigh_TO_TAPE();
 
-		 }
+		}
+		else{
+			FAN_LED_OFF_TO_TAPE_LED_OFF();//TAPE_LED_OFF_TO_FAN_LED();
+			// RELAY_TAPE_SetLow_TO_FAN();
+			RELAY_KILL_SetHigh_TO_TAPE();
+
+		}
 
 		 
 
@@ -671,43 +676,56 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 		//
 		if(pro_t.gTimer_pro_key > 1){//20ms
            pro_t.gTimer_pro_key =0;
-	     if(tpd_t.relay_fan_flag == 1){
 
-			 FAN_LED_ON();//FAN_LED_ON();
-					 
-		     RELAY_FAN_SetHigh_TO_KILL()	 ;
-
-         }
-         else{
-		   FAN_LED_OFF();//FAN_LED_OFF();
-		   RELAY_FAN_SetLow_TO_KILL()	;
-
-
-		 }
+		//fan_led_relay
+	   	 if(tpd_t.relay_fan_flag == 1){
 	
-         if(tpd_t.relay_tape_flag ==1){
-		 	 TAPE_LED_ON();
-			 RELAY_TAPE_SetHigh_TO_FAN();
+				TAPE_LED_ON_TO_FAN_LED(); //FAN_LED_ON_TO_TAPE_LED_ON();//FAN_LED_ON_TO_TAPE_LED_ON();
+						 
+				// RELAY_FAN_SetHigh_TO_KILL()	 ;
+				RELAY_TAPE_SetHigh_TO_FAN();
+				
+	
+			 }
+			 else{
+			  TAPE_LED_OFF_TO_FAN_LED();// FAN_LED_OFF_TO_TAPE_LED_OFF();//FAN_LED_OFF_TO_TAPE_LED_OFF();
+			  // RELAY_FAN_SetLow_TO_KILL()	;
+			  RELAY_TAPE_SetLow_TO_FAN();
+			  
+	
+	
+			 }
+       //tape_led_relay
+		 if(tpd_t.relay_tape_flag ==1){
+			 FAN_LED_ON_TO_TAPE_LED_ON();//TAPE_LED_ON_TO_FAN_LED();
+			// RELAY_TAPE_SetHigh_TO_FAN();
+			RELAY_KILL_SetHigh_TO_TAPE();
 			 
 		 }
 		 else{
-		 	TAPE_LED_OFF();
-            RELAY_TAPE_SetLow_TO_FAN();
-
-		 }
-
+			FAN_LED_OFF_TO_TAPE_LED_OFF();//TAPE_LED_OFF_TO_FAN_LED();
+		   // RELAY_TAPE_SetLow_TO_FAN();
+		   RELAY_KILL_SetHigh_TO_TAPE();
 		 
-	     if(tpd_t.relay_kill_flag ==1){
+	   }
+
+		//kill_led_relay
+		  if(tpd_t.relay_kill_flag ==1){
 		 	 KILL_LED_ON();
-			 RELAY_KILL_SetHigh_TO_TAPE_LED();
+			// RELAY_KILL_SetHigh_TO_TAPE();
+			RELAY_FAN_SetHigh_TO_KILL();
 	        
 		 }
 		 else{
 		 	 KILL_LED_OFF();
-			 RELAY_KILL_SetLow_TO_TAPE_LED();
+			// RELAY_KILL_SetLow_TO_TAPE();
+			RELAY_FAN_SetLow_TO_KILL();
 	
 	
 		 }
+
+		 
+	   
 	 }
 
     break;
