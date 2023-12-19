@@ -119,9 +119,7 @@ int main(void)
 	 }
 	 else{
 	    Key_Handler(key_value);
-
-
-	 }
+     }
   }
   /* USER CODE END 3 */
 }

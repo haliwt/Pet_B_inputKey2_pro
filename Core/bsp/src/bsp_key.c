@@ -56,13 +56,13 @@ uint8_t ReadKey(void)
   }
   else if(FUN_KEY_VALUE()==0 && CONFIRM_KEY_VALUE()==0 && pro_t.long_key_flag ==0){ //oneself key 
 		cnt++;
-		if(cnt<30){ //按键松开消抖,一定要大于短按键次数 > 20
+		if(cnt<70){ //按键松开消抖,一定要大于短按键次数 > 20
 		    return 0; 
 
 		}
 		
 		cnt = 0;//
-		if(K1>20){ //KEY_FUN
+		if(K1>60){ //KEY_FUN
 			value1 = 0x01;	//short time power press ---power on 
 		}
 		else{
@@ -71,7 +71,7 @@ uint8_t ReadKey(void)
 		}
 
 		//KEY_CONFIRM 
-		if(K2>20 ){//short time modes press 
+		if(K2>60 ){//short time modes press 
             value2 = 0x02;
 
 		}
