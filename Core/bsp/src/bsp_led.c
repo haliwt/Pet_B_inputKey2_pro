@@ -279,18 +279,19 @@ void Tape_Led_Filcker(void)
    
 	if(led_t.gTimer_flicker < 1){ //500ms
 
-	  TAPE_LED_ON();
+	  TAPE_LED_OFF();
 
     }
 	else if(led_t.gTimer_flicker >0 && led_t.gTimer_flicker <2){
 
 	    
-	  TAPE_LED_OFF();
+	  TAPE_LED_ON();
 
 
 	}
 	else{
 	  led_t.gTimer_flicker=0;
+	   TAPE_LED_OFF();
 
     }
 

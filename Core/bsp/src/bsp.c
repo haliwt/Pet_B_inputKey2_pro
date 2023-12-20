@@ -326,6 +326,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 		else{
 			 tpd_t.gTimer_select_fun =10;
 			 fun_key_counter=0;
+			 pro_t.keep_temp_flag =0;
 			 
 		  if(pro_t.key_short_confirm_flag ==1){
 				pro_t.key_short_confirm_flag =0;
@@ -426,6 +427,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
        else{
 	   	  tpd_t.gTimer_select_fun =10;
 		  fun_key_counter=0;
+		  pro_t.keep_temp_flag =0;
 
 
 		
@@ -524,7 +526,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 
 			tpd_t.gTimer_select_fun =10;
 			fun_key_counter=0;
-
+			pro_t.keep_temp_flag =0;
 
 
 			if(pro_t.key_short_confirm_flag ==1){
@@ -630,6 +632,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 			tpd_t.gTimer_select_fun=20;
             pro_t.keep_temp_flag =0;
 		    fun_key_counter=0;
+		
 			
 			pro_t.long_key_flag =0;
 		    pro_t.key_short_confirm_flag=0;
