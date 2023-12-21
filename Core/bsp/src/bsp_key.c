@@ -31,12 +31,12 @@ uint8_t ReadKey(void)
 //		return value1;
 //	T1msFlag = 0;
 	
-  if(FUN_KEY_VALUE() ==KEY_DOWN && CONFIRM_KEY_VALUE()==KEY_UP){ //KEY1 =POWER_KEY ,KEY2 = MODES
+  if(FUN_KEY_VALUE() ==KEY_DOWN){ //KEY1 =POWER_KEY ,KEY2 = MODES
 		cnt = 0;
 		pro_t.long_key_flag =0;
 		K1++;	 //Fun_key press 
   }
-  else if( CONFIRM_KEY_VALUE()==KEY_DOWN && pro_t.long_key_flag ==0){
+  else if( CONFIRM_KEY_VALUE()==KEY_DOWN && pro_t.long_key_flag ==0 ){
 		cnt = 0;
 		K2++;   //Confirm_key press
 		if(pro_t.keep_temp_flag ==1){

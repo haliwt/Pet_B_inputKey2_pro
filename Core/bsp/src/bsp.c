@@ -319,7 +319,13 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 
          //relay_a_tape
 		if(tpd_t.gTimer_select_fun < 6 && pro_t.key_short_confirm_flag ==0 ){
+			if(tpd_t.relay_keep_temp_flag ==0){
+				KEEP_HEAT_LED_OFF();
+				RELAY_KEEP_TEMP_SetLow();
+		
+			}
 			Tape_Led_Filcker();
+			
 		}
 		else{
 			 tpd_t.gTimer_select_fun =10;
