@@ -94,6 +94,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
    bsp_ctl_init();
    delay_init(24);
+   Relay_Init();
 
   /* USER CODE END 2 */
    HAL_TIM_Base_Start_IT(&htim14);//HAL_TIM_Base_Start(&htim3);
@@ -115,12 +116,12 @@ int main(void)
 	
 	  key_value = ReadKey();
 
-	 if(key_value ==0){
-	    Main_Process();
-	 }
-	 else{
-	    Key_Handler(key_value);
-     }
+	    if(key_value==0){
+	    	Main_Process();
+	    }
+		else
+	   		Key_Handler(key_value); 
+     
   }
   /* USER CODE END 3 */
 }

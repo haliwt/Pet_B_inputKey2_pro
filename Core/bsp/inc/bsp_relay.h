@@ -21,4 +21,17 @@
 #define RELAY_KEEP_TEMP_SetLow()		HAL_GPIO_WritePin(RELAY_D_GPIO_Port , RELAY_D_Pin , GPIO_PIN_SET)
 
 
+void Relay_Init(void);
+
+void Relay_Confirm_Turn_OnOff_Fun(void);
+
+void Relay_Tape_State(void);
+
+void Relay_Fan_State(void);
+
+void Relay_Kill_State(void);
+
+void Relay_Temp_State(void);
+
+
 #endif 

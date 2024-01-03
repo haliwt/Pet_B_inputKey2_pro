@@ -3,13 +3,13 @@
 main_prcess_t pro_t;
 
 static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag);
-//static void Run_Display_Handler(uint8_t temp_value);
+
 
 
 
 
 uint8_t relay_id_led ;
-uint8_t fun_key_counter,display_keep_temp_value;
+uint8_t display_keep_temp_value;
 uint8_t  disp_keep_temp_value ;
 /*
 *********************************************************************************************************
@@ -82,26 +82,25 @@ void Key_Handler(uint8_t key_value)
 
 		        relay_id_led = relay_tape_led_on;
 				tpd_t.gTimer_select_fun=0;
-				pro_t.key_short_confirm_flag=0;//WT.EDIT 2023.12.20
-				fun_key_counter=1;
+				pro_t.fun_key_counter=1;
 		 
 
 		   break;
 		 
-		    case relay_b_fan:
+		    case relay_b_fan_led:
 				relay_id_led = relay_fan_led_on;
 				tpd_t.gTimer_select_fun=0;
 				pro_t.key_short_confirm_flag=0;
-				 fun_key_counter=1;
+				pro_t.fun_key_counter=1;
 				
 
 		    break;
 
-			case relay_c_kill:  // 
+			case relay_c_kill_led:  // 
 				relay_id_led = relay_kill_led_on;
 				tpd_t.gTimer_select_fun=0;
 				pro_t.key_short_confirm_flag=0;
-				 fun_key_counter=1;
+				 pro_t.fun_key_counter=1;
 				
 		    break;
 
@@ -111,31 +110,87 @@ void Key_Handler(uint8_t key_value)
 				relay_id_led = relay_keep_temp_led_on;
 				tpd_t.gTimer_select_fun=0;
 				pro_t.key_short_confirm_flag=0;//WT.EDIT 2023.12.20
-				fun_key_counter=1;
+				pro_t.fun_key_counter=1;
 			 
 		    break;
 
-			default:
-
-			break;
-
            }
-		   break;
+		  break;
 		
         }
      break;
 		
      //confirm key 
-	 case confirm_short_key: // confirm key
+	case confirm_short_key: // confirm key
 
-	  switch(fun_key_counter){
 
-	     case 1:
+	  if(pro_t.fun_key_counter==0){
+        
+		if( pro_t.set_keey_temp_define_flag == 1){ //display has been set keep heat temperatur value .
+		pro_t.gTimer_pro_disp_temp=0;
+		disp_keep_temp_value =1;
 
-	     //special key of fun relay D "keep heap temperature be set up " 
-         if(relay_id_led == relay_keep_temp_led_on &&  pro_t.key_as_numbers_input_flag ==0){ //"+" tempeature value 
+		}
+		else{ //display "00:00"
+		pro_t.gTimer_pro_disp_temp=0;
+		disp_keep_temp_value =2;
 
-		     switch(pro_t.set_keey_temp_define_flag){
+		}
+
+
+     }
+	 else{
+
+      switch(relay_id_led){
+
+		 case relay_tape_led_on:
+
+		      if(tpd_t.relay_tape_flag ==0){
+				 tpd_t.relay_tape_flag =1;
+				  TAPE_LED_ON();
+				  RELAY_TAPE_SetHigh();
+			  } 
+			  else{
+				  tpd_t.relay_tape_flag =0;
+				   TAPE_LED_OFF(); 
+				  RELAY_TAPE_SetLow();
+			  } 
+		      pro_t.fun_key_counter=0;
+
+		   break;
+		 
+		    case relay_fan_led_on:
+				if(tpd_t.relay_fan_flag==0){
+					tpd_t.relay_fan_flag=1;
+					 FAN_LED_ON();
+					RELAY_FAN_SetHigh();
+				}
+				else{
+					tpd_t.relay_fan_flag=0;
+					FAN_LED_OFF(); 
+		            RELAY_FAN_SetLow();
+				}
+				 pro_t.fun_key_counter=0;
+			break;
+
+			case relay_kill_led_on:  // 
+				if(tpd_t.relay_kill_flag==0){
+					tpd_t.relay_kill_flag=1;
+					KILL_LED_ON();
+		            RELAY_KILL_SetHigh();
+				}else{
+					tpd_t.relay_kill_flag=0;
+					 KILL_LED_OFF(); 
+		             RELAY_KILL_SetLow();
+				}
+				 pro_t.fun_key_counter=0;
+				
+				
+		    break;
+
+			case relay_keep_temp_led_on: //keep temperature value
+
+			  switch(pro_t.set_keey_temp_define_flag){
 
 			   case 1:
   
@@ -150,62 +205,27 @@ void Key_Handler(uint8_t key_value)
 			 
 			  break;
 
-			 case 0:
+			 case 0: //confirm key as input numbers key
          
-			 // tpd_t.relay_keep_temp_flag =1;
 			  pro_t.key_as_numbers_input_flag =1;
 			  tpd_t.gTimer_select_fun=0;
 	          ADD_DEC_LED_ON();
-		      fun_key_counter =1;
+		     
+                tpd_t.gTimer_select_fun=0;
+				pro_t.gTimer_pro_disp_temp=0;
+				disp_keep_temp_value = 0xff;
+				tpd_t.digital_numbers--; //scope : 16~30度
+				if(tpd_t.digital_numbers <16) tpd_t.digital_numbers=16;
+				Run_Keep_Heat_Setup_Digital_Numbers(tpd_t.digital_numbers);
 			  
-
-          
 			  break;
 
 		     }
 
-			
+      }
+				
+	break;
 
-	   }
-
-
-	   if(pro_t.key_as_numbers_input_flag ==1 && relay_id_led == relay_keep_temp_led_on){
-	   
-          tpd_t.gTimer_select_fun=0;
-		  pro_t.gTimer_pro_disp_temp=0;
-          disp_keep_temp_value = 0xff;
-		  tpd_t.digital_numbers--; //scope : 16~30度
-		  if(tpd_t.digital_numbers <16) tpd_t.digital_numbers=16;
-		  Run_Keep_Heat_Setup_Digital_Numbers(tpd_t.digital_numbers);
-		}
-		else{
-			tpd_t.gTimer_select_fun=0;
-	    	pro_t.key_short_confirm_flag =1;
-		}
-	
-
-	  break;
-
-	  case 0: //don't touch fun key and the first touch confirm key
-	 
-
-          if( pro_t.set_keey_temp_define_flag == 1){ //display has been set keep heat temperatur value .
-		  	  pro_t.gTimer_pro_disp_temp=0;
-		      disp_keep_temp_value =1;
-
-          }
-		  else{ //display "00:00"
-		  	  pro_t.gTimer_pro_disp_temp=0;
-			 disp_keep_temp_value =2;
-
-		  }
-
-
-	    break;
-
-	    }
-
-	 break;
      //function key long be pressed 
 	 case confirm_long_key: //confirm long by pressed 
 
@@ -238,13 +258,13 @@ void Key_Handler(uint8_t key_value)
 				   ADD_DEC_LED_OFF();
 
               }
+			  pro_t.fun_key_counter=0;
 		}
 
 	 break;
   
-  }
-
-
+	}
+	}
 }
 /*
 *********************************************************************************************************
@@ -314,13 +334,15 @@ void Main_Process(void)
 
 
 
-/*********************************************************************************************************
+/********************************************************************************
+*
 *	函 数 名: void Main_Process(void)
 *	功能说明: App 层 
 *			 
 *	形    参: 输入按键的键值
 *	返 回 值: 无
-*********************************************************************************************************/
+*
+*********************************************************************************/
 static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 {
 
@@ -331,99 +353,19 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 	case relay_tape_led_on:
 
          //relay_a_tape
-		if(tpd_t.gTimer_select_fun < 6 && pro_t.key_short_confirm_flag ==0 ){
-			if(tpd_t.relay_keep_temp_flag ==0){
-				KEEP_HEAT_LED_OFF();
-				RELAY_KEEP_TEMP_SetLow();
+		if(tpd_t.gTimer_select_fun < 6 && pro_t.fun_key_counter==1){
 		
-			}
 			Tape_Led_Filcker();
 			
 		}
 		else{
-			 tpd_t.gTimer_select_fun =10;
-			 fun_key_counter=0;
-			 pro_t.key_as_numbers_input_flag =0;
-			 
-		  if(pro_t.key_short_confirm_flag ==1){
-				pro_t.key_short_confirm_flag =0;
-				
-				if(tpd_t.relay_tape_flag ==0){
-					tpd_t.relay_tape_flag =1;
-					TAPE_LED_ON();
-					RELAY_TAPE_SetHigh();
-
-				}
-				else {
-
-					tpd_t.relay_tape_flag =0;
-					TAPE_LED_OFF(); 
-					RELAY_TAPE_SetLow();
-
-	           }
-		   }
-		   else{
-             if(pro_t.gTimer_pro_key > 20){//30ms){
-				if(tpd_t.relay_tape_flag ==1){
-					TAPE_LED_ON();
-					RELAY_TAPE_SetHigh();
-
-				}
-				else{
-				   TAPE_LED_OFF(); 
-					RELAY_TAPE_SetLow();
-
-
-			   }
-			}
-		   }
+			pro_t.fun_key_counter=0;
+		    pro_t.key_as_numbers_input_flag =0;
 		}
-
-		//
-	    if(pro_t.gTimer_pro_key > 20){//20ms
-				pro_t.gTimer_pro_key =0;
-			 if(tpd_t.relay_fan_flag == 1){
-	
-				FAN_LED_ON(); 
-						 
 		
-				RELAY_FAN_SetHigh();
-				
-	
-			 }
-			 else{
-			  FAN_LED_OFF();
-			
-			  RELAY_FAN_SetLow();
-			  
-	
-	
-			 }
-	
-			 if(tpd_t.relay_kill_flag ==1){
-		 	 KILL_LED_ON();
-		
-			RELAY_KILL_SetHigh();
-	        
-		 	}
-		 	else{
-		 	 KILL_LED_OFF();
-		
-			RELAY_KILL_SetLow();
-	
-	
-		 	}
-	
-			 
-			if(tpd_t.relay_keep_temp_flag ==1){
-				KEEP_HEAT_LED_ON();
-				RELAY_KEEP_TEMP_SetHigh();
-			}
-			else{
-				KEEP_HEAT_LED_OFF();
-				RELAY_KEEP_TEMP_SetLow();
-		
-			}
+		if(pro_t.gTimer_pro_key > 30){//200ms
+ 			pro_t.gTimer_pro_key=0;	
+			Relay_Confirm_Turn_OnOff_Fun();
 		}
 	
 		break;
@@ -434,194 +376,37 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
     case relay_fan_led_on:
 
 
-      if(tpd_t.gTimer_select_fun < 6 &&  pro_t.key_short_confirm_flag ==0){
+      if(tpd_t.gTimer_select_fun < 6 &&  pro_t.fun_key_counter ==1){
         	Fan_Led_Flicker();//Tape_Led_Filcker();
 	
        }
        else{
-	   	  tpd_t.gTimer_select_fun =10;
-		  fun_key_counter=0;
+	   	 
+		  pro_t.fun_key_counter=0;
 		  pro_t.key_as_numbers_input_flag =0;
-
-
-		
-				
-		  if(pro_t.key_short_confirm_flag ==1){
-		  	   pro_t.key_short_confirm_flag =0;
-			   if(tpd_t.relay_fan_flag ==0){
-			   	   tpd_t.relay_fan_flag = 1;
-				  
-				    FAN_LED_ON();
-				   RELAY_FAN_SetHigh();
-			   }
-			   else {
-				   tpd_t.relay_fan_flag = 0;
-				  
-				   FAN_LED_OFF();
-				   RELAY_FAN_SetLow();
-
-			   }
-		  }
-          else{
-
-			 if(pro_t.gTimer_pro_key > 20){//30ms
-			 if(tpd_t.relay_fan_flag ==1){
-					
-				FAN_LED_ON();
-				RELAY_FAN_SetHigh();
-			}
-			else if(tpd_t.relay_fan_flag ==0){
-			 
-			
-			 FAN_LED_OFF() ;
-			 RELAY_FAN_SetLow();
-			  
-			}
-			}
-          }
-		}
-     
-	
-      
-
-    if(pro_t.gTimer_pro_key > 20){//300ms
-            pro_t.gTimer_pro_key =0;
-		 if(tpd_t.relay_tape_flag ==1){
-		 	 TAPE_LED_ON();
-			RELAY_TAPE_SetHigh();
-			 
-		 }
-		 else{
-		 	TAPE_LED_OFF();
-      
-           RELAY_TAPE_SetLow();
-
-		 }
-
-		 
-	     if(tpd_t.relay_kill_flag ==1){
-		 	 KILL_LED_ON();
-			
-			RELAY_KILL_SetHigh();
-	        
-		 }
-		 else{
-		 	 KILL_LED_OFF();
-		
-			RELAY_KILL_SetLow();
-	
-	
-		 }
-
-		 
-	    if(tpd_t.relay_keep_temp_flag ==1){
-			KEEP_HEAT_LED_ON();
-	        RELAY_KEEP_TEMP_SetHigh();
-		}
-		else{
-	        KEEP_HEAT_LED_OFF();
-	        RELAY_KEEP_TEMP_SetLow();
-	
-		}
-
-		 
-
-       }
-    break;
+	   }
+	 if(pro_t.gTimer_pro_key > 30){//300ms
+	     pro_t.gTimer_pro_key=0;
+		Relay_Confirm_Turn_OnOff_Fun();
+	 }		
+		break;
 
 	
 	case relay_kill_led_on:
 
 		//relay_a_tape
-		if(tpd_t.gTimer_select_fun < 6 && pro_t.key_short_confirm_flag ==0){
+		if(tpd_t.gTimer_select_fun < 6 && pro_t.fun_key_counter==1){
 			Sterilization_Led_Filcker();//Fan_Led_Flicker();
 		}
 		else{
-
-			tpd_t.gTimer_select_fun =10;
-			fun_key_counter=0;
+			pro_t.fun_key_counter=0;
 			pro_t.key_as_numbers_input_flag =0;
-
-
-			if(pro_t.key_short_confirm_flag ==1){
-				pro_t.key_short_confirm_flag =0;
-
-				if(tpd_t.relay_kill_flag==0){
-
-					tpd_t.relay_kill_flag=1;
-					KILL_LED_ON();//FAN_LED_ON();
-					RELAY_KILL_SetHigh()	 ;//RELAY_FAN_SetHigh();
-
-				}
-				else{
-					tpd_t.relay_kill_flag=0;
-
-					KILL_LED_OFF();//FAN_LED_OFF();
-					RELAY_KILL_SetLow()	 ;//RELAY_FAN_SetLow();
-
-
-				}
-			}
-			else{
-				if(pro_t.gTimer_pro_key > 20){//200ms
-				if(tpd_t.relay_kill_flag ==1){
-					KILL_LED_ON();
-					RELAY_KILL_SetHigh()	 ;//RELAY_FAN_SetHigh();
-
-					}
-					else{
-						KILL_LED_OFF();
-						RELAY_KILL_SetLow()	 ;//RELAY_FAN_SetLow();
-
-
-					}
-				}
-			 }
-
-	   }
-			
-		if(pro_t.gTimer_pro_key > 20){//200ms
-			pro_t.gTimer_pro_key =0;
-		if(tpd_t.relay_fan_flag == 1){
-
-			FAN_LED_ON(); 
-			RELAY_FAN_SetHigh();
-
-
 		}
-		else{
-			FAN_LED_OFF();
-		
-			RELAY_FAN_SetLow();
+		if(pro_t.gTimer_pro_key > 30){//200ms
+ 			pro_t.gTimer_pro_key=0;
+             Relay_Confirm_Turn_OnOff_Fun();
 		}
-
-		if(tpd_t.relay_tape_flag ==1){
-			TAPE_LED_ON();
-		
-			RELAY_TAPE_SetHigh();
-
-		}
-		else{
-			TAPE_LED_OFF();
-			
-			RELAY_TAPE_SetLow();
-
-		}
-
-
-
-
-
-		if(tpd_t.relay_keep_temp_flag ==1){
-		KEEP_HEAT_LED_ON();
-		RELAY_KEEP_TEMP_SetHigh();
-		}
-		else{
-		KEEP_HEAT_LED_OFF();
-		RELAY_KEEP_TEMP_SetLow();
-
-		}
-		}
+				
       
 
     break;
@@ -629,7 +414,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 	case relay_keep_temp_led_on: //keep temperature be set up value 16~30 degree
 
 	    //KEEP HEAT Display of LED 
-       if(tpd_t.gTimer_select_fun < 6 && pro_t.key_short_confirm_flag ==0){
+        if(tpd_t.gTimer_select_fun < 6 && pro_t.fun_key_counter ==1){
 
 	       if(pro_t.key_as_numbers_input_flag ==0){
 		   	
@@ -642,100 +427,24 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 		  
 		
        	}
-        else{
-			tpd_t.gTimer_select_fun=20;
-            pro_t.key_as_numbers_input_flag =0;
-		    fun_key_counter=0;
-		
-			
-			pro_t.long_key_flag =0;
-		    pro_t.key_short_confirm_flag=0;
-		    ADD_DEC_LED_OFF();
+	    else{
+			pro_t.fun_key_counter =0;
+			pro_t.key_as_numbers_input_flag =0;
+			ADD_DEC_LED_OFF();
 		    KEY_FUN_CONFIRM_LED_ON() ;
-			
-			if(pro_t.gTimer_pro_select > 20){
-				pro_t.gTimer_pro_select=0;
-
-				if(tpd_t.relay_keep_temp_flag ==1){
-					KEEP_HEAT_LED_ON();
-					RELAY_KEEP_TEMP_SetHigh();
-				}
-				else if(tpd_t.relay_keep_temp_flag ==0){
-					KEEP_HEAT_LED_OFF();
-					RELAY_KEEP_TEMP_SetLow();
-
-			  }
 		  }
-
-        }
-          
-
-      
-
-		
-
-		//
-		if(pro_t.gTimer_pro_key > 20){//20ms
-           pro_t.gTimer_pro_key =0;
-
-		//fan_led_relay
-	   	 if(tpd_t.relay_fan_flag == 1){
-	
-				FAN_LED_ON(); //TAPE_LED_ON();//TAPE_LED_ON();
-						 
-				// RELAY_KILL_SetHigh()	 ;
-				RELAY_FAN_SetHigh();
+		  
+		if(pro_t.gTimer_pro_key > 30){//300ms
+			 pro_t.gTimer_pro_key=0;
+             Relay_Confirm_Turn_OnOff_Fun();
+		}
 				
-	
-			 }
-			 else{
-			  FAN_LED_OFF();// TAPE_LED_OFF();//TAPE_LED_OFF();
-			  // RELAY_KILL_SetLow()	;
-			  RELAY_FAN_SetLow();
-			  
-	
-	
-			 }
-       //tape_led_relay
-		 if(tpd_t.relay_tape_flag ==1){
-			 TAPE_LED_ON();//FAN_LED_ON();
-			// RELAY_FAN_SetHigh();
-			RELAY_TAPE_SetHigh();
-			 
-		 }
-		 else{
-			TAPE_LED_OFF();//FAN_LED_OFF();
-		   // RELAY_FAN_SetLow();
-		   RELAY_TAPE_SetLow();
-		 
-	   }
-
-		//kill_led_relay
-		  if(tpd_t.relay_kill_flag ==1){
-		 	 KILL_LED_ON();
-			// RELAY_TAPE_SetHigh();
-			RELAY_KILL_SetHigh();
-	        
-		 }
-		 else{
-		 	 KILL_LED_OFF();
-			// RELAY_TAPE_SetLow();
-			RELAY_KILL_SetLow();
-	
-	
-		 }
-
-		 
-	   
-	 }
+       
 
     break;
 
     }
 
 }
-
-
-
 
 

@@ -23,6 +23,7 @@
 
 
 
+
 typedef enum{
 
     fun_key =0x01,
@@ -36,8 +37,8 @@ typedef enum{
 typedef enum{
 
     relay_a_tape_led = 0x01 ,
-	relay_b_fan ,
-	relay_c_kill ,
+	relay_b_fan_led ,
+	relay_c_kill_led ,
 	relay_keep_temp 
 
 }relay_id_state;
@@ -58,6 +59,7 @@ typedef struct{
 
    uint8_t key_fun;
    uint8_t  key_value;
+   uint8_t fun_key_counter;
    uint8_t key_short_confirm_flag;
    uint8_t key_long_confirm_flag;
    uint8_t set_keey_temp_define_flag;

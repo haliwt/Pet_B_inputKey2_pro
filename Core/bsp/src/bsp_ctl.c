@@ -2,16 +2,16 @@
 #include "bsp.h"
 
 
-uint8_t (*relay_a_state)(void);
-uint8_t (*relay_b_state)(void);
-uint8_t (*relay_c_state)(void);
-uint8_t (*relay_d_state)(void);
+uint8_t (*relay_tape_state)(void);
+uint8_t (*relay_fan_state)(void);
+uint8_t (*relay_kill_state)(void);
+uint8_t (*relay_temp_state)(void);
 
 
-static uint8_t relay_a_fun(void);
-static uint8_t relay_b_fun(void);
-static uint8_t relay_c_fun(void);
-static uint8_t relay_d_fun(void);
+static uint8_t relay_tape_fun(void);
+static uint8_t relay_fan_fun(void);
+static uint8_t relay_kill_fun(void);
+static uint8_t relay_temp_fun(void);
 
 
 
@@ -22,226 +22,127 @@ uint8_t led_on_of_number;
 
 void bsp_ctl_init(void)
 {
-    Relay_A_Process(relay_a_fun);
-	Relay_B_Process(relay_b_fun);
-	Relay_C_Process(relay_c_fun);
-	Relay_D_Process(relay_d_fun);
+    Relay_Tape_Process(relay_tape_fun);
+	Relay_Fan_Process(relay_fan_fun);
+	Relay_Kill_Process(relay_kill_fun);
+	Relay_Temp_Process(relay_temp_fun);
 
 }
 
 
 /***********************************************************
 	*
-	*Function Name: void Run_InputKey_Model(uint8_t keyvalue)
-	*Function: parse of input key value
-	*Input Ref: input key of value 
-	*Retrun Ref:NO
-	*
-***********************************************************/
-#if 0
-void Run_InputKey_Model(uint8_t keyvalue)
-{
-   
-    static uint8_t confirm_flag;
-    switch(tpd_t.read_key_value){
-			
-	
-
-		case FUNCTION_KEY_PRES: //FUN
-
-	    if(tpd_t.keep_heat_fun_digital_numbers ==1){
-              tpd_t.gTimer_keep_heat_fun=0;
-			  tpd_t.digital_numbers++; //scope : 0~40度
-			  if(tpd_t.digital_numbers>40) tpd_t.digital_numbers=0;
-			   Key_Confirm_Handler(KEEP_HEAT_LED);
-			   Run_Keep_Heat_Setup_Digital_Numbers(tpd_t.digital_numbers);
-			   tpd_t.run_process_tag= KEY_FUNCTION_ITEM;
-
-		}
-		else{
-
-	     tpd_t.run_process_tag= KEY_FUNCTION_ITEM;
-	     if(led_on_of_number == KEEP_HEAT_LED)led_on_of_number =0;
-         if(led_on_of_number ==KEY_NULL)led_on_of_number =0;
-	     led_on_of_number++;
-		 led_t.gTimer_flicker=0;
-		 tpd_t.gTimer_select_fun=0;
-		   
-		  
-		}
-		break;
-	
-		case CONFIRM_KEY_PRES: //CONFIRM_KEY
-
-		if(tpd_t.keep_heat_fun_digital_numbers ==1){
-              tpd_t.gTimer_keep_heat_fun=0;
-			   Key_Confirm_Handler(KEEP_HEAT_LED);
-			  tpd_t.digital_numbers--; //scope : 0~40度--; //scope : 0 ~40 degree
-			  if(tpd_t.digital_numbers < 0)  tpd_t.digital_numbers=40; //scope : 0~80度=80;
-			  Run_Keep_Heat_Setup_Digital_Numbers(tpd_t.digital_numbers);
-               tpd_t.run_process_tag= KEY_CONFIRM_ITEM;
-			  
-		}
-		else{
-             
-		      tpd_t.run_process_tag= KEY_CONFIRM_ITEM;
-           }
-	
-		break;
-
-		case KEY_LONG_PRES_CONFIRM_MODE : //long key 
-			tpd_t.keep_heat_fun_digital_numbers=0;
-            tpd_t.keep_heat_run_flag=3;
-			Key_Confirm_Handler(KEEP_HEAT_LED);
-
-		break;
-
-	    
-		}
-
-}
-#endif 
-/***********************************************************
-	*
-	*Function Name: void Run_BoardCommand_Handler(void)
-	*Function: contiunce of process 
+	*Function Name:uint8_t relay_tape_fun(void)
+	*Function: open of clouse relay
 	*Input Ref: NO
-	*Retrun Ref:NO
+	*Retrun Ref: 1->open 0->close
 	*
 ***********************************************************/
-#if 0
-void Run_BoardCommand_Handler(void)
+static uint8_t relay_tape_fun(void)
 {
+     if(tpd_t.relay_tape_flag==1)return 1;
+	 else return 0;
 
-     static uint8_t keep_heat_confirm;
-	 switch(tpd_t.run_process_tag){
-         
+}
+/***********************************************************
+	*
+	*Function Name:static uint8_t relay_kill_fun(void) 
+	*Function: open of clouse relay
+	*Input Ref: NO
+	*Retrun Ref: 1->open 0->close
+	*
+***********************************************************/
+static uint8_t relay_fan_fun(void)
+{
+   if(tpd_t.relay_fan_flag==1) return 1;
+   else return 0;
 
-	 case KEY_FUNCTION_ITEM:
-	 
-	    Led_Display_Content_Fun(led_on_of_number);
+}
 
-     break;
+/***********************************************************
+	*
+	*Function Name:static uint8_t relay_kill_fun(void) 
+	*Function: open of clouse relay
+	*Input Ref: NO
+	*Retrun Ref: 1->open 0->close
+	*
+***********************************************************/
+static uint8_t relay_kill_fun(void)
+{
+	if(tpd_t.relay_kill_flag==1) return 1;
+	else return 0;
 
-	 case KEY_CONFIRM_ITEM:
-             if(tpd_t.confirm_key_select_item_keep_heat == keep_heat_enable && led_on_of_number ==KEEP_HEAT_LED){
-                 tpd_t.confirm_key_select_item_keep_heat= confirm_disable;
-                 RELAY_KEEP_TEMP_SetLow();
-                 KEEP_HEAT_LED_OFF();
-                 tpd_t.keep_heat_fun_digital_numbers =0;
-                 led_on_of_number =KEY_NULL;
-                 Key_Confirm_Handler(led_on_of_number);
+}
+/***********************************************************
+	*
+	*Function Name: static uint8_t relay_temp_fun(void)
+	*Function: open of clouse relay
+	*Input Ref: NO
+	*Retrun Ref: 1->open 0->close
+	*
+***********************************************************/
+static uint8_t relay_temp_fun(void)
+{
+	if(pro_t.set_keey_temp_define_flag ==1){
+		if(pro_t.set_keep_tmep_value >= tpd_t.temperature_value ){
+                   tpd_t.relay_keep_temp_flag =1; //open keep temperature "relay_d" 
+			       KEEP_HEAT_LED_ON();
+	               RELAY_KEEP_TEMP_SetHigh();
+				   KEY_FUN_CONFIRM_LED_ON() ;  
+				   ADD_DEC_LED_OFF();
+
+			  }
+              else{
+                  tpd_t.relay_keep_temp_flag =0;
+			      KEEP_HEAT_LED_OFF();
+	              RELAY_KEEP_TEMP_SetLow();
+				  KEY_FUN_CONFIRM_LED_ON() ;
+				   ADD_DEC_LED_OFF();
 
               }
-              else if(tpd_t.keep_heat_fun_digital_numbers ==1){
-                   
-			  	Key_Confirm_Handler(KEEP_HEAT_LED);
 
-			 
-			 }
-			 else 
-               Key_Confirm_Handler(led_on_of_number);
-	 
 
-	 break;
+	}
+	else{
+		KEEP_HEAT_LED_OFF();
+		RELAY_KEEP_TEMP_SetLow();
+		KEY_FUN_CONFIRM_LED_ON() ;
+		ADD_DEC_LED_OFF();
 
-	
-     }
+	}
+
 
 }
 
-#endif 
+
 
 
 /***********************************************************
 	*
-	*Function Name: void Relay_A_Process(uint8_t (*relay_a_handler)(void))
+	*Function Name: void Relay_Tape_Process(uint8_t(*relay_tape_handler)(void))
 	*Function: open of clouse relay
 	*Input Ref: NO
 	*Retrun Ref: 1->open 0->close
 	*
 ***********************************************************/
-void Relay_A_Process(uint8_t (*relay_a_handler)(void))
+void Relay_Tape_Process(uint8_t(*relay_tape_handler)(void))
 {
-     relay_a_state = relay_a_handler;
+   relay_tape_state = relay_tape_handler;
 }
-
-static uint8_t relay_a_fun(void)
+void Relay_Fan_Process(uint8_t(*relay_fan_handler)(void))
 {
-   if(tpd_t.relay_fan_flag ==1)
-   	return open;
-   else 
-   	return close;
-
+	relay_fan_state = relay_fan_handler;
 }
-
-/***********************************************************
-	*
-	*Function Name: void Relay_A_Process(uint8_t (*relay_a_handler)(void))
-	*Function: open of clouse relay
-	*Input Ref: NO
-	*Retrun Ref: 1->open 0->close
-	*
-***********************************************************/
-void Relay_B_Process(uint8_t (*relay_b_handler)(void))
+void Relay_Kill_Process(uint8_t(*relay_kill_handler)(void))
 {
-     relay_b_state = relay_b_handler;
-}
-
-static uint8_t relay_b_fun(void)
-{
-   if(tpd_t.relay_tape_flag ==1)
-   	return open;
-   else 
-   	return close;
+   relay_kill_state = relay_kill_handler;
 
 }
-
-/***********************************************************
-	*
-	*Function Name: void Relay_A_Process(uint8_t (*relay_a_handler)(void))
-	*Function: open of clouse relay
-	*Input Ref: NO
-	*Retrun Ref: 1->open 0->close
-	*
-***********************************************************/
-void Relay_C_Process(uint8_t (*relay_c_handler)(void))
+void Relay_Temp_Process(uint8_t(*relay_temp_handler)(void))
 {
-     relay_c_state = relay_c_handler;
-}
-
-static uint8_t relay_c_fun(void)
-{
-   if(tpd_t.relay_kill_flag ==1)
-   	return open;
-   else 
-   	return close;
+   relay_temp_state = relay_temp_handler;
 
 }
-
-/***********************************************************
-	*
-	*Function Name: void Relay_A_Process(uint8_t (*relay_a_handler)(void))
-	*Function: open of clouse relay
-	*Input Ref: NO
-	*Retrun Ref: 1->open 0->close
-	*
-***********************************************************/
-void Relay_D_Process(uint8_t (*relay_d_handler)(void))
-{
-     relay_d_state = relay_d_handler;
-}
-
-static uint8_t relay_d_fun(void)
-{
-   if(tpd_t.relay_keep_temp_flag ==1)
-   	return open;
-   else 
-   	return close;
-
-}
-
-
 
 
 
