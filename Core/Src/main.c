@@ -30,7 +30,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
- uint8_t key_value;
+uint8_t key_value;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -110,10 +110,11 @@ int main(void)
 	   power_on++;
 	   Smg_Display_Temp_Degree_Handler();
 	}
-	 bsp_Idle();
-	// key_value =  KEY_Scan();
-	 key_value = ReadKey();
+	  bsp_Idle();
+	// pro_t.key_value =  KEY_Scan();
 	
+	  key_value = ReadKey();
+
 	 if(key_value ==0){
 	    Main_Process();
 	 }

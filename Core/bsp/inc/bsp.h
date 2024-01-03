@@ -55,7 +55,9 @@ typedef enum{
 
 typedef struct{
 
+
    uint8_t key_fun;
+   uint8_t  key_value;
    uint8_t key_short_confirm_flag;
    uint8_t key_long_confirm_flag;
    uint8_t set_keey_temp_define_flag;
@@ -68,6 +70,7 @@ typedef struct{
    uint8_t gTimer_pro_disp;
    uint8_t gTimer_pro_disp_temp;
    uint8_t gTimer_pro_select;
+   
 
 
 }main_prcess_t;

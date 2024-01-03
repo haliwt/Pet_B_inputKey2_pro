@@ -23,7 +23,7 @@ uint8_t  disp_keep_temp_value ;
 void bsp_Idle(void)
 {
 	/* --- 喂狗 */
-    if(pro_t.gTimer_pro_feed_dog > 3){
+    if(pro_t.gTimer_pro_feed_dog > 3 && pro_t.key_value ==0 ){
 	   pro_t.gTimer_pro_feed_dog=0;
 	   Feed_Dog();
 
@@ -42,7 +42,7 @@ void bsp_Idle(void)
 }
 /*
 *********************************************************************************************************
-*	函 数 名: Key_Handler(uint8_t key_value)
+*	函 数 名: Key_Handler(uint8_t pro_t.key_value)
 *	功能说明: 中间层 
 *			 
 *	形    参: 输入按键的键值
@@ -544,43 +544,43 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 
 
 			if(pro_t.key_short_confirm_flag ==1){
-			pro_t.key_short_confirm_flag =0;
+				pro_t.key_short_confirm_flag =0;
 
-			if(tpd_t.relay_kill_flag==0){
+				if(tpd_t.relay_kill_flag==0){
 
-			tpd_t.relay_kill_flag=1;
-			KILL_LED_ON();//FAN_LED_ON();
-			RELAY_KILL_SetHigh()	 ;//RELAY_FAN_SetHigh();
+					tpd_t.relay_kill_flag=1;
+					KILL_LED_ON();//FAN_LED_ON();
+					RELAY_KILL_SetHigh()	 ;//RELAY_FAN_SetHigh();
 
+				}
+				else{
+					tpd_t.relay_kill_flag=0;
+
+					KILL_LED_OFF();//FAN_LED_OFF();
+					RELAY_KILL_SetLow()	 ;//RELAY_FAN_SetLow();
+
+
+				}
 			}
 			else{
-			tpd_t.relay_kill_flag=0;
+				if(pro_t.gTimer_pro_key > 20){//200ms
+				if(tpd_t.relay_kill_flag ==1){
+					KILL_LED_ON();
+					RELAY_KILL_SetHigh()	 ;//RELAY_FAN_SetHigh();
 
-			KILL_LED_OFF();//FAN_LED_OFF();
-			RELAY_KILL_SetLow()	 ;//RELAY_FAN_SetLow();
-
-
-		}
-		}
-		else{
-			if(pro_t.gTimer_pro_key > 20){//200ms
-			if(tpd_t.relay_kill_flag ==1){
-			KILL_LED_ON();
-			RELAY_KILL_SetHigh()	 ;//RELAY_FAN_SetHigh();
-
-		}
-		else{
-			KILL_LED_OFF();
-			RELAY_KILL_SetLow()	 ;//RELAY_FAN_SetLow();
+					}
+					else{
+						KILL_LED_OFF();
+						RELAY_KILL_SetLow()	 ;//RELAY_FAN_SetLow();
 
 
-			}
-		  }
-		}
+					}
+				}
+			 }
 
 	   }
 			
-		if(pro_t.gTimer_pro_key > 20){//20ms
+		if(pro_t.gTimer_pro_key > 20){//200ms
 			pro_t.gTimer_pro_key =0;
 		if(tpd_t.relay_fan_flag == 1){
 
@@ -602,9 +602,9 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 
 		}
 		else{
-		TAPE_LED_OFF();
-		
-		RELAY_TAPE_SetLow();
+			TAPE_LED_OFF();
+			
+			RELAY_TAPE_SetLow();
 
 		}
 
