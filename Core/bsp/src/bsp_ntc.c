@@ -26,7 +26,7 @@ static uint16_t Read_NTC_Temperature_Voltage(void);
 
 static int8_t  Binary_Search(const uint8_t *array ,uint8_t key,uint8_t length);
 
-static int8_t  Binary_Uint16_t_Search(const uint16_t *array ,uint16_t key,uint8_t length);
+
 
 
 static void Read_Ntc_Decimal_Point_Numbers(void);
@@ -37,8 +37,6 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 
 
 uint8_t search_key;
-
-
 
 //std voltage
 static const uint16_t R10K_NTC[]={
@@ -215,90 +213,23 @@ static int8_t  Binary_Search(const uint8_t *array ,uint8_t key,uint8_t length)
 		    return   mid_value;
 
 		}
-        else if(array[mid_value] >   key ){ //right ->small
+        else if(array[mid_value] >   key ){ //right ->big number
 
              left_point = mid_value +1;
+			
 
 		}
-		else if(array[mid_value] < key){ //left -> big number
+		else if(array[mid_value] < key){ //left -> small number
 
           right_point = mid_value -1;
+		   
 
        }
-
-
-      } 
+	} 
    
-	  return -1;
-
-   
+	return -1;
 } 
-/*************************************************************************
-	*
-	*Functin Name: static int8_t  Binary_Uint16_t_Search(const uint16_t *array ,uint16_t key,uint8_t length)
-	*Funtion: binary search arithmetic
-	*
-	*
-	*
-*************************************************************************/
-static int8_t  Binary_Uint16_t_Search(const uint16_t *array ,uint16_t key,uint8_t length)
-{
-   
-   
-	 left_point =0 ;
-	right_point = length -1;
-   while(left_point <= right_point){
 
-        mid_value = left_point + (right_point-left_point)/2;
-
-        if(key == array[mid_value]){
-
-		
-            tpd_t.temperature_value = mid_value;
-		    return   mid_value;
-
-		}
-        else if(array[mid_value] >   key ){ //right ->small
-
-             left_point = mid_value +1;
-
-		}
-		else if(array[mid_value] < key){ //left -> big number
-
-          right_point = mid_value -1;
-
-       }
-
-	   
-       
-		
-	   if(right_point < 0){
-
-	       return -1 ; //don't find key of value 
-
-
-	   }
-	   else if(left_point >=length){
-
-	       return -1;
-       }
-       else{
-		 if((R10K_NTC_81[left_point])  -key >=0 && (R10K_NTC_81[right_point]-key) >=0){
-
-		       tpd_t.temperature_value = ((R10K_NTC_81[left_point]-key) > (R10K_NTC_81[right_point]-key)) ? right_point:left_point;
-				
-               return right_point ;
-		 }
-
-		  
-		  	
-      }
-
-     }
-
-    return -1;
-
-}
 /*********************************************************************
     *
 *Funtion Name:static void Analysis_Read_Ntc_Votalge(uint8_t readvalue)
@@ -327,24 +258,13 @@ void Read_NTC_Temperature_Power_On(void)
 {
 
       
-  
-	 #if 1
-	   tpd_t.ntc_voltage_value=Read_NTC_Temperature_Voltage_Power_On(); //Read_NTC_Temperature_Voltage();
-      temp_uint16_t_vlue= tpd_t.ntc_voltage_value/100;
-	 length_simple = sizeof(R10K_Init_0_81_simple)/sizeof(R10K_Init_0_81_simple[0]);
+  tpd_t.ntc_voltage_value=Read_NTC_Temperature_Voltage_Power_On(); //Read_NTC_Temperature_Voltage();
+  temp_uint16_t_vlue= tpd_t.ntc_voltage_value/100;
+  length_simple = sizeof(R10K_Init_0_81_simple)/sizeof(R10K_Init_0_81_simple[0]);
     
-   	 tpd_t.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
+  tpd_t.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
 
-	 Display_Speicial_Temperature_Value(tpd_t.temp_degree);
-
-	#endif 
-    #if 0
-    tpd_t.ntc_voltage_value= Read_NTC_Temperature_Voltage();
-
-	temp_uint16_t_vlue   =Binary_Uint16_t_Search(R10K_NTC_81,tpd_t.ntc_voltage_value,length);
-	if(tpd_t.ntc_voltage_value !=0)
-         Read_Ntc_Decimal_Point_Numbers();
-    #endif 
+  Display_Speicial_Temperature_Value(tpd_t.temp_degree);
 
 }
 
@@ -367,16 +287,30 @@ void Read_NTC_Temperature_Value_Handler(void)
    	 tpd_t.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
 
 	 Display_Speicial_Temperature_Value(tpd_t.temp_degree);
-	
+	 
+	 if(pro_t.set_keey_temp_define_flag == 1){
+         if(pro_t.set_keep_tmep_value >= tpd_t.temperature_value ){
+                   tpd_t.relay_keep_temp_flag =1;
+			       KEEP_HEAT_LED_ON();
+	               RELAY_KEEP_TEMP_SetHigh();
+				   KEY_FUN_CONFIRM_LED_ON() ;  
+				   ADD_DEC_LED_OFF();
+
+			  }
+              else{
+                  tpd_t.relay_keep_temp_flag =0;
+			      KEEP_HEAT_LED_OFF();
+	              RELAY_KEEP_TEMP_SetLow();
+				  KEY_FUN_CONFIRM_LED_ON() ;
+				   ADD_DEC_LED_OFF();
+
+              }
+
+
+	 }
 
 	#endif 
-    #if 0
-    tpd_t.ntc_voltage_value= Read_NTC_Temperature_Voltage();
-
-	temp_uint16_t_vlue   =Binary_Uint16_t_Search(R10K_NTC_81,tpd_t.ntc_voltage_value,length);
-	if(tpd_t.ntc_voltage_value !=0)
-         Read_Ntc_Decimal_Point_Numbers();
-    #endif 
+  
 
 }
 
@@ -771,15 +705,15 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 	   		 if(i==0){
                if(*(pt+0) < key){
 
-			    if(key- *(pt+0) >30){
+			    if(key- *(pt+0) >=20){
 
 				   tpd_t.temperature_rectify_value =-1;
 				  
 
 				}
                 else{
-					 tpd_t.temperature_rectify_value =0;
-                   }
+					tpd_t.temperature_rectify_value =0;
+                }
 				
 				    temp_decimal_point = key - *(pt+i);
 
@@ -789,15 +723,18 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 
                }
 
-                temp_temperature_value  = i;
-
+              if(*(pt+0) < key){
+			  	
+			    temp_temperature_value  = i;
 				return temp_temperature_value ;
+
+               }
 
 
 			}
 	 	    else if(*(pt+i) >  key && (*(pt+i+1) < key)){ //high temperature degree is number is smaller
 
-            if(key- (*(pt+i+1)) >=30){ //10
+            if(key- (*(pt+i+1)) >=20){ //10
                  tpd_t.temperature_rectify_value =1;
 				 
             }
@@ -809,8 +746,11 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 		   temp_decimal_point = temp_decimal_point +5;
            tpd_t.temperature_decimal_point_value =  temp_decimal_point/10 ;
 
-			temp_temperature_value =  i;
-			return temp_temperature_value ;
+            
+				temp_temperature_value =  i;
+				return temp_temperature_value ;
+
+            
 
 		 }
 		 else if(i==(length-1)){
@@ -825,7 +765,7 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 			   else
 		      	tpd_t.temperature_rectify_value =0;
 
-			    temp_decimal_point = *(pt+i)-key;
+			    temp_decimal_point = *(pt+i)-key; //小数点
 
 		        temp_decimal_point = temp_decimal_point +5;
 
@@ -837,17 +777,13 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 				return temp_temperature_value ;
 			   	
 
-               	}
+               }
 
 		 }
 		
-
-		 
-		
-	
-      }
-	  
-  }
+	  }
+	  return 0;
+}
 
   
   

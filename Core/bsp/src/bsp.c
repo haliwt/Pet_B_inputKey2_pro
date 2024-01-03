@@ -2,7 +2,7 @@
 
 main_prcess_t pro_t;
 
-static void Relay_Fun(uint8_t relay_id_led_flag);
+static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag);
 //static void Run_Display_Handler(uint8_t temp_value);
 
 
@@ -57,19 +57,22 @@ void Key_Handler(uint8_t key_value)
 
      case fun_key:  //fun key 
 
-         if(pro_t.keep_temp_flag ==1){
-		 	
-		 	  tpd_t.gTimer_select_fun=0;
-			  disp_keep_temp_value =0xff;
-			   pro_t.gTimer_pro_disp_temp=0; //display set keep temperature timer timing 
-              tpd_t.digital_numbers++; //scope : 16~30度
-              if(tpd_t.digital_numbers <16)tpd_t.digital_numbers =16;
-			  if(tpd_t.digital_numbers>30) tpd_t.digital_numbers=30;
-			  Run_Keep_Heat_Setup_Digital_Numbers(tpd_t.digital_numbers);
-			  
+        switch(pro_t.key_as_numbers_input_flag){
 
-		 }
-		 else{
+		 case 1:
+
+			tpd_t.gTimer_select_fun=0;
+			disp_keep_temp_value =0xff;
+			pro_t.gTimer_pro_disp_temp=0; //display set keep temperature timer timing 
+			tpd_t.digital_numbers++; //scope : 16~30度
+			if(tpd_t.digital_numbers <16)tpd_t.digital_numbers =16;
+			if(tpd_t.digital_numbers>30) tpd_t.digital_numbers=30;
+			Run_Keep_Heat_Setup_Digital_Numbers(tpd_t.digital_numbers);
+			  
+			break;
+
+		 case 0:
+		
 		 KEY_FUN_CONFIRM_LED_ON() ; 
          pro_t.key_fun++;
 		 if(pro_t.key_fun > 4) pro_t.key_fun=1;
@@ -105,10 +108,10 @@ void Key_Handler(uint8_t key_value)
 			case relay_keep_temp: //keep temperature value
 
 			   
-			relay_id_led = relay_keep_temp_led_on;
-			tpd_t.gTimer_select_fun=0;
-			pro_t.key_short_confirm_flag=0;//WT.EDIT 2023.12.20
-			 fun_key_counter=1;
+				relay_id_led = relay_keep_temp_led_on;
+				tpd_t.gTimer_select_fun=0;
+				pro_t.key_short_confirm_flag=0;//WT.EDIT 2023.12.20
+				fun_key_counter=1;
 			 
 		    break;
 
@@ -117,90 +120,110 @@ void Key_Handler(uint8_t key_value)
 			break;
 
            }
-		 }
-    
+		   break;
+		
+        }
      break;
-
+		
+     //confirm key 
 	 case confirm_short_key: // confirm key
 
-	  if(fun_key_counter ==1){
-	   if(relay_id_led == relay_keep_temp_led_on &&  pro_t.keep_temp_flag ==0){ //"+" tempeature value 
+	  switch(fun_key_counter){
 
+	     case 1:
 
-	       
+	     //special key of fun relay D "keep heap temperature be set up " 
+         if(relay_id_led == relay_keep_temp_led_on &&  pro_t.key_as_numbers_input_flag ==0){ //"+" tempeature value 
 
-			 if(pro_t.set_keep_temp == 1){
-			 	 pro_t.set_keep_temp=0;
+		     switch(pro_t.set_keey_temp_define_flag){
+
+			   case 1:
+  
+			
+			 	 pro_t.set_keey_temp_define_flag=0;
                  tpd_t.relay_keep_temp_flag =0;
 				 tpd_t.gTimer_select_fun =10;
 				 pro_t.key_short_confirm_flag =1;
 			
 				 KEY_FUN_CONFIRM_LED_OFF() ;  
 
-			 }
-             else{
+			 
+			  break;
+
+			 case 0:
+         
 			 // tpd_t.relay_keep_temp_flag =1;
-			  pro_t.keep_temp_flag =1;
+			  pro_t.key_as_numbers_input_flag =1;
 			  tpd_t.gTimer_select_fun=0;
 	          ADD_DEC_LED_ON();
 		      fun_key_counter =1;
 			  
 
-            }
+          
+			  break;
+
+		     }
+
+			
 
 	   }
-	   else if(pro_t.keep_temp_flag ==1){
-	   
-              tpd_t.gTimer_select_fun=0;
-			  pro_t.gTimer_pro_disp_temp=0;
-	          disp_keep_temp_value = 0xff;
-			  tpd_t.digital_numbers--; //scope : 16~30度
-			  if(tpd_t.digital_numbers <16) tpd_t.digital_numbers=16;
-			  Run_Keep_Heat_Setup_Digital_Numbers(tpd_t.digital_numbers);
-			
-			   
 
+
+	   if(pro_t.key_as_numbers_input_flag ==1 && relay_id_led == relay_keep_temp_led_on){
+	   
+          tpd_t.gTimer_select_fun=0;
+		  pro_t.gTimer_pro_disp_temp=0;
+          disp_keep_temp_value = 0xff;
+		  tpd_t.digital_numbers--; //scope : 16~30度
+		  if(tpd_t.digital_numbers <16) tpd_t.digital_numbers=16;
+		  Run_Keep_Heat_Setup_Digital_Numbers(tpd_t.digital_numbers);
 		}
 		else{
 			tpd_t.gTimer_select_fun=0;
 	    	pro_t.key_short_confirm_flag =1;
 		}
-	  }
-	  else{
+	
 
-          if( pro_t.set_keep_temp == 1){
+	  break;
+
+	  case 0: //don't touch fun key and the first touch confirm key
+	 
+
+          if( pro_t.set_keey_temp_define_flag == 1){ //display has been set keep heat temperatur value .
 		  	  pro_t.gTimer_pro_disp_temp=0;
 		      disp_keep_temp_value =1;
 
           }
-		  else{
+		  else{ //display "00:00"
 		  	  pro_t.gTimer_pro_disp_temp=0;
 			 disp_keep_temp_value =2;
 
 		  }
 
 
-	  }
-     
-	 break;
+	    break;
 
+	    }
+
+	 break;
+     //function key long be pressed 
 	 case confirm_long_key: //confirm long by pressed 
 
-	    if(pro_t.keep_temp_flag ==1){
+	    if(pro_t.key_as_numbers_input_flag ==1){
 
 	        tpd_t.gTimer_select_fun=20;
-			pro_t.keep_temp_flag =0;
+			pro_t.key_as_numbers_input_flag =0;
 		
 			ADD_DEC_LED_OFF();
 		
-		   pro_t.set_keep_temp = 1; //set keep temperature is complete.
+		   pro_t.set_keey_temp_define_flag = 1; //set keep temperature is complete.
 		   pro_t.long_key_flag =0; //repeat by pressed key_confirm .
 		   disp_keep_temp_value =0;
 		   tpd_t.gTimer_read_adc =20;
 		
 		   pro_t.set_keep_tmep_value = tpd_t.digital_numbers;
 			   if(pro_t.set_keep_tmep_value >= tpd_t.temperature_value ){
-                   tpd_t.relay_keep_temp_flag =1;
+                   tpd_t.relay_keep_temp_flag =1; //open keep temperature "relay_d" 
 			       KEEP_HEAT_LED_ON();
 	               RELAY_KEEP_TEMP_SetHigh();
 				   KEY_FUN_CONFIRM_LED_ON() ;  
@@ -235,15 +258,11 @@ void Key_Handler(uint8_t key_value)
 void Main_Process(void)
 {
    
-	 Relay_Fun(relay_id_led);
+	Relay_Tunr_OnOff_Fun(relay_id_led);
 
-
-
-	   switch(disp_keep_temp_value ){
+	switch(disp_keep_temp_value){
 
 	   case 0:
-	
-		
 			if(tpd_t.gTimer_read_adc >12 ){
 			  tpd_t.gTimer_read_adc =0;
 		     
@@ -254,19 +273,13 @@ void Main_Process(void)
 			if(tpd_t.gTimer_display > 15 ){
 		      tpd_t.gTimer_display=0; 
 			
-		        
-		         Smg_Display_Temp_Degree_Handler();
+		       Smg_Display_Temp_Degree_Handler();
 				
-				 
-		        
-		    }
+			}
 
-		
+		break;
 
-
-	   break;
-
-	   case 1:
+	   case 1: //
     
 		if(pro_t.gTimer_pro_disp_temp < 3){
 		    Repeat_Keep_Heat_Setup_Digital_Numbers(pro_t.set_keep_tmep_value);
@@ -308,7 +321,7 @@ void Main_Process(void)
 *	形    参: 输入按键的键值
 *	返 回 值: 无
 *********************************************************************************************************/
-static void Relay_Fun(uint8_t relay_id_led_flag)
+static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 {
 
 
@@ -330,7 +343,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 		else{
 			 tpd_t.gTimer_select_fun =10;
 			 fun_key_counter=0;
-			 pro_t.keep_temp_flag =0;
+			 pro_t.key_as_numbers_input_flag =0;
 			 
 		  if(pro_t.key_short_confirm_flag ==1){
 				pro_t.key_short_confirm_flag =0;
@@ -364,13 +377,10 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 			   }
 			}
 		   }
+		}
 
-	
-
-
-
-  			//
-			 if(pro_t.gTimer_pro_key > 20){//20ms
+		//
+	    if(pro_t.gTimer_pro_key > 20){//20ms
 				pro_t.gTimer_pro_key =0;
 			 if(tpd_t.relay_fan_flag == 1){
 	
@@ -414,7 +424,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 				RELAY_KEEP_TEMP_SetLow();
 		
 			}
-			}
+		}
 	
 		break;
 
@@ -431,7 +441,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
        else{
 	   	  tpd_t.gTimer_select_fun =10;
 		  fun_key_counter=0;
-		  pro_t.keep_temp_flag =0;
+		  pro_t.key_as_numbers_input_flag =0;
 
 
 		
@@ -530,7 +540,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 
 			tpd_t.gTimer_select_fun =10;
 			fun_key_counter=0;
-			pro_t.keep_temp_flag =0;
+			pro_t.key_as_numbers_input_flag =0;
 
 
 			if(pro_t.key_short_confirm_flag ==1){
@@ -621,7 +631,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 	    //KEEP HEAT Display of LED 
        if(tpd_t.gTimer_select_fun < 6 && pro_t.key_short_confirm_flag ==0){
 
-	       if(pro_t.keep_temp_flag ==0){
+	       if(pro_t.key_as_numbers_input_flag ==0){
 		   	
 	   	      Keep_Heat_Led_Filcker();
 	       }
@@ -634,7 +644,7 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
        	}
         else{
 			tpd_t.gTimer_select_fun=20;
-            pro_t.keep_temp_flag =0;
+            pro_t.key_as_numbers_input_flag =0;
 		    fun_key_counter=0;
 		
 			
@@ -644,15 +654,15 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 		    KEY_FUN_CONFIRM_LED_ON() ;
 			
 			if(pro_t.gTimer_pro_select > 20){
-					pro_t.gTimer_pro_select=0;
+				pro_t.gTimer_pro_select=0;
 
-		   		if(tpd_t.relay_keep_temp_flag ==1){
-				KEEP_HEAT_LED_ON();
-				RELAY_KEEP_TEMP_SetHigh();
+				if(tpd_t.relay_keep_temp_flag ==1){
+					KEEP_HEAT_LED_ON();
+					RELAY_KEEP_TEMP_SetHigh();
 				}
 				else if(tpd_t.relay_keep_temp_flag ==0){
-				KEEP_HEAT_LED_OFF();
-				RELAY_KEEP_TEMP_SetLow();
+					KEEP_HEAT_LED_OFF();
+					RELAY_KEEP_TEMP_SetLow();
 
 			  }
 		  }
@@ -723,72 +733,9 @@ static void Relay_Fun(uint8_t relay_id_led_flag)
 
     }
 
-	}
 }
 
 
-/*********************************************************************************************************
-*	函 数 名: static void Run_Display_Handler(uint8_t temp_value)
-*	功能说明: App 层 
-*			 
-*	形    参: 输入按键的键值
-*	返 回 值: 无
-*********************************************************************************************************/
-#if 0
-static void Run_Display_Handler(uint8_t temp_value)
-{
 
 
-	switch(temp_value){
-
-	 case 0:
-		
-	if(tpd_t.gTimer_read_adc >12 ){
-	  tpd_t.gTimer_read_adc =0;
-      if(tpd_t.power_on_times < 10){
-		  tpd_t.power_on_times++;
-           Read_NTC_Temperature_Power_On();
-      }
-	  else	
-	      Read_NTC_Temperature_Value_Handler();
-    
-  }
-	if(tpd_t.gTimer_display > 15){
-      tpd_t.gTimer_display=0; 
-	  tpd_t.power_on_times++;
-        
-         Smg_Display_Temp_Degree_Handler();
-		 
-		 if( pro_t.set_keep_temp == 1){ //
-		      
-             if(pro_t.set_keep_tmep_value >= tpd_t.temperature_value ){
-				  tpd_t.relay_keep_temp_flag =1;
-			       KEEP_HEAT_LED_ON();
-	               RELAY_KEEP_TEMP_SetHigh();
-
-			 }
-             else{
-                  tpd_t.relay_keep_temp_flag =0;
-			      KEEP_HEAT_LED_OFF();
-	              RELAY_KEEP_TEMP_SetLow();
-
-            }
-
-		 }
-	 }  
-    
-    
-    break;
-
-	case 1:
-      Run_Keep_Heat_Setup_Digital_Numbers(tpd_t.digital_numbers);
-			
-
-	break;
-
-	
-   }
-
-}
-#endif 
 

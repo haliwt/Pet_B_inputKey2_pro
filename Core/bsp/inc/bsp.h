@@ -20,6 +20,9 @@
 #include "bsp_adc.h"
 
 
+
+
+
 typedef enum{
 
     fun_key =0x01,
@@ -55,9 +58,9 @@ typedef struct{
    uint8_t key_fun;
    uint8_t key_short_confirm_flag;
    uint8_t key_long_confirm_flag;
-   uint8_t set_keep_temp;
+   uint8_t set_keey_temp_define_flag;
    uint8_t set_keep_tmep_value;
-   uint8_t keep_temp_flag;
+   uint8_t key_as_numbers_input_flag;
    uint8_t long_key_flag;
    
    uint8_t gTimer_pro_feed_dog;

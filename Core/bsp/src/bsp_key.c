@@ -16,6 +16,7 @@ uint8_t cnt;
     *Return Ref: 1 -battery recharge   0-no recharge
     * 
 ***********************************************************/
+#if NORMAL_KEY_2
 uint8_t ReadKey(void)
 {
 
@@ -39,7 +40,7 @@ uint8_t ReadKey(void)
   else if( CONFIRM_KEY_VALUE()==KEY_DOWN && pro_t.long_key_flag ==0 ){
 		cnt = 0;
 		K2++;   //Confirm_key press
-		if(pro_t.keep_temp_flag ==1){
+		if(pro_t.key_as_numbers_input_flag ==1){
            if(K2 > 199000){
               K2=0;
 			  cnt = 0;
@@ -108,7 +109,7 @@ uint8_t ReadKey(void)
 }
 
 
-
+#endif
 
 
 /***********************************************************
@@ -119,6 +120,7 @@ uint8_t ReadKey(void)
     *Return Ref: 1 -battery recharge   0-no recharge
     * 
 ***********************************************************/
+#if NORMAL_KEY_1
 uint8_t KEY_Scan(void)
 {
 
@@ -237,6 +239,6 @@ uint8_t KEY_Scan(void)
 }
 
 
-
+#endif 
 
 

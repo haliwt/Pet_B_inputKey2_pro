@@ -3,18 +3,13 @@
 #include "main.h"
 
 
-
+#define NORMAL_KEY_1       0
+#define NORMAL_KEY_2       1
 
 
 #define FUN_KEY_VALUE()                                 HAL_GPIO_ReadPin(INPUT_KEY_FUN_GPIO_Port ,INPUT_KEY_FUN_Pin )
 
 #define CONFIRM_KEY_VALUE()                             HAL_GPIO_ReadPin(INPUT_KEY_CONFIRM_GPIO_Port,INPUT_KEY_CONFIRM_Pin)
-
-
-
-
-
-
 
 #define		_KEY_ALL_OFF				 0XFF
 
@@ -23,16 +18,9 @@
 #define CONFIRM_KEY_PRES	0x02
 
 
-
-
 //long times be pressed
 #define	   _KEY_CONT_1_POWER     	     0x81    //??????--???
 #define	   KEY_LONG_PRES_CONFIRM_MODE   		     0x82    //??????--???
-
-
-
-
-
 
 
 #define HIGH_LEVEL                   1  /* 根据原理图设计，KEY1按下时引脚为低电平，所以这里设置为0 */
