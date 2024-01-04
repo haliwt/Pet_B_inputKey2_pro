@@ -6,7 +6,7 @@
 #define Zero_Degree           5828    
 #define ADC_Sample_Times      10
 
-#define COMPENSATION_VALUE    0
+#define COMPENSATION_VALUE    1
 
 
 

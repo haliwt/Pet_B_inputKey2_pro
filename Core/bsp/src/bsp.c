@@ -227,7 +227,7 @@ void Key_Handler(uint8_t key_value)
 				pro_t.gTimer_pro_disp_temp=0;
 				disp_keep_temp_value = 0xff;
 				tpd_t.digital_numbers--; //scope : 16~30度
-				if(tpd_t.digital_numbers <16) tpd_t.digital_numbers=30;
+				if(tpd_t.digital_numbers <16) tpd_t.digital_numbers=16;
 				Run_Keep_Heat_Setup_Digital_Numbers(tpd_t.digital_numbers);
 			  }
 			  
@@ -235,10 +235,11 @@ void Key_Handler(uint8_t key_value)
 
 		     }
 
+		  break;
       }
-				
-	break;
-
+	 }
+	  break;
+	  
      //function key long be pressed 
 	 case confirm_long_key: //confirm long by pressed 
 
@@ -277,8 +278,8 @@ void Key_Handler(uint8_t key_value)
 	 break;
   
 	}
-	}
 }
+
 /*
 *********************************************************************************************************
 *	函 数 名: void Main_Process(void)
@@ -467,7 +468,6 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 
 			 Relay_Kill_State();
 
-			//Relay_Temp_State();
 			  
 	       }
 	       else{

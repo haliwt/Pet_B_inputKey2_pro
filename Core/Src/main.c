@@ -119,10 +119,10 @@ int main(void)
 	    if(key_value==0){
 	    	Main_Process();
 			
-			
 		}
-		else
+		else{
 	   		Key_Handler(key_value); 
+		}
      
   }
   /* USER CODE END 3 */
