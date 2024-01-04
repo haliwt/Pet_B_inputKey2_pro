@@ -128,12 +128,15 @@ void Key_Handler(uint8_t key_value)
         
 		if( pro_t.set_keey_temp_define_flag == 1){ //display has been set keep heat temperatur value .
 		pro_t.gTimer_pro_disp_temp=0;
+		 //pro_t.disp_temp_value=1;
 		disp_keep_temp_value =1;
 
 		}
 		else{ //display "00:00"
-		pro_t.gTimer_pro_disp_temp=0;
-		disp_keep_temp_value =2;
+		  pro_t.gTimer_pro_disp_temp=0;
+		//  pro_t.disp_temp_value=1;
+		  disp_keep_temp_value =2;
+		
 
 		}
 
@@ -289,10 +292,7 @@ void Main_Process(void)
 {
    
 
-
-    
-
-	Relay_Tunr_OnOff_Fun(relay_id_led);
+    Relay_Tunr_OnOff_Fun(relay_id_led);
 
 	switch(disp_keep_temp_value){
 
@@ -315,10 +315,11 @@ void Main_Process(void)
 
 	   case 1: //
     
-		if(pro_t.gTimer_pro_disp_temp < 3){
-		    Repeat_Keep_Heat_Setup_Digital_Numbers(pro_t.set_keep_tmep_value);
+		if(pro_t.gTimer_pro_disp_temp <2){
 
-	    }
+		   Repeat_Keep_Heat_Setup_Digital_Numbers(pro_t.set_keep_tmep_value);
+		   
+		 }
 		else{
 		   disp_keep_temp_value =0;
 		   tpd_t.gTimer_read_adc  =20;
@@ -328,15 +329,16 @@ void Main_Process(void)
 	   break;
 
 	   case 2: //don't set up keep tempeature is 00 
+
+	       if(pro_t.gTimer_pro_disp_temp <2){
 	   	
-	       if(pro_t.gTimer_pro_disp_temp < 3){
-			  Repeat_Keep_Heat_Setup_Digital_Numbers(0);
+	          Repeat_Keep_Heat_Setup_Digital_Numbers(0);
 	   
 		   }
 		   else{
 			  disp_keep_temp_value =0;
-			   tpd_t.gTimer_read_adc  =20;
-			   Smg_Display_Temp_Degree_Handler();
+			  tpd_t.gTimer_read_adc  =20;
+			  Smg_Display_Temp_Degree_Handler();
 		   }
 
 
@@ -440,11 +442,11 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 		else{
 			pro_t.fun_key_counter=0;
 			pro_t.key_as_numbers_input_flag =0;
-			//Relay_Kill_State();
+			
 		}
 		if(pro_t.gTimer_pro_key > 20){//200ms
  			pro_t.gTimer_pro_key=0;
-             Relay_Confirm_Turn_OnOff_Fun();
+            Relay_Confirm_Turn_OnOff_Fun();
 		}
 				
       

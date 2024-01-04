@@ -18,12 +18,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     if(htim->Instance==TIM14){
        tm0++;
        tm1++;
-	
+	    tpd_t.gTimer_smg_turn_on ++;
 	   if(tm2 > 9){
 		 	 tm2=0;
 		     pro_t.gTimer_pro_key++;
 	         pro_t.gTimer_pro_disp++;
-		    tpd_t.gTimer_smg_turn_on ++;
+		    
 			pro_t.gTimer_pro_select++;
 	     }
 		

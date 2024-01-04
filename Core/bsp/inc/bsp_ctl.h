@@ -57,13 +57,13 @@ typedef struct _touchpad_t{
    uint8_t keep_heat_run_flag;
    uint8_t keep_heat_fun_digital_numbers;
   
-   uint8_t gTimer_smg_turn_on ;
+  
 
    uint8_t power_on_times;
   
    uint8_t temp_degree;
    
-   
+    uint16_t gTimer_smg_turn_on ;
    
 
 	//taouchpad
