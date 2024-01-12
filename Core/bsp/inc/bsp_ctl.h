@@ -82,12 +82,12 @@ extern touchpad_t tpd_t;
 extern uint8_t (*relay_tape_state)(void);
 extern uint8_t (*relay_fan_state)(void);
 extern uint8_t (*relay_kill_state)(void);
-extern uint8_t (*relay_temp_state)(void);
+extern uint8_t (*relay_keep_temp_state)(void);
 
 void Relay_Tape_Process(uint8_t(*relay_a_handler)(void));
 void Relay_Fan_Process(uint8_t(*relay_b_handler)(void));
 void Relay_Kill_Process(uint8_t(*relay_c_handler)(void));
-void Relay_Temp_Process(uint8_t(*relay_d_handler)(void));
+void Relay_Keep_Temp_Process(uint8_t(*relay_d_handler)(void));
 
 
 
@@ -98,6 +98,8 @@ void bsp_ctl_init(void);
 void Run_InputKey_Model(uint8_t keyvalue);
 
 void Run_BoardCommand_Handler(void);
+
+
 
 
 

@@ -54,7 +54,7 @@ void Relay_Kill_State(void)
 
 void Relay_Temp_State(void)
 {
-  relay_temp_state();
+  relay_keep_temp_state();
 }
 
 /********************************************************************************

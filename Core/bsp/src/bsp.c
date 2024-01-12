@@ -64,7 +64,8 @@ void Key_Handler(uint8_t key_value)
         switch(pro_t.key_as_numbers_input_flag){
 
 		 case 1:
-
+             
+			 
 			tpd_t.gTimer_select_fun=0;
 			disp_keep_temp_value =0xff;
 			pro_t.gTimer_pro_disp_temp=0; //display set keep temperature timer timing 
@@ -79,7 +80,12 @@ void Key_Handler(uint8_t key_value)
 		
 		 KEY_FUN_CONFIRM_LED_ON() ; 
          pro_t.key_fun++;
-		 if(pro_t.key_fun > 4) pro_t.key_fun=1;
+		 
+			 
+		 if(pro_t.key_fun > 4){
+		 	pro_t.key_fun=1;
+
+		 }
          switch(pro_t.key_fun){
 
 		    case relay_a_tape_led:
@@ -302,18 +308,25 @@ void Main_Process(void)
 	switch(disp_keep_temp_value){
 
 	   case 0:
-			if(tpd_t.gTimer_read_adc >12 ){
+			if(tpd_t.gTimer_read_adc >8 ){
 			  tpd_t.gTimer_read_adc =0;
 		     
 			    Read_NTC_Temperature_Value_Handler();
 				Smg_Display_Temp_Degree_Handler();
 		    }
 			
-			if(tpd_t.gTimer_display > 15 ){
+			if(tpd_t.gTimer_display > 10 ){
 		      tpd_t.gTimer_display=0; 
 			
 		       Smg_Display_Temp_Degree_Handler();
-				
+			   
+			}
+
+			if(pro_t.gTimer_display_relay_led > 4){
+			   pro_t.gTimer_display_relay_led =0;
+			   Relay_Confirm_Turn_OnOff_Fun();
+          
+
 			}
 
 		break;
@@ -327,8 +340,8 @@ void Main_Process(void)
 		 }
 		else{
 		   disp_keep_temp_value =0;
-		   tpd_t.gTimer_read_adc  =20;
-			Smg_Display_Temp_Degree_Handler();
+		   tpd_t.gTimer_read_adc  =20; //at once return NTC read tempeerature
+		   Smg_Display_Temp_Degree_Handler();
 		}
 
 	   break;

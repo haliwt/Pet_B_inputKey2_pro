@@ -5,7 +5,7 @@
 uint8_t (*relay_tape_state)(void);
 uint8_t (*relay_fan_state)(void);
 uint8_t (*relay_kill_state)(void);
-uint8_t (*relay_temp_state)(void);
+uint8_t (*relay_keep_temp_state)(void);
 
 
 static uint8_t relay_tape_fun(void);
@@ -20,16 +20,22 @@ static uint8_t relay_temp_fun(void);
 touchpad_t tpd_t;
 uint8_t led_on_of_number;
 
+/***********************************************************
+	*
+	*Function Name:void Relay_LED_ON_OFF_Handler(void)
+	*Function: open of clouse relay
+	*Input Ref: NO
+	*Retrun Ref: 1->open 0->close
+	*
+***********************************************************/
 void bsp_ctl_init(void)
 {
     Relay_Tape_Process(relay_tape_fun);
 	Relay_Fan_Process(relay_fan_fun);
 	Relay_Kill_Process(relay_kill_fun);
-	Relay_Temp_Process(relay_temp_fun);
+	Relay_Keep_Temp_Process(relay_temp_fun);
 
 }
-
-
 /***********************************************************
 	*
 	*Function Name:uint8_t relay_tape_fun(void)
@@ -138,9 +144,9 @@ void Relay_Kill_Process(uint8_t(*relay_kill_handler)(void))
    relay_kill_state = relay_kill_handler;
 
 }
-void Relay_Temp_Process(uint8_t(*relay_temp_handler)(void))
+void Relay_Keep_Temp_Process(uint8_t(*relay_temp_handler)(void))
 {
-   relay_temp_state = relay_temp_handler;
+   relay_keep_temp_state = relay_temp_handler;
 
 }
 

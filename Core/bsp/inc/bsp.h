@@ -73,6 +73,8 @@ typedef struct{
    uint8_t gTimer_pro_disp;
    uint8_t gTimer_pro_disp_temp;
    uint8_t gTimer_pro_select;
+   uint8_t gTimer_display_relay_led ;
+  
    
 
 

@@ -41,7 +41,7 @@ uint8_t ReadKey(void)
 		cnt = 0;
 		K2++;   //Confirm_key press
 		if(pro_t.key_as_numbers_input_flag ==1){
-           if(K2 > 119000){//K2 > 199000
+           if(K2 > 110000){//K2 > 199000
               K2=0;
 			  cnt = 0;
 		      K1 = 0;
