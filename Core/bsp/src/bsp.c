@@ -302,15 +302,15 @@ void Key_Handler(uint8_t key_value)
 void Main_Process(void)
 {
    
-
+    static uint8_t p_disp;
     Relay_Tunr_OnOff_Fun(relay_id_led);
 
 	switch(disp_keep_temp_value){
 
 	   case 0:
-			if(tpd_t.gTimer_read_adc >8 ){
+			if((tpd_t.gTimer_read_adc >14) ||(p_disp < 3 )){
 			  tpd_t.gTimer_read_adc =0;
-		     
+		      p_disp++;
 			    Read_NTC_Temperature_Value_Handler();
 				Smg_Display_Temp_Degree_Handler();
 		    }
@@ -322,12 +322,10 @@ void Main_Process(void)
 			   
 			}
 
-			if(pro_t.gTimer_display_relay_led > 4){
+			if(pro_t.gTimer_display_relay_led > 3){
 			   pro_t.gTimer_display_relay_led =0;
 			   Relay_Confirm_Turn_OnOff_Fun();
-          
-
-			}
+          	}
 
 		break;
 
@@ -355,7 +353,7 @@ void Main_Process(void)
 		   }
 		   else{
 			  disp_keep_temp_value =0;
-			  tpd_t.gTimer_read_adc  =20;
+			  tpd_t.gTimer_read_adc  =50;
 			  Smg_Display_Temp_Degree_Handler();
 		   }
 
@@ -403,6 +401,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 		else{
 			pro_t.fun_key_counter=0;
 		    pro_t.key_as_numbers_input_flag =0;
+		    pro_t.gTimer_pro_key=50; //at once to switch normal relay display led 
 		    //Relay_Tape_State();
 		}
 		
@@ -434,6 +433,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 	   	 
 		  pro_t.fun_key_counter=0;
 		  pro_t.key_as_numbers_input_flag =0;
+	      pro_t.gTimer_pro_key=50; //at once to switch normal relay display led 
 	   	//  Relay_Fan_State();
 	   }
 	   if(pro_t.gTimer_pro_key > 20){//300ms
@@ -460,6 +460,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 		else{
 			pro_t.fun_key_counter=0;
 			pro_t.key_as_numbers_input_flag =0;
+		     pro_t.gTimer_pro_key=50; //at once to switch normal relay display led 
 			
 		}
 		if(pro_t.gTimer_pro_key > 20){//200ms
@@ -506,6 +507,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 	    else{
 			pro_t.fun_key_counter =0;
 			pro_t.key_as_numbers_input_flag =0;
+		    pro_t.gTimer_pro_key=50; //at once to switch normal relay display led 
 			ADD_DEC_LED_OFF();
 		    KEY_FUN_CONFIRM_LED_ON() ;
 			Relay_Temp_State();
