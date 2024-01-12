@@ -18,6 +18,7 @@
 #include "bsp_delay.h"
 #include "bsp_relay.h"
 #include "bsp_adc.h"
+#include "bsp_flash.h"
 
 
 
