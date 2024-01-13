@@ -3,10 +3,10 @@
 
 void Relay_Init(void)
 {
-    tpd_t.relay_tape_flag =0;
-    tpd_t.relay_fan_flag =0;
-    tpd_t.relay_kill_flag =0;
-    tpd_t.relay_keep_temp_flag =0;
+    ctl_t.relay_tape_flag =0;
+    ctl_t.relay_fan_flag =0;
+    ctl_t.relay_kill_flag =0;
+    ctl_t.relay_keep_temp_flag =0;
 
 
 }

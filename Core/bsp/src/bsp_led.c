@@ -29,7 +29,7 @@ void Led_Display_Content_Fun(uint8_t selitem)
    case FAN_LED:
 
 
-		if(tpd_t.confirm_key_select_item_tape == tape_enable){
+		if(ctl_t.confirm_key_select_item_tape == tape_enable){
 			FAN_LED_ON();
 		    
 		    RELAY_FAN_SetHigh()	;
@@ -41,7 +41,7 @@ void Led_Display_Content_Fun(uint8_t selitem)
 
 		}
 
-		if(tpd_t.confirm_key_select_item_sterilization == sterilization_enable ){
+		if(ctl_t.confirm_key_select_item_sterilization == sterilization_enable ){
 		    KILL_LED_ON();
 		}
 		else
@@ -49,7 +49,7 @@ void Led_Display_Content_Fun(uint8_t selitem)
 
 		
 
-		if(tpd_t.confirm_key_select_item_keep_heat == keep_heat_enable){
+		if(ctl_t.confirm_key_select_item_keep_heat == keep_heat_enable){
 		  KEEP_HEAT_LED_ON();
           RELAY_KEEP_TEMP_SetHigh();
 	  	}
@@ -62,11 +62,11 @@ void Led_Display_Content_Fun(uint8_t selitem)
 
 		
    	 
-	 if(tpd_t.gTimer_select_fun < 6){
+	 if(ctl_t.gTimer_select_fun < 6){
         Tape_Led_Filcker();
      }
      else{
-         if(tpd_t.confirm_key_select_item_fan == confirm_disable){
+         if(ctl_t.confirm_key_select_item_fan == confirm_disable){
           TAPE_LED_OFF();
             }
 
@@ -77,7 +77,7 @@ void Led_Display_Content_Fun(uint8_t selitem)
 
    case TAPE_LED:
 
-      if(tpd_t.confirm_key_select_item_fan == fan_enable){
+      if(ctl_t.confirm_key_select_item_fan == fan_enable){
 		TAPE_LED_ON();//TAPE_LED_ON();
 		
 		RELAY_KILL_SetHigh()	;
@@ -90,7 +90,7 @@ void Led_Display_Content_Fun(uint8_t selitem)
 
         
 
-		if(tpd_t.confirm_key_select_item_sterilization == sterilization_enable ){
+		if(ctl_t.confirm_key_select_item_sterilization == sterilization_enable ){
             RELAY_TAPE_SetHigh();
 		    KILL_LED_ON();
 		}
@@ -102,7 +102,7 @@ void Led_Display_Content_Fun(uint8_t selitem)
 
 		
 
-		if(tpd_t.confirm_key_select_item_keep_heat == keep_heat_enable){
+		if(ctl_t.confirm_key_select_item_keep_heat == keep_heat_enable){
           RELAY_KEEP_TEMP_SetHigh();
 		  KEEP_HEAT_LED_ON();
 	  	}
@@ -111,11 +111,11 @@ void Led_Display_Content_Fun(uint8_t selitem)
 	  		KEEP_HEAT_LED_OFF();//KEEP_HEAT_LED_OFF();
           }
    	  
-	 if(tpd_t.gTimer_select_fun < 6){
+	 if(ctl_t.gTimer_select_fun < 6){
    	    Fan_Led_Flicker();
 	 }
      else{
-        if(tpd_t.confirm_key_select_item_tape == confirm_disable){
+        if(ctl_t.confirm_key_select_item_tape == confirm_disable){
 
         FAN_LED_OFF();
         }
@@ -127,7 +127,7 @@ void Led_Display_Content_Fun(uint8_t selitem)
 
    case STERILIZATION_LED:
       //FAN 
-      if(tpd_t.confirm_key_select_item_fan == fan_enable){
+      if(ctl_t.confirm_key_select_item_fan == fan_enable){
 		TAPE_LED_ON();//TAPE_LED_ON();
 		RELAY_KILL_SetHigh()	;
 		}
@@ -138,7 +138,7 @@ void Led_Display_Content_Fun(uint8_t selitem)
 		}
 
        //TAPE
-		if(tpd_t.confirm_key_select_item_tape == tape_enable){
+		if(ctl_t.confirm_key_select_item_tape == tape_enable){
 		FAN_LED_ON();
 		RELAY_FAN_SetHigh()	;
 
@@ -148,7 +148,7 @@ void Led_Display_Content_Fun(uint8_t selitem)
 		   RELAY_FAN_SetLow()	;
 		}
         //KEEP HEAT
-		if(tpd_t.confirm_key_select_item_keep_heat == keep_heat_enable){
+		if(ctl_t.confirm_key_select_item_keep_heat == keep_heat_enable){
 		  KEEP_HEAT_LED_ON();
           RELAY_KEEP_TEMP_SetHigh()	;
 	  	}
@@ -160,11 +160,11 @@ void Led_Display_Content_Fun(uint8_t selitem)
 
 
      //STERILIZATION
-      if(tpd_t.gTimer_select_fun < 6){
+      if(ctl_t.gTimer_select_fun < 6){
    	     Sterilization_Led_Filcker();
        }
        else{
-           if(tpd_t.confirm_key_select_item_sterilization == confirm_disable){
+           if(ctl_t.confirm_key_select_item_sterilization == confirm_disable){
 
             KILL_LED_OFF();
             }
@@ -176,7 +176,7 @@ void Led_Display_Content_Fun(uint8_t selitem)
 
    case KEEP_HEAT_LED:
         //FAN
-       if(tpd_t.confirm_key_select_item_fan == fan_enable){
+       if(ctl_t.confirm_key_select_item_fan == fan_enable){
 		TAPE_LED_ON();
 		RELAY_KILL_SetHigh();
 		}
@@ -187,7 +187,7 @@ void Led_Display_Content_Fun(uint8_t selitem)
 		}
 
         //TAPE
-		if(tpd_t.confirm_key_select_item_tape == tape_enable){
+		if(ctl_t.confirm_key_select_item_tape == tape_enable){
     		FAN_LED_ON();
     		
     		RELAY_FAN_SetHigh();
@@ -201,7 +201,7 @@ void Led_Display_Content_Fun(uint8_t selitem)
 
 		}
         //STERILIZATION 
-		if(tpd_t.confirm_key_select_item_sterilization == sterilization_enable ){
+		if(ctl_t.confirm_key_select_item_sterilization == sterilization_enable ){
 		    KILL_LED_ON();
             RELAY_TAPE_SetHigh()	;
             
@@ -214,15 +214,15 @@ void Led_Display_Content_Fun(uint8_t selitem)
 
 	
       //KEEP HEAT Display of LED 
-       if(tpd_t.gTimer_select_fun < 6){
+       if(ctl_t.gTimer_select_fun < 6){
 	   	   Keep_Heat_Led_Filcker();
-		   tpd_t.keep_heat_run_flag= 1;
+		   ctl_t.keep_heat_run_flag= 1;
 	       led_t.gTimer_keey_heat_flicker=0;
-		   tpd_t.gTimer_keep_heat_fun=0;
+		   ctl_t.gTimer_keep_heat_fun=0;
 		
        	}
         else{
-           if(tpd_t.confirm_key_select_item_keep_heat == confirm_disable){
+           if(ctl_t.confirm_key_select_item_keep_heat == confirm_disable){
               KEEP_HEAT_LED_OFF();
             }
             else{
@@ -455,7 +455,7 @@ void Key_Confirm_Handler(uint8_t selitem)
    break;
 
    case FAN_LED:
-   	    if(tpd_t.confirm_key_select_item_tape == tape_enable){
+   	    if(ctl_t.confirm_key_select_item_tape == tape_enable){
 	      FAN_LED_ON();
 		  
 		  RELAY_FAN_SetHigh()	;
@@ -469,7 +469,7 @@ void Key_Confirm_Handler(uint8_t selitem)
 	  	}
 
    		
-     if(tpd_t.confirm_key_select_item_sterilization == sterilization_enable ){
+     if(ctl_t.confirm_key_select_item_sterilization == sterilization_enable ){
             RELAY_TAPE_SetHigh();
             KILL_LED_ON();
           }
@@ -479,7 +479,7 @@ void Key_Confirm_Handler(uint8_t selitem)
           }
        
        
-         if(tpd_t.confirm_key_select_item_keep_heat == keep_heat_enable){
+         if(ctl_t.confirm_key_select_item_keep_heat == keep_heat_enable){
              RELAY_KEEP_TEMP_SetHigh();
              KEEP_HEAT_LED_ON();
            }
@@ -492,23 +492,23 @@ void Key_Confirm_Handler(uint8_t selitem)
 	 // select 
 	  fan_confirm_flag = fan_confirm_flag ^ 0x01;
        if(fan_confirm_flag==1){
-    	  tpd_t.confirm_key_select_item_fan = fan_enable ;
+    	  ctl_t.confirm_key_select_item_fan = fan_enable ;
           TAPE_LED_ON(); 
     	  RELAY_KILL_SetHigh()	;
 
         }
         else{
-            tpd_t.confirm_key_select_item_fan = confirm_disable ;
+            ctl_t.confirm_key_select_item_fan = confirm_disable ;
               TAPE_LED_OFF(); 
              RELAY_KILL_SetLow() ;
         }
      
     
-      tpd_t.run_process_tag=KEY_NULL;
+      ctl_t.run_process_tag=KEY_NULL;
    break;
 
    case TAPE_LED:
-   	   if(tpd_t.confirm_key_select_item_fan == fan_enable){
+   	   if(ctl_t.confirm_key_select_item_fan == fan_enable){
    	     TAPE_LED_ON();
 		  RELAY_KILL_SetHigh()   ;
    	   }
@@ -518,7 +518,7 @@ void Key_Confirm_Handler(uint8_t selitem)
 
 	   }
 
-	    if(tpd_t.confirm_key_select_item_sterilization == sterilization_enable ){
+	    if(ctl_t.confirm_key_select_item_sterilization == sterilization_enable ){
          RELAY_TAPE_SetHigh();
          KILL_LED_ON();
        }
@@ -528,7 +528,7 @@ void Key_Confirm_Handler(uint8_t selitem)
        }
 	
 	
-	  if(tpd_t.confirm_key_select_item_keep_heat == keep_heat_enable){
+	  if(ctl_t.confirm_key_select_item_keep_heat == keep_heat_enable){
           RELAY_KEEP_TEMP_SetHigh();
 		  KEEP_HEAT_LED_ON();
 	  	}
@@ -543,23 +543,23 @@ void Key_Confirm_Handler(uint8_t selitem)
 	  //Select tape led fun
 	  tape_confirm_flag = tape_confirm_flag ^ 0x01;
        if(tape_confirm_flag==1){
-    	  tpd_t.confirm_key_select_item_tape = tape_enable;
+    	  ctl_t.confirm_key_select_item_tape = tape_enable;
     	 
        	  FAN_LED_ON();
     	  RELAY_FAN_SetHigh()	;
       }
       else{
-          tpd_t.confirm_key_select_item_tape = confirm_disable ;
+          ctl_t.confirm_key_select_item_tape = confirm_disable ;
 
            FAN_LED_OFF();
            RELAY_FAN_SetLow() ;
        }
 	  
-    tpd_t.run_process_tag=KEY_NULL;
+    ctl_t.run_process_tag=KEY_NULL;
    break;
 
    case STERILIZATION_LED:
-   	   if(tpd_t.confirm_key_select_item_fan == fan_enable){
+   	   if(ctl_t.confirm_key_select_item_fan == fan_enable){
    	     TAPE_LED_ON();
 		 RELAY_KILL_SetHigh()   ;
    	   }
@@ -568,7 +568,7 @@ void Key_Confirm_Handler(uint8_t selitem)
 		 RELAY_KILL_SetLow()   ;
 	   }
 
-      if(tpd_t.confirm_key_select_item_tape == tape_enable){
+      if(ctl_t.confirm_key_select_item_tape == tape_enable){
 	      FAN_LED_ON();
 		  
 	  	  RELAY_FAN_SetHigh()   ;
@@ -581,7 +581,7 @@ void Key_Confirm_Handler(uint8_t selitem)
 
 	  }
 	 
-	   if(tpd_t.confirm_key_select_item_keep_heat == keep_heat_enable){
+	   if(ctl_t.confirm_key_select_item_keep_heat == keep_heat_enable){
           RELAY_KEEP_TEMP_SetHigh();;
 		  KEEP_HEAT_LED_ON();
 	  	}
@@ -596,12 +596,12 @@ void Key_Confirm_Handler(uint8_t selitem)
 	  //select sterilization fun
 	   kill_confirm_flag = kill_confirm_flag ^ 0x01;
        if(kill_confirm_flag==1){
-    	   tpd_t.confirm_key_select_item_sterilization = sterilization_enable ;
+    	   ctl_t.confirm_key_select_item_sterilization = sterilization_enable ;
            KILL_LED_ON();
            RELAY_TAPE_SetHigh();
        }
        else{
-         tpd_t.confirm_key_select_item_sterilization = confirm_disable ;
+         ctl_t.confirm_key_select_item_sterilization = confirm_disable ;
 
           KILL_LED_OFF();
           RELAY_TAPE_SetLow();
@@ -609,13 +609,13 @@ void Key_Confirm_Handler(uint8_t selitem)
 
        }
    	   
-    tpd_t.run_process_tag=KEY_NULL;
+    ctl_t.run_process_tag=KEY_NULL;
        
    break;
 
    case KEEP_HEAT_LED:
 
-       if(tpd_t.confirm_key_select_item_fan == fan_enable){
+       if(ctl_t.confirm_key_select_item_fan == fan_enable){
    	     TAPE_LED_ON();
 		 RELAY_KILL_SetHigh()   ;
    	   }
@@ -625,7 +625,7 @@ void Key_Confirm_Handler(uint8_t selitem)
 
 	   }
 
-      if(tpd_t.confirm_key_select_item_tape == tape_enable){
+      if(ctl_t.confirm_key_select_item_tape == tape_enable){
 	      FAN_LED_ON();
 		  
 	  
@@ -639,7 +639,7 @@ void Key_Confirm_Handler(uint8_t selitem)
 		  RELAY_FAN_SetLow()	;
 	  	}
    	    
-       if(tpd_t.confirm_key_select_item_sterilization == sterilization_enable ){
+       if(ctl_t.confirm_key_select_item_sterilization == sterilization_enable ){
          RELAY_TAPE_SetHigh();
          KILL_LED_ON();
        }
@@ -649,29 +649,29 @@ void Key_Confirm_Handler(uint8_t selitem)
 
        }
 
-     // tpd_t.keep_heat_flag = run_t.keep_heat_flag ^ 0x01;
+     // ctl_t.keep_heat_flag = run_t.keep_heat_flag ^ 0x01;
 
      // if(run_t.keep_heat_flag==1){
      
-	  if(tpd_t.keep_heat_run_flag==1){ //Confirm key of define key
-           tpd_t.keep_heat_run_flag ++;
+	  if(ctl_t.keep_heat_run_flag==1){ //Confirm key of define key
+           ctl_t.keep_heat_run_flag ++;
     
 	  }
 	  //select keep heat fun
-	  switch(tpd_t.keep_heat_run_flag){
+	  switch(ctl_t.keep_heat_run_flag){
 
 	   case 2:
-			if(tpd_t.gTimer_keep_heat_fun< 11){
+			if(ctl_t.gTimer_keep_heat_fun< 11){
 	
-				tpd_t.keep_heat_fun_digital_numbers=1; //select keep heat item 
+				ctl_t.keep_heat_fun_digital_numbers=1; //select keep heat item 
 				ADD_DEC_LED_ON();  
 				Keep_heat_SetUp_Led_Filcker();
            
 				
 			}
 			else{
-                if(tpd_t.confirm_key_select_item_keep_heat == confirm_disable){
-				tpd_t.gTimer_keep_heat_fun= 12;
+                if(ctl_t.confirm_key_select_item_keep_heat == confirm_disable){
+				ctl_t.gTimer_keep_heat_fun= 12;
 				
 				KEEP_HEAT_LED_OFF();
 				ADD_DEC_LED_OFF();  
@@ -681,9 +681,9 @@ void Key_Confirm_Handler(uint8_t selitem)
                 
                     KEEP_HEAT_LED_ON();
                 }
-				tpd_t.keep_heat_fun_digital_numbers=0;
+				ctl_t.keep_heat_fun_digital_numbers=0;
                 KEY_FUN_CONFIRM_LED_ON() ;
-                tpd_t.run_process_tag=KEY_NULL; 
+                ctl_t.run_process_tag=KEY_NULL; 
                
 
 
@@ -693,12 +693,12 @@ void Key_Confirm_Handler(uint8_t selitem)
 	  break;
 
 	  case 3:
-	  	      tpd_t.confirm_key_select_item_keep_heat = keep_heat_enable;
+	  	      ctl_t.confirm_key_select_item_keep_heat = keep_heat_enable;
 	          KEEP_HEAT_LED_ON();
 			  ADD_DEC_LED_OFF();  
 			  KEY_FUN_CONFIRM_LED_ON() ;
 
-              tpd_t.run_process_tag=KEY_NULL;
+              ctl_t.run_process_tag=KEY_NULL;
 	  break;
     
 	 }

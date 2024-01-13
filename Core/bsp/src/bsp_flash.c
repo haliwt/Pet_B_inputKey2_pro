@@ -1,12 +1,16 @@
 #include "bsp_flash.h"
+#include "bsp.h"
 
 
 uint32_t FirstPage = 0, NbOfPages = 0;//页管理变量
 uint32_t Address = 0, PageError = 0;//地址管理变量
-__IO uint32_t data32 = 0 , MemoryProgramStatus = 0;//状态变量
+__IO uint64_t data32 = 0 ;//状态变量
+__IO uint64_t data32_data2 = 0 ;
 static FLASH_EraseInitTypeDef EraseInitStruct;
 
 static uint32_t GetPage(uint32_t Address);//获取页
+static uint32_t stmflash_read_halfword(uint32_t faddr);
+
 
 /**
   * @brief  Gets the page of a given address
@@ -44,7 +48,7 @@ void STM32G030F6P6_Write_Flash_Data(uint64_t data)
     {
       while (1)//如果写入失败，LED闪烁
       {
-             //HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
+       Tape_Led_Filcker();      //HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
 			 //HAL_Delay(1000);//1s等待
       }
     }
@@ -58,44 +62,33 @@ void STM32G030F6P6_Write_Flash_Data(uint64_t data)
   * @param  Addr: Address of the FLASH Memory
   * @retval The page of a given address
 **/
-uint8_t STM32G030F6P6_Read_Flash_Data_Handler(void)
+uint32_t STM32G030F6P6_Read_Flash_Data(void)
 {
-  
+ //  static uint8_t i=0;
 	 Address = FLASH_USER_START_ADDR;
-	 MemoryProgramStatus = 0x0;
+
+
 	 while (Address < FLASH_USER_END_ADDR)
 	 {
-	   data32 = *(__IO uint32_t *)Address;//读取数据
-	
-	   if (data32 != DATA_32)//如果数据不一致，计数器加1
-	   {
-		 MemoryProgramStatus++;
-	   }
-	   Address = Address + 4;
+	   
+    
+       data32 = *(__IO uint64_t *)Address;//读取数据
+      
+	   Address = Address + 8;
+	   data32_data2 =*(uint64_t *)(Address);//读取数据
+		 
+		
+     
 	 }
 	
 	 /*Check if there is an issue to program data*/
-	 if (MemoryProgramStatus == 0)//数据全都一致
-	 {
-	   /* No error detected. Switch on LED0*/
-	 HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET);
-	 }
-	 else
-	 {
-	   /* Error detected. LED0 will blink with 1s period */
-	   while (1)//如果写入跟读出来的不一致，LED闪烁
-	   {
-		 HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_4);
-		 HAL_Delay(1000);
-	   }
-	 }
-
-   return (uint8_t)data32;
+	
+	
+	
+   
+   return (uint32_t)data32;
 }
 
-
-
-}
 
 /**
   * @brief  Gets the page of a given address
@@ -109,6 +102,34 @@ static uint32_t GetPage(uint32_t Addr)
 
 
 
+/**
+ * @brief       从指定地址读取一个半字 (16位数据)
+ * @param       faddr   : 读取地址 (此地址必须为2的倍数!!)
+ * @retval      读取到的数据 (16位)
+ */
+static uint32_t stmflash_read_halfword(uint32_t faddr)
+{
+    return *(volatile uint32_t *)faddr;
+}
+
+/**
+ * @brief       从指定地址开始读出指定长度的数据
+ * @param       raddr : 起始地址
+ * @param       pbuf  : 数据指针
+ * @param       length: 要读取的半字(16位)数,即2个字节的整数倍
+ * @retval      无
+ */
+void stmflash_read(uint32_t raddr, uint32_t *pbuf, uint16_t length)
+{
+    uint16_t i;
+
+    for (i = 0; i < length; i++)
+    {
+        pbuf[i] = stmflash_read_halfword(raddr);    /* 读取2个字节 */
+        //raddr += 2; /* 偏移2个字节  16bit*/
+        raddr += 4; /* 偏移4个字节 32bit */
+    }
+}
 
 
 

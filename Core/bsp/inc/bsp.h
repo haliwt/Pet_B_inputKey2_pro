@@ -59,7 +59,7 @@ typedef struct{
 
 
    uint8_t key_fun;
-   uint8_t  key_value;
+   uint8_t key_value;
    uint8_t fun_key_counter;
    uint8_t key_short_confirm_flag;
    uint8_t key_long_confirm_flag;
@@ -68,6 +68,7 @@ typedef struct{
    uint8_t key_as_numbers_input_flag;
    uint8_t long_key_flag;
    uint8_t disp_temp_value;
+   uint8_t iwdg_detected_times;
    
    uint8_t gTimer_pro_feed_dog;
    uint8_t gTimer_pro_key;
@@ -75,8 +76,10 @@ typedef struct{
    uint8_t gTimer_pro_disp_temp;
    uint8_t gTimer_pro_select;
    uint8_t gTimer_display_relay_led ;
+   uint8_t gTimer_pro_det_dog;
   
-   
+   //read flash data
+   uint32_t read_flash_data;
 
 
 }main_prcess_t;

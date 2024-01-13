@@ -240,11 +240,11 @@ static void Read_Ntc_Decimal_Point_Numbers(void)
 {
    
    uint8_t temp_decimal_point;
-   temp_decimal_point = R10K_NTC_81[tpd_t.temperature_value] - R10K_NTC_81[tpd_t.temperature_value +1];
+   temp_decimal_point = R10K_NTC_81[ctl_t.temperature_value] - R10K_NTC_81[ctl_t.temperature_value +1];
 
    temp_decimal_point = temp_decimal_point +5;
 
-   tpd_t.temperature_decimal_point_value =  temp_decimal_point/10 ;
+   ctl_t.temperature_decimal_point_value =  temp_decimal_point/10 ;
    
 }
 /******************************************************************************
@@ -258,13 +258,13 @@ void Read_NTC_Temperature_Power_On(void)
 {
 
       
-  tpd_t.ntc_voltage_value=Read_NTC_Temperature_Voltage_Power_On(); //Read_NTC_Temperature_Voltage();
-  temp_uint16_t_vlue= tpd_t.ntc_voltage_value/100;
+  ctl_t.ntc_voltage_value=Read_NTC_Temperature_Voltage_Power_On(); //Read_NTC_Temperature_Voltage();
+  temp_uint16_t_vlue= ctl_t.ntc_voltage_value/100;
   length_simple = sizeof(R10K_Init_0_81_simple)/sizeof(R10K_Init_0_81_simple[0]);
     
-  tpd_t.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
+  ctl_t.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
 
-  Display_Speicial_Temperature_Value(tpd_t.temp_degree);
+  Display_Speicial_Temperature_Value(ctl_t.temp_degree);
 
 }
 
@@ -280,17 +280,17 @@ void Read_NTC_Temperature_Value_Handler(void)
     
     
 	 #if 1
-	 tpd_t.ntc_voltage_value= Read_NTC_Temperature_Voltage();
-     temp_uint16_t_vlue= tpd_t.ntc_voltage_value /100;
+	 ctl_t.ntc_voltage_value= Read_NTC_Temperature_Voltage();
+     temp_uint16_t_vlue= ctl_t.ntc_voltage_value /100;
 	 length_simple = sizeof(R10K_Init_0_81_simple)/sizeof(R10K_Init_0_81_simple[0]);
     
-   	 tpd_t.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
+   	 ctl_t.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
 
-	 Display_Speicial_Temperature_Value(tpd_t.temp_degree);
+	 Display_Speicial_Temperature_Value(ctl_t.temp_degree);
 	 
 	 if(pro_t.set_keey_temp_define_flag == 1){
-         if(pro_t.set_keep_tmep_value >= tpd_t.temperature_value ){
-                   tpd_t.relay_keep_temp_flag =1;
+         if(pro_t.set_keep_tmep_value >= ctl_t.temperature_value ){
+                   ctl_t.relay_keep_temp_flag =1;
 			       KEEP_HEAT_LED_ON();
 	               RELAY_KEEP_TEMP_SetHigh();
 				   KEY_FUN_CONFIRM_LED_ON() ;  
@@ -298,7 +298,7 @@ void Read_NTC_Temperature_Value_Handler(void)
 
 			  }
               else{
-                  tpd_t.relay_keep_temp_flag =0;
+                  ctl_t.relay_keep_temp_flag =0;
 			      KEEP_HEAT_LED_OFF();
 	              RELAY_KEEP_TEMP_SetLow();
 				  KEY_FUN_CONFIRM_LED_ON() ;
@@ -331,35 +331,35 @@ void Display_Speicial_Temperature_Value(uint8_t temp)
     case degree_zero: //zero degree
 
          // zero_d =2;
-        array_subscript =  Calculate_Display_Temperature_Value(R10K_0_0,tpd_t.ntc_voltage_value,2);
+        array_subscript =  Calculate_Display_Temperature_Value(R10K_0_0,ctl_t.ntc_voltage_value,2);
         HAL_Delay(5);
-        tpd_t.temperature_value = tpd_t.temperature_rectify_value ;
+        ctl_t.temperature_value = ctl_t.temperature_rectify_value ;
 
     break;
 
 	
    case degree_one :
-   	    array_subscript =  Calculate_Display_Temperature_Value(R10K_1_4,tpd_t.ntc_voltage_value,4);
+   	    array_subscript =  Calculate_Display_Temperature_Value(R10K_1_4,ctl_t.ntc_voltage_value,4);
 	    HAL_Delay(5);
         switch(array_subscript){
 
 		 case 0:
-		 	tpd_t.temperature_value = 1 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+		 	ctl_t.temperature_value = 1 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
 
 		 break;
 
 		 case 1:
-		 	tpd_t.temperature_value = 2 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+		 	ctl_t.temperature_value = 2 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
 
 		 break;
 
 		 case 2:
-		 	tpd_t.temperature_value = 3 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+		 	ctl_t.temperature_value = 3 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
 
 		 break;
 
 		 case 3:
-		 	tpd_t.temperature_value = 4 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+		 	ctl_t.temperature_value = 4 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
 
 		 break;
 
@@ -368,22 +368,22 @@ void Display_Speicial_Temperature_Value(uint8_t temp)
    break;
    
    case degree_two:
-   	   array_subscript =  Calculate_Display_Temperature_Value(R10K_5_7,tpd_t.ntc_voltage_value,3);
+   	   array_subscript =  Calculate_Display_Temperature_Value(R10K_5_7,ctl_t.ntc_voltage_value,3);
 	    HAL_Delay(5);
 	   switch(array_subscript){
 
 		 case 0:
-		 	tpd_t.temperature_value = 5 + tpd_t.temperature_rectify_value + COMPENSATION_VALUE;
+		 	ctl_t.temperature_value = 5 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
 
 		 break;
 
 		 case 1:
-		 	tpd_t.temperature_value = 6 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+		 	ctl_t.temperature_value = 6 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
 
 		 break;
 
 		 case 2:
-		 	tpd_t.temperature_value = 7 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+		 	ctl_t.temperature_value = 7 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
 
 		 break;
 
@@ -396,18 +396,18 @@ void Display_Speicial_Temperature_Value(uint8_t temp)
    
    case degree_three :
 
-         array_subscript =  Calculate_Display_Temperature_Value(R10K_8_9,tpd_t.ntc_voltage_value,2);
+         array_subscript =  Calculate_Display_Temperature_Value(R10K_8_9,ctl_t.ntc_voltage_value,2);
 		  HAL_Delay(5);
   		
 		 switch(array_subscript){
    
 		   case 0:
-			  tpd_t.temperature_value = 8 + tpd_t.temperature_rectify_value + COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 8 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
    
 		   break;
    
 		   case 1:
-			  tpd_t.temperature_value = 9 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 9 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
@@ -419,22 +419,22 @@ void Display_Speicial_Temperature_Value(uint8_t temp)
    
    case degree_four:
 
-         array_subscript =  Calculate_Display_Temperature_Value(R10K_10_12,tpd_t.ntc_voltage_value,3);
+         array_subscript =  Calculate_Display_Temperature_Value(R10K_10_12,ctl_t.ntc_voltage_value,3);
 			 HAL_Delay(5);
 		 switch(array_subscript){
    
 		   case 0:
-			  tpd_t.temperature_value = 10 + tpd_t.temperature_rectify_value + COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 10 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
    
 		   break;
    
 		   case 1:
-			  tpd_t.temperature_value = 11 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 11 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
 		   case 2:
-			  tpd_t.temperature_value = 12 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 12 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
@@ -444,22 +444,22 @@ void Display_Speicial_Temperature_Value(uint8_t temp)
    break;
 
    case degree_five :
-		 array_subscript =  Calculate_Display_Temperature_Value(R10K_13_15,tpd_t.ntc_voltage_value,3);
+		 array_subscript =  Calculate_Display_Temperature_Value(R10K_13_15,ctl_t.ntc_voltage_value,3);
 		  HAL_Delay(5);
 		 switch(array_subscript){
    
 		   case 0:
-			  tpd_t.temperature_value = 13 + tpd_t.temperature_rectify_value + COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 13 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
    
 		   break;
    
 		   case 1:
-			  tpd_t.temperature_value = 14 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 14 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
 		   case 2:
-			  tpd_t.temperature_value = 15 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 15 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
@@ -467,22 +467,22 @@ void Display_Speicial_Temperature_Value(uint8_t temp)
    break;
    
    case degree_six:
-   	     array_subscript =  Calculate_Display_Temperature_Value(R10K_16_18,tpd_t.ntc_voltage_value,3);
+   	     array_subscript =  Calculate_Display_Temperature_Value(R10K_16_18,ctl_t.ntc_voltage_value,3);
 		  HAL_Delay(5);
 		 switch(array_subscript){
    
 		   case 0:
-			  tpd_t.temperature_value = 16 + tpd_t.temperature_rectify_value + COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 16 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
    
 		   break;
    
 		   case 1:
-			  tpd_t.temperature_value = 17 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 17 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
 		   case 2:
-			  tpd_t.temperature_value = 18 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 18 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
@@ -491,18 +491,18 @@ void Display_Speicial_Temperature_Value(uint8_t temp)
    break;
    
    case degree_seven :
-   	     array_subscript =  Calculate_Display_Temperature_Value(R10K_19_20,tpd_t.ntc_voltage_value,2);
+   	     array_subscript =  Calculate_Display_Temperature_Value(R10K_19_20,ctl_t.ntc_voltage_value,2);
 		  HAL_Delay(5);
 
 		 switch(array_subscript){
    
 		   case 0:
-			  tpd_t.temperature_value = 19 + tpd_t.temperature_rectify_value + COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 19 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
    
 		   break;
    
 		   case 1:
-			  tpd_t.temperature_value = 20 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 20 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
@@ -513,22 +513,22 @@ void Display_Speicial_Temperature_Value(uint8_t temp)
 
   
    case degree_eight :
-   	     array_subscript =  Calculate_Display_Temperature_Value(R10K_21_23,tpd_t.ntc_voltage_value,3);
+   	     array_subscript =  Calculate_Display_Temperature_Value(R10K_21_23,ctl_t.ntc_voltage_value,3);
 		  HAL_Delay(5);
 		 switch(array_subscript){
    
 		   case 0:
-			  tpd_t.temperature_value = 21 + tpd_t.temperature_rectify_value + COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 21 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
    
 		   break;
    
 		   case 1:
-			  tpd_t.temperature_value = 22 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 22 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
 		   case 2:
-			  tpd_t.temperature_value = 23 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 23 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
@@ -538,22 +538,22 @@ void Display_Speicial_Temperature_Value(uint8_t temp)
 
    
    case degree_nine :
-   	    array_subscript =  Calculate_Display_Temperature_Value(R10K_24_26,tpd_t.ntc_voltage_value,3);
+   	    array_subscript =  Calculate_Display_Temperature_Value(R10K_24_26,ctl_t.ntc_voltage_value,3);
 		  HAL_Delay(5);
 		 switch(array_subscript){
    
 		   case 0:
-			  tpd_t.temperature_value = 24 + tpd_t.temperature_rectify_value + COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 24 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
    
 		   break;
    
 		   case 1:
-			  tpd_t.temperature_value = 25 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 25 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
 		   case 2:
-			  tpd_t.temperature_value = 26 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 26 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
@@ -562,22 +562,22 @@ void Display_Speicial_Temperature_Value(uint8_t temp)
    break;
    
    case degree_ten :
-   	 array_subscript =  Calculate_Display_Temperature_Value(R10K_27_29,tpd_t.ntc_voltage_value,3);
+   	 array_subscript =  Calculate_Display_Temperature_Value(R10K_27_29,ctl_t.ntc_voltage_value,3);
 	      HAL_Delay(5);
 		 switch(array_subscript){
    
 		   case 0:
-			  tpd_t.temperature_value = 27 + tpd_t.temperature_rectify_value + COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 27 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
    
 		   break;
    
 		   case 1:
-			  tpd_t.temperature_value = 28 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 28 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
 		   case 2:
-			  tpd_t.temperature_value = 29 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 29 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
@@ -586,22 +586,22 @@ void Display_Speicial_Temperature_Value(uint8_t temp)
    break;
    
    case  degree_eleven :
-   		 array_subscript =  Calculate_Display_Temperature_Value(R10K_30_32,tpd_t.ntc_voltage_value,3);
+   		 array_subscript =  Calculate_Display_Temperature_Value(R10K_30_32,ctl_t.ntc_voltage_value,3);
 		  HAL_Delay(5);
 		 switch(array_subscript){
    
 		   case 0:
-			  tpd_t.temperature_value = 30 + tpd_t.temperature_rectify_value + COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 30 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
    
 		   break;
    
 		   case 1:
-			  tpd_t.temperature_value = 31 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 31 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
 		   case 2:
-			  tpd_t.temperature_value = 32 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 32 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
@@ -610,22 +610,22 @@ void Display_Speicial_Temperature_Value(uint8_t temp)
    break;
    
    case degree_twelve :
-   	   	 array_subscript =  Calculate_Display_Temperature_Value(R10K_33_35,tpd_t.ntc_voltage_value,3);
+   	   	 array_subscript =  Calculate_Display_Temperature_Value(R10K_33_35,ctl_t.ntc_voltage_value,3);
 	       HAL_Delay(5);
 		 switch(array_subscript){
    
 		   case 0:
-			  tpd_t.temperature_value = 33 + tpd_t.temperature_rectify_value + COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 33 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
    
 		   break;
    
 		   case 1:
-			  tpd_t.temperature_value = 34 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 34 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
 		   case 2:
-			  tpd_t.temperature_value = 35 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 35 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
@@ -634,22 +634,22 @@ void Display_Speicial_Temperature_Value(uint8_t temp)
    break;
 
    case degree_thirteen :
-   		 array_subscript =  Calculate_Display_Temperature_Value(R10K_36_38,tpd_t.ntc_voltage_value,3);
+   		 array_subscript =  Calculate_Display_Temperature_Value(R10K_36_38,ctl_t.ntc_voltage_value,3);
 		  HAL_Delay(5);
 		 switch(array_subscript){
    
 		   case 0:
-			  tpd_t.temperature_value = 36 + tpd_t.temperature_rectify_value + COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 36 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
    
 		   break;
    
 		   case 1:
-			  tpd_t.temperature_value = 37 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 37 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
 		   case 2:
-			  tpd_t.temperature_value = 38 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 38 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
@@ -658,22 +658,22 @@ void Display_Speicial_Temperature_Value(uint8_t temp)
    break;
    
    case degree_fourteen : //40 degree
-       array_subscript =  Calculate_Display_Temperature_Value(R10K_39_41,tpd_t.ntc_voltage_value,3);
+       array_subscript =  Calculate_Display_Temperature_Value(R10K_39_41,ctl_t.ntc_voltage_value,3);
 	       HAL_Delay(5);
 		 switch(array_subscript){
    
 		   case 0:
-			  tpd_t.temperature_value = 39 + tpd_t.temperature_rectify_value + COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 39 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
    
 		   break;
    
 		   case 1:
-			  tpd_t.temperature_value = 40 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 40 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
 		   case 2:
-			  tpd_t.temperature_value = 41 + tpd_t.temperature_rectify_value +COMPENSATION_VALUE;
+			  ctl_t.temperature_value = 41 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
    
@@ -707,19 +707,19 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 
 			    if(key- *(pt+0) >=20){
 
-				   tpd_t.temperature_rectify_value =-1;
+				   ctl_t.temperature_rectify_value =-1;
 				  
 
 				}
                 else{
-					tpd_t.temperature_rectify_value =0;
+					ctl_t.temperature_rectify_value =0;
                 }
 				
 				    temp_decimal_point = key - *(pt+i);
 
 			        temp_decimal_point = temp_decimal_point +5;
 
-	   		       tpd_t.temperature_decimal_point_value =  temp_decimal_point/10  ;
+	   		       ctl_t.temperature_decimal_point_value =  temp_decimal_point/10  ;
 
                }
 
@@ -735,16 +735,16 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 	 	    else if(*(pt+i) >  key && (*(pt+i+1) < key)){ //high temperature degree is number is smaller
 
             if(key- (*(pt+i+1)) >=20){ //10
-                 tpd_t.temperature_rectify_value =1;
+                 ctl_t.temperature_rectify_value =1;
 				 
             }
 			else
-		      tpd_t.temperature_rectify_value =0;
+		      ctl_t.temperature_rectify_value =0;
 			
 		   temp_decimal_point = *(pt+i) -key;
 
 		   temp_decimal_point = temp_decimal_point +5;
-           tpd_t.temperature_decimal_point_value =  temp_decimal_point/10 ;
+           ctl_t.temperature_decimal_point_value =  temp_decimal_point/10 ;
 
             
 				temp_temperature_value =  i;
@@ -759,18 +759,18 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 
 
 			   if((*(pt+i) - key) >=30){
-                 tpd_t.temperature_rectify_value =1;
+                 ctl_t.temperature_rectify_value =1;
 				 
                }
 			   else
-		      	tpd_t.temperature_rectify_value =0;
+		      	ctl_t.temperature_rectify_value =0;
 
 			    temp_decimal_point = *(pt+i)-key; //小数点
 
 		        temp_decimal_point = temp_decimal_point +5;
 
 
-   		       tpd_t.temperature_decimal_point_value =  temp_decimal_point/10 ;
+   		       ctl_t.temperature_decimal_point_value =  temp_decimal_point/10 ;
 
                 temp_temperature_value  = i;
 

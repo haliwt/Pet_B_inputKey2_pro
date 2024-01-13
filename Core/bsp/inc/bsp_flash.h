@@ -5,13 +5,14 @@
 #define FLASH_USER_START_ADDR   (FLASH_BASE + (15 * FLASH_PAGE_SIZE)) //FLASH写入的起始地址 = 0x08000000+0x00007800 
 #define FLASH_USER_END_ADDR     (FLASH_USER_START_ADDR + FLASH_PAGE_SIZE)//FLASH写入的结束地址 = 0x08000000+0x00007800 + 0x000000800= 0x08008000 (32K)
 
-#define DATA_64                 ((uint64_t)0x1234567812345678)//内容
-#define DATA_32                 ((uint32_t)0x12345678)
+//#define DATA_64                 ((uint64_t)0x1234567812345678)//内容
+//#define DATA_32                 ((uint32_t)0x12345678)
 
 
 
-void STM32G030F6P6_Write_Flash_Data_Handler(void);
-void STM32G030F6P6_Read_Flash_Data_Handler(void);
+void STM32G030F6P6_Write_Flash_Data(uint64_t data);
+uint32_t STM32G030F6P6_Read_Flash_Data(void);
+void stmflash_read(uint32_t raddr, uint32_t *pbuf, uint16_t length);
 
 
 #if 0

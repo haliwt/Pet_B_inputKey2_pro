@@ -260,11 +260,11 @@ void Smg_Display_Temp_Degree_Handler(void)
       uint8_t decade_temp=0,uint_temp=0,decimal_point;
 
 
-      decade_temp  = tpd_t.temperature_value / 10;
-      uint_temp =   tpd_t.temperature_value  % 10;
+      decade_temp  = ctl_t.temperature_value / 10;
+      uint_temp =   ctl_t.temperature_value  % 10;
 	
 
-	  decimal_point =   tpd_t.temperature_decimal_point_value ;
+	  decimal_point =   ctl_t.temperature_decimal_point_value ;
    
  
   
@@ -318,10 +318,10 @@ void Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
       decade_temp  = numbers / 10;
       uint_temp =   numbers  % 10;
 
-	  decimal_point =   0;//tpd_t.temperature_decimal_point_value ;
+	  decimal_point =   0;//ctl_t.temperature_decimal_point_value ;
    
  
-//   if(tpd_t.gTimer_smg_turn_on < 100){ //20*10 =200ms
+//   if(ctl_t.gTimer_smg_turn_on < 100){ //20*10 =200ms
 	     TM1650_Write_Data(0x48,0x71);//初始化为7级灰度，开显示,power off TM1650_Set(0x48,0x30);
 	     
 		
@@ -335,12 +335,12 @@ void Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
 
 
    //	}
-//	else if(tpd_t.gTimer_smg_turn_on >100  && tpd_t.gTimer_smg_turn_on < 105){
+//	else if(ctl_t.gTimer_smg_turn_on >100  && ctl_t.gTimer_smg_turn_on < 105){
 //
 //	     TM1650_Write_Data(0x48,0x00);
 //    }
 //	else{
-//	  tpd_t.gTimer_smg_turn_on =0;
+//	  ctl_t.gTimer_smg_turn_on =0;
 //	    TM1650_Write_Data(0x48,0x71);//初始化为7级灰度，开显示,power off TM1650_Set(0x48,0x30);
 //	     
 //		
@@ -376,10 +376,10 @@ void Repeat_Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
       decade_temp  = numbers / 10;
       uint_temp =   numbers  % 10;
 
-	  decimal_point =   0;//tpd_t.temperature_decimal_point_value ;
+	  decimal_point =   0;//ctl_t.temperature_decimal_point_value ;
    
  
-   if(tpd_t.gTimer_smg_turn_on < 300){ //20*10 =200ms
+   if(ctl_t.gTimer_smg_turn_on < 300){ //20*10 =200ms
 	     TM1650_Write_Data(0x48,0x71);//初始化为7级灰度，开显示,power off TM1650_Set(0x48,0x30);
 	     
 		
@@ -393,12 +393,12 @@ void Repeat_Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
 
 
    	}
-	else if(tpd_t.gTimer_smg_turn_on >299  && tpd_t.gTimer_smg_turn_on < 601){
+	else if(ctl_t.gTimer_smg_turn_on >299  && ctl_t.gTimer_smg_turn_on < 601){
 
 	     TM1650_Write_Data(0x48,0x00);
     }
 	else{
-	  tpd_t.gTimer_smg_turn_on =0;
+	  ctl_t.gTimer_smg_turn_on =0;
 	 
 
 	}
