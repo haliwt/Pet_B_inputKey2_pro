@@ -6,10 +6,10 @@
   ******************************************************************************
   * @attention
   *
-  * Pet-B Version : 1.3  DATA:2024.01.11
+  * Pet-B Version : 2.0  DATA:2024.01.13
   * 
   * Return Factory 
-  * Touch is low level is Enable
+  * Touch IC ouput is low level enable by hardware be changed .
   * 
   * 
   *
