@@ -189,7 +189,7 @@ static void Parse_Flash_Read_Data(uint32_t data)
 	   break;
 
 	   case 0x05:
-	   	ctl_t.relay_tape_flag=1;
+	   	ctl_t.relay_tape_flag=1; //
 	    ctl_t.relay_kill_flag=1;
 
 	   break;

@@ -148,56 +148,56 @@ void Quantificat_FlashData_Handler(void)
 		if(relay_tape_state() == 1 && relay_fan_state() == 1 && relay_kill_state() == 1 && relay_temp_flag_state() ==1){//TAP+FAN+KILL+TEMP//
 			ctl_t.relay_flag_flash_data = 0x0f;
 		}
-        else if(relay_tape_state() == 1 && relay_fan_state() == 1 && relay_kill_state() == 1){ //TAP+FAN+KILL
+        else if(relay_tape_state() == 1 && relay_fan_state() == 1 && relay_kill_state() == 1 && relay_temp_flag_state() ==0){ //TAP+FAN+KILL
 			ctl_t.relay_flag_flash_data= 0x07;
 		}
-        else if(relay_tape_state() == 1 && relay_fan_state() == 1){ //TAP+FAN
+        else if(relay_tape_state() == 1 && relay_fan_state() == 1  && relay_temp_flag_state() ==0 && relay_kill_state() == 0 ){ //TAP+FAN
 				ctl_t.relay_flag_flash_data= 0x03;
 		}
-		else if(relay_tape_state() == 1 && relay_kill_state() == 1){ //TAPE+ KILL
+		else if(relay_tape_state() == 1 && relay_kill_state() == 1 && relay_temp_flag_state() ==0 && relay_fan_state() == 0 ){ //TAPE+ KILL
 			ctl_t.relay_flag_flash_data= 0x05;
 		}
-		else if(relay_tape_state() == 1 &&  relay_temp_flag_state() ==1){ //TAP+TEMP
+		else if(relay_tape_state() == 1 &&  relay_temp_flag_state() ==1 && relay_fan_state() ==0 && relay_kill_state() == 0 ){ //TAP+TEMP
 			ctl_t.relay_flag_flash_data = 0x09;
 		}
-		else if(relay_tape_state() == 1 && relay_fan_state() == 1 && relay_temp_flag_state() ==1){ //TAPE+FAN+TEMP
+		else if(relay_tape_state() == 1 && relay_fan_state() == 1 && relay_temp_flag_state() ==1 && relay_kill_state() == 0){ //TAPE+FAN+TEMP
 			ctl_t.relay_flag_flash_data = 0x0B;
 		}
-		else if(relay_tape_state() == 1 && relay_kill_state() == 1 && relay_temp_flag_state() ==1){ //TAPE+KILL+TEMP
+		else if(relay_tape_state() == 1 && relay_kill_state() == 1 && relay_temp_flag_state() ==1 && relay_fan_state() == 0 ){ //TAPE+KILL+TEMP
 			ctl_t.relay_flag_flash_data = 0x0D;
 		}
-		else if(relay_tape_state() == 1 ){ //TAPE
+		else if(relay_tape_state() == 1 && relay_kill_state() == 0 && relay_temp_flag_state() ==0 && relay_fan_state() == 0  ){ //TAPE
 				ctl_t.relay_flag_flash_data= 0x01;
 		}
-        else if(relay_fan_state() == 1 && relay_kill_state() == 1 && relay_temp_flag_state() ==1){ //FAN+KILL+TEMP
+        else if(relay_fan_state() == 1 && relay_kill_state() == 1 && relay_temp_flag_state() ==1 && relay_tape_state() == 0){ //FAN+KILL+TEMP
 
 			ctl_t.relay_flag_flash_data= 0x0E;
 
        }
-	   else if(relay_fan_state() == 1 && relay_kill_state() == 1 ){ //FAN+KILL
+	   else if(relay_fan_state() == 1 && relay_kill_state() == 1  && relay_temp_flag_state() ==0 && relay_tape_state() == 0 ){ //FAN+KILL
 		
 			ctl_t.relay_flag_flash_data= 0x06;
 		}
-	   	else if(relay_fan_state() == 1 && relay_temp_flag_state() ==1){ //FAN+TEMP
+	   	else if(relay_fan_state() == 1 && relay_temp_flag_state() ==1 && relay_kill_state() ==0 && relay_tape_state() == 0){ //FAN+TEMP
 
 			ctl_t.relay_flag_flash_data= 0x0A;
 
        }
-	    else if(relay_fan_state() == 1){ //FAN
+	    else if(relay_fan_state() == 1 && relay_temp_flag_state() ==0 && relay_kill_state() ==0 && relay_tape_state() == 0){ //FAN
 		
 			ctl_t.relay_flag_flash_data= 0x02;
 		}
-		else if(relay_kill_state() == 1 && relay_temp_flag_state() ==1){//KILL+TEMP
+		else if(relay_kill_state() == 1 && relay_temp_flag_state() ==1 && relay_fan_state() ==0 && relay_tape_state() == 0 ){//KILL+TEMP
 
 			ctl_t.relay_flag_flash_data= 0x0C;
 
        }
-	   else if(relay_kill_state() == 1){//KILL
+	   else if(relay_kill_state() == 1 && relay_fan_state() ==0 && relay_keep_temp_state() ==0 && relay_tape_state() == 0){//KILL
 
 			ctl_t.relay_flag_flash_data= 0x04;
 
        }
-	  	else if(relay_temp_flag_state() ==1){//KEEP TEMP 
+	  	else if(relay_temp_flag_state() ==1 && relay_fan_state() ==0 && relay_kill_state() ==0 && relay_tape_state() == 0){//KEEP TEMP 
 		
 			  ctl_t.relay_flag_flash_data= 0x08;
 		}
