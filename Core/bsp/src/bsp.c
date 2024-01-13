@@ -101,45 +101,154 @@ static void IWDG_Detected_Times(void)
     
 
 }
+/***********************************************************************************
+	*
+	*Function Name: static void Parse_Flash_Read_Data(uint32_t data)
+	*Function:  tape =0x01,fan=0x02,kill= 0x04,keep_temp =0x08
+	*Input Ref: NO
+	*Retrun Ref: NO
+	*
+************************************************************************************/
 static void Parse_Flash_Read_Data(uint32_t data)
 {
     static uint16_t read_data;
-	static uint8_t read_temp_data, read_relay_flag_data;
+	static uint8_t read_temp_data,read_flash_relay_data;
 	if(data > 0){
        
 	   read_data = (uint16_t)data;
        read_temp_data = (data >> 8);
-	   read_relay_flag_data = (data & 0x00FF);
+	   read_flash_relay_data = (data & 0x00FF);
 
-	   if(read_relay_flag_data & 0x01){
-			ctl_t.relay_tape_flag=1;
-	   }
-	   else{
-			ctl_t.relay_tape_flag=0;
-	   }
+	   switch(read_flash_relay_data){
 
-	   if(read_relay_flag_data & 0x02){
-			ctl_t.relay_fan_flag=1;
-	   }
-	   else{
-			ctl_t.relay_fan_flag=0;
-	   }
+	   case 0x01:
+	   	ctl_t.relay_tape_flag=1;
 
-	   if(read_relay_flag_data & 0x04){
-			ctl_t.relay_kill_flag=1;
-	   }
-	   else{
-			ctl_t.relay_kill_flag=0;
-	   }
+	   break;
 
-	   if(read_relay_flag_data & 0x08){
-			ctl_t.relay_keep_temp_flag=1;
-			 pro_t.set_keep_tmep_value = read_temp_data;
-		}
-		else{
-			ctl_t.relay_keep_temp_flag=0;
-			pro_t.set_keep_tmep_value=0;
-		}
+	   case 0x02:
+	   	ctl_t.relay_fan_flag=1;
+
+	   break;
+
+	   case 0x04:
+	   	 ctl_t.relay_kill_flag=1;
+
+	   break;
+
+       case 0x08:
+	   	
+	     ctl_t.relay_keep_temp_flag=1;
+		 pro_t.set_keep_tmep_value = read_temp_data;
+
+	   break;
+
+	   case 0x0F:
+	      ctl_t.relay_tape_flag=1;
+	      ctl_t.relay_fan_flag=1;
+	      ctl_t.relay_kill_flag=1;
+		  
+		  ctl_t.relay_keep_temp_flag=1;
+		  pro_t.set_keep_tmep_value = read_temp_data;
+
+
+	   break;
+
+	   case 0x07:
+	   	  ctl_t.relay_tape_flag=1; //0x01
+	      ctl_t.relay_fan_flag=1;  //0x02
+	      ctl_t.relay_kill_flag=1; //0x04
+       break;
+
+	    case 0x0B:
+	   	
+		 ctl_t.relay_tape_flag=1; //0x01
+		 ctl_t.relay_fan_flag=1;  //0x02
+		
+		 ctl_t.relay_keep_temp_flag=1; //0x08
+		 
+		 pro_t.set_keep_tmep_value = read_temp_data;
+
+	   break;
+
+	   case 0x0D:
+	   	 ctl_t.relay_tape_flag=1; //0x01
+		 ctl_t.relay_kill_flag=1;  //0x04
+		
+		 ctl_t.relay_keep_temp_flag=1; //0x08
+		 
+		 
+		 pro_t.set_keep_tmep_value = read_temp_data;
+
+	   break;
+
+	   case 0x03:
+	   	 ctl_t.relay_tape_flag=1;
+	     ctl_t.relay_fan_flag=1;
+
+	   break;
+
+	   case 0x05:
+	   	ctl_t.relay_tape_flag=1;
+	    ctl_t.relay_kill_flag=1;
+
+	   break;
+
+	   case 0x09:
+	   	  ctl_t.relay_tape_flag=1; //0x01
+	     
+		  ctl_t.relay_keep_temp_flag=1; //0x08
+		  pro_t.set_keep_tmep_value = read_temp_data;
+
+	   break;
+       
+	  
+       //FAN -RELAY
+	   case 0x0E:
+	   		 
+		  ctl_t.relay_fan_flag=1;  //0x02
+
+		  ctl_t.relay_kill_flag=1;  //0x04
+		
+		 ctl_t.relay_keep_temp_flag=1; //0x08
+		 
+		 
+		 pro_t.set_keep_tmep_value = read_temp_data;
+
+
+	   break;
+
+	   case 0x06:
+	   	  ctl_t.relay_fan_flag=1;  //0x02
+
+		  ctl_t.relay_kill_flag=1;  //0x04
+
+	   break;
+
+	   case 0x0A:
+
+	     ctl_t.relay_fan_flag=1;  //0x02
+
+		ctl_t.relay_keep_temp_flag=1; //0x08
+		 
+		pro_t.set_keep_tmep_value = read_temp_data;
+
+	   break;
+       //KILL RELAY 
+	   case 0x0C:
+	  
+
+		  ctl_t.relay_kill_flag=1;  //0x04
+		
+		 ctl_t.relay_keep_temp_flag=1; //0x08
+		 
+		 
+		 pro_t.set_keep_tmep_value = read_temp_data;
+
+	   break;
+
+	   }
+	   
 	}
 
 }
