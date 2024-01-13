@@ -138,7 +138,7 @@ static void Parse_Flash_Read_Data(uint32_t data)
 
        case 0x08:
 	   	
-	     ctl_t.relay_keep_temp_flag=1;
+	     pro_t.set_keey_temp_define_flag=1; //0x08
 		 pro_t.set_keep_tmep_value = read_temp_data;
 
 	   break;
@@ -148,7 +148,7 @@ static void Parse_Flash_Read_Data(uint32_t data)
 	      ctl_t.relay_fan_flag=1;
 	      ctl_t.relay_kill_flag=1;
 		  
-		  ctl_t.relay_keep_temp_flag=1;
+		   pro_t.set_keey_temp_define_flag=1; //0x08
 		  pro_t.set_keep_tmep_value = read_temp_data;
 
 
@@ -165,7 +165,7 @@ static void Parse_Flash_Read_Data(uint32_t data)
 		 ctl_t.relay_tape_flag=1; //0x01
 		 ctl_t.relay_fan_flag=1;  //0x02
 		
-		 ctl_t.relay_keep_temp_flag=1; //0x08
+		  pro_t.set_keey_temp_define_flag=1; //0x08
 		 
 		 pro_t.set_keep_tmep_value = read_temp_data;
 
@@ -175,7 +175,7 @@ static void Parse_Flash_Read_Data(uint32_t data)
 	   	 ctl_t.relay_tape_flag=1; //0x01
 		 ctl_t.relay_kill_flag=1;  //0x04
 		
-		 ctl_t.relay_keep_temp_flag=1; //0x08
+		  pro_t.set_keey_temp_define_flag=1; //0x08
 		 
 		 
 		 pro_t.set_keep_tmep_value = read_temp_data;
@@ -197,7 +197,7 @@ static void Parse_Flash_Read_Data(uint32_t data)
 	   case 0x09:
 	   	  ctl_t.relay_tape_flag=1; //0x01
 	     
-		  ctl_t.relay_keep_temp_flag=1; //0x08
+		  pro_t.set_keey_temp_define_flag=1; //0x08
 		  pro_t.set_keep_tmep_value = read_temp_data;
 
 	   break;
@@ -210,7 +210,7 @@ static void Parse_Flash_Read_Data(uint32_t data)
 
 		  ctl_t.relay_kill_flag=1;  //0x04
 		
-		 ctl_t.relay_keep_temp_flag=1; //0x08
+		  pro_t.set_keey_temp_define_flag=1; //0x08
 		 
 		 
 		 pro_t.set_keep_tmep_value = read_temp_data;
@@ -229,7 +229,7 @@ static void Parse_Flash_Read_Data(uint32_t data)
 
 	     ctl_t.relay_fan_flag=1;  //0x02
 
-		ctl_t.relay_keep_temp_flag=1; //0x08
+		 pro_t.set_keey_temp_define_flag=1; //0x08
 		 
 		pro_t.set_keep_tmep_value = read_temp_data;
 
@@ -239,11 +239,11 @@ static void Parse_Flash_Read_Data(uint32_t data)
 	  
 
 		  ctl_t.relay_kill_flag=1;  //0x04
+		  
+
+	      pro_t.set_keey_temp_define_flag=1; //0x08
 		
-		 ctl_t.relay_keep_temp_flag=1; //0x08
-		 
-		 
-		 pro_t.set_keep_tmep_value = read_temp_data;
+		  pro_t.set_keep_tmep_value = read_temp_data;
 
 	   break;
 
