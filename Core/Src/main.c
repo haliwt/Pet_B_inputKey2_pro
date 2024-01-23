@@ -7,12 +7,11 @@
   * @attention
   *
   * Pet-B Version : 2.0  DATA:2024.01.13
-  * 
+  * Pet-B Version : 2.1  DATA:2024.01.23  modify touchkey 
+  *
   * Return Factory 
   * Touch IC ouput is low level enable by hardware be changed .
   * 
-  * 
-  *
   ******************************************************************************
   */
 /* USER CODE END Header */

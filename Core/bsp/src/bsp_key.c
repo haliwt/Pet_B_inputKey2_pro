@@ -57,7 +57,7 @@ uint8_t ReadKey(void)
   }
   else if(FUN_KEY_VALUE()==KEY_UP && CONFIRM_KEY_VALUE()==KEY_UP && pro_t.long_key_flag ==0){ //oneself key 
 		cnt++;
-		if(cnt<70){ //按键松开消抖,一定要大于短按键次数 > 20
+		if(cnt<80){ //按键松开消抖,一定要大于短按键次数 > 70
 		    return 0; 
 
 		}
