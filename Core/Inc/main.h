@@ -103,11 +103,20 @@ void Error_Handler(void);
 
 //touch key input 
 
-#define INPUT_KEY_FUN_Pin               GPIO_PIN_0
-#define INPUT_KEY_FUN_GPIO_Port           GPIOB
+#define INPUT_KEY_FUN_Pin GPIO_PIN_0
+#define INPUT_KEY_FUN_GPIO_Port GPIOB
+#define INPUT_KEY_FUN_EXTI_IRQn  EXTI0_1_IRQn
 
-#define INPUT_KEY_CONFIRM_Pin             GPIO_PIN_3
-#define INPUT_KEY_CONFIRM_GPIO_Port       GPIOB
+#define INPUT_KEY_CONFIRM_Pin GPIO_PIN_3
+#define INPUT_KEY_CONFIRM_GPIO_Port GPIOB
+#define INPUT_KEY_CONFIRM_EXTI_IRQn EXTI2_3_IRQn
+
+//
+//#define INPUT_KEY_FUN_Pin               GPIO_PIN_0
+//#define INPUT_KEY_FUN_GPIO_Port           GPIOB
+//
+//#define INPUT_KEY_CONFIRM_Pin             GPIO_PIN_3
+//#define INPUT_KEY_CONFIRM_GPIO_Port       GPIOB
 
 /* USER CODE BEGIN Private defines */
 

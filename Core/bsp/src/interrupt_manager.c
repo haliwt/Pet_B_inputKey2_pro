@@ -1,6 +1,32 @@
 #include "interrupt_manager.h"
 #include "bsp.h"
 
+void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
+{
+
+   if(GPIO_Pin == INPUT_KEY_CONFIRM_Pin){
+	 if(CONFIRM_KEY_VALUE() == KEY_DOWN){
+
+       pro_t.iwdg_detected_times =0;
+
+	 }
+
+
+   }
+
+   if(GPIO_Pin == INPUT_KEY_FUN_Pin){
+	 if(CONFIRM_KEY_VALUE() == KEY_DOWN){
+
+       pro_t.iwdg_detected_times =0;
+
+	 }
+
+
+   }
+
+
+
+}
 
 
 /*******************************************************************************
@@ -18,7 +44,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     if(htim->Instance==TIM14){
        tm0++;
        tm1++;
-	 
+	   tm2++;
 	    ctl_t.gTimer_smg_turn_on ++;
 	   if(tm2 > 9){
 		 	 tm2=0;

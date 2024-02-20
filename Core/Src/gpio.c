@@ -91,10 +91,25 @@ void MX_GPIO_Init(void)
 
 
   /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = INPUT_KEY_CONFIRM_Pin|INPUT_KEY_FUN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(INPUT_KEY_CONFIRM_GPIO_Port, &GPIO_InitStruct);
+//  GPIO_InitStruct.Pin = INPUT_KEY_CONFIRM_Pin|INPUT_KEY_FUN_Pin;
+//  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+//  GPIO_InitStruct.Pull = GPIO_NOPULL;
+//  HAL_GPIO_Init(INPUT_KEY_CONFIRM_GPIO_Port, &GPIO_InitStruct);
+
+	/*Configure GPIO pins : PB0 PBPin */
+	 GPIO_InitStruct.Pin = INPUT_KEY_FUN_Pin|INPUT_KEY_CONFIRM_Pin;
+	 GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+	 GPIO_InitStruct.Pull = GPIO_NOPULL;
+	 HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+	
+	 /* EXTI interrupt init*/
+	 HAL_NVIC_SetPriority(EXTI0_1_IRQn, 1, 0);
+	 HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
+	
+	 HAL_NVIC_SetPriority(EXTI2_3_IRQn, 1, 0);
+	 HAL_NVIC_EnableIRQ(EXTI2_3_IRQn);
+
+
 
 }
 

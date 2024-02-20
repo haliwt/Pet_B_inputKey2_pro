@@ -30,23 +30,23 @@ void bsp_Idle(void)
    static uint8_t iwdg_times;
    static uint8_t parse_data;
    /* --- 喂狗 */
-    if((pro_t.gTimer_pro_feed_dog > 3 && FUN_KEY_VALUE()==KEY_UP && CONFIRM_KEY_VALUE()==KEY_UP) ||(iwdg_times < 4 && pro_t.gTimer_pro_feed_dog > 3 )){
+    if((pro_t.gTimer_pro_feed_dog > 3 && FUN_KEY_VALUE()==KEY_DOWN && CONFIRM_KEY_VALUE()==KEY_DOWN)){
 		pro_t.gTimer_pro_feed_dog=0;
 		pro_t.gTimer_pro_det_dog =0;
-		iwdg_times ++;
+		pro_t.iwdg_detected_times  ++;
 	   
 	   Feed_Dog();
 
     }
-	else{
 
-	  if(pro_t.gTimer_pro_det_dog > 3 &&  pro_t.iwdg_detected_times < 6){
+
+	if(pro_t.gTimer_pro_det_dog > 3){
 		 pro_t.gTimer_pro_det_dog =0;
 		 Feed_Dog();
-		 pro_t.iwdg_detected_times ++;
+		
 
-	    }
 	}
+	
 		
 	/* --- 让CPU进入休眠，由Systick定时中断唤醒或者其他中断唤醒 */
 	
@@ -75,7 +75,7 @@ static void IWDG_Detected_Times(void)
    
 	 static uint8_t  iwdg_flag;
 	 uint16_t temp_value;
-     if(pro_t.iwdg_detected_times  > 5  && iwdg_flag ==0){
+     if(pro_t.iwdg_detected_times  > 100  && iwdg_flag ==0){
 		pro_t.gTimer_pro_feed_dog=0;
 		iwdg_flag ++;
 		Feed_Dog();
