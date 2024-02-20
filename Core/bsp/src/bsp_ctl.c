@@ -91,7 +91,7 @@ static uint8_t relay_kill_fun(void)
 ***********************************************************/
 static uint8_t relay_temp_flag_fun(void)
 {
-   if(pro_t.set_keey_temp_define_flag==1) return 1;
+   if(pro_t.set_keep_temp_fun_flag==1) return 1;
    else return 0;
 
 }
@@ -107,7 +107,7 @@ static uint8_t relay_temp_flag_fun(void)
 static uint8_t relay_temp_fun(void)
 {
 	if(relay_temp_flag_state() ==1){
-		if(pro_t.set_keep_tmep_value >= ctl_t.temperature_value ){
+		if(pro_t.set_keep_temp_value >= ctl_t.temperature_value ){
                    ctl_t.relay_keep_temp_flag =1; //open keep temperature "relay_d" 
 			       KEEP_HEAT_LED_ON();
 	               RELAY_KEEP_TEMP_SetHigh();

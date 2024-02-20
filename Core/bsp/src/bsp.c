@@ -83,7 +83,7 @@ static void IWDG_Detected_Times(void)
 		
         if(relay_temp_flag_state()==1){
           // ctl_t.relay_keep_temp_data;// =30;//pro_t.set_keep_tmep_value ;
-           ctl_t.relay_keep_temp_data =(uint64_t) pro_t.set_keep_tmep_value ;
+           ctl_t.relay_keep_temp_data =(uint64_t) pro_t.set_keep_temp_value ;
 		   ctl_t.relay_keep_temp_data = ctl_t.relay_keep_temp_data <<8;
 		  write_flash_datta =(ctl_t.relay_flag_flash_data | ctl_t.relay_keep_temp_data);
 
@@ -138,8 +138,8 @@ static void Parse_Flash_Read_Data(uint32_t data)
 
        case 0x08:
 	   	
-	     pro_t.set_keey_temp_define_flag=1; //0x08
-		 pro_t.set_keep_tmep_value = read_temp_data;
+	     pro_t.set_keep_temp_fun_flag=1; //0x08
+		 pro_t.set_keep_temp_value = read_temp_data;
 
 	   break;
 
@@ -148,8 +148,8 @@ static void Parse_Flash_Read_Data(uint32_t data)
 	      ctl_t.relay_fan_flag=1;
 	      ctl_t.relay_kill_flag=1;
 		  
-		   pro_t.set_keey_temp_define_flag=1; //0x08
-		  pro_t.set_keep_tmep_value = read_temp_data;
+		   pro_t.set_keep_temp_fun_flag=1; //0x08
+		  pro_t.set_keep_temp_value = read_temp_data;
 
 
 	   break;
@@ -165,9 +165,9 @@ static void Parse_Flash_Read_Data(uint32_t data)
 		 ctl_t.relay_tape_flag=1; //0x01
 		 ctl_t.relay_fan_flag=1;  //0x02
 		
-		  pro_t.set_keey_temp_define_flag=1; //0x08
+		  pro_t.set_keep_temp_fun_flag=1; //0x08
 		 
-		 pro_t.set_keep_tmep_value = read_temp_data;
+		 pro_t.set_keep_temp_value = read_temp_data;
 
 	   break;
 
@@ -175,10 +175,10 @@ static void Parse_Flash_Read_Data(uint32_t data)
 	   	 ctl_t.relay_tape_flag=1; //0x01
 		 ctl_t.relay_kill_flag=1;  //0x04
 		
-		  pro_t.set_keey_temp_define_flag=1; //0x08
+		  pro_t.set_keep_temp_fun_flag=1; //0x08
 		 
 		 
-		 pro_t.set_keep_tmep_value = read_temp_data;
+		 pro_t.set_keep_temp_value = read_temp_data;
 
 	   break;
 
@@ -197,8 +197,8 @@ static void Parse_Flash_Read_Data(uint32_t data)
 	   case 0x09:
 	   	  ctl_t.relay_tape_flag=1; //0x01
 	     
-		  pro_t.set_keey_temp_define_flag=1; //0x08
-		  pro_t.set_keep_tmep_value = read_temp_data;
+		  pro_t.set_keep_temp_fun_flag=1; //0x08
+		  pro_t.set_keep_temp_value = read_temp_data;
 
 	   break;
        
@@ -210,10 +210,10 @@ static void Parse_Flash_Read_Data(uint32_t data)
 
 		  ctl_t.relay_kill_flag=1;  //0x04
 		
-		  pro_t.set_keey_temp_define_flag=1; //0x08
+		  pro_t.set_keep_temp_fun_flag=1; //0x08
 		 
 		 
-		 pro_t.set_keep_tmep_value = read_temp_data;
+		 pro_t.set_keep_temp_value = read_temp_data;
 
 
 	   break;
@@ -229,9 +229,9 @@ static void Parse_Flash_Read_Data(uint32_t data)
 
 	     ctl_t.relay_fan_flag=1;  //0x02
 
-		 pro_t.set_keey_temp_define_flag=1; //0x08
+		 pro_t.set_keep_temp_fun_flag=1; //0x08
 		 
-		pro_t.set_keep_tmep_value = read_temp_data;
+		pro_t.set_keep_temp_value = read_temp_data;
 
 	   break;
        //KILL RELAY 
@@ -241,9 +241,9 @@ static void Parse_Flash_Read_Data(uint32_t data)
 		  ctl_t.relay_kill_flag=1;  //0x04
 		  
 
-	      pro_t.set_keey_temp_define_flag=1; //0x08
+	      pro_t.set_keep_temp_fun_flag=1; //0x08
 		
-		  pro_t.set_keep_tmep_value = read_temp_data;
+		  pro_t.set_keep_temp_value = read_temp_data;
 
 	   break;
 
@@ -271,12 +271,13 @@ void Key_Handler(uint8_t key_value)
 
         switch(pro_t.key_as_numbers_input_flag){
 
-		 case 1:
+		 case 1: //keep temperature value that as inupt number of key
              pro_t.iwdg_detected_times=0;
 			 
 			ctl_t.gTimer_select_fun=0;
 			disp_keep_temp_value =0xff;
 			pro_t.gTimer_pro_disp_temp=0; //display set keep temperature timer timing 
+			//
 			ctl_t.digital_numbers++; //scope : 16~30度
 			if(ctl_t.digital_numbers <16)ctl_t.digital_numbers =16;
 			if(ctl_t.digital_numbers>30) ctl_t.digital_numbers=30;
@@ -344,7 +345,7 @@ void Key_Handler(uint8_t key_value)
       pro_t.iwdg_detected_times=0;
 	  if(pro_t.fun_key_counter==0){
         
-		if( pro_t.set_keey_temp_define_flag == 1){ //display has been set keep heat temperatur value .
+		if( pro_t.set_keep_temp_fun_flag == 1){ //display has been set keep heat temperatur value .
 		pro_t.gTimer_pro_disp_temp=0;
 		 //pro_t.disp_temp_value=1;
 		disp_keep_temp_value =1;
@@ -360,7 +361,7 @@ void Key_Handler(uint8_t key_value)
 
 
      }
-	 else{
+	 else{// confrim key define speical led on or off.
 
       switch(relay_id_led){
 
@@ -411,12 +412,12 @@ void Key_Handler(uint8_t key_value)
 
 			case relay_keep_temp_led_on: //keep temperature value
 
-			  switch(pro_t.set_keey_temp_define_flag){
+			  switch(pro_t.set_keep_temp_fun_flag){
 
 			   case 1:
   
 			
-			 	 pro_t.set_keey_temp_define_flag=0;
+			 	 pro_t.set_keep_temp_fun_flag=0;
                  ctl_t.relay_keep_temp_flag =0;
 				 ctl_t.gTimer_select_fun =10;
 				 pro_t.key_short_confirm_flag =1;
@@ -468,13 +469,13 @@ void Key_Handler(uint8_t key_value)
 		
 			ADD_DEC_LED_OFF();
 		
-		   pro_t.set_keey_temp_define_flag = 1; //set keep temperature is complete.
+		   pro_t.set_keep_temp_fun_flag = 1; //set keep temperature is complete.
 		   pro_t.long_key_flag =0; //repeat by pressed key_confirm .
 		   disp_keep_temp_value =0;
 		   ctl_t.gTimer_read_adc =20;
 		
-		   pro_t.set_keep_tmep_value = ctl_t.digital_numbers;
-			   if(pro_t.set_keep_tmep_value >= ctl_t.temperature_value ){
+		   pro_t.set_keep_temp_value = ctl_t.digital_numbers;
+			   if(pro_t.set_keep_temp_value >= ctl_t.temperature_value ){
                    ctl_t.relay_keep_temp_flag =1; //open keep temperature "relay_d" 
 			       KEEP_HEAT_LED_ON();
 	               RELAY_KEEP_TEMP_SetHigh();
@@ -487,7 +488,7 @@ void Key_Handler(uint8_t key_value)
 			      KEEP_HEAT_LED_OFF();
 	              RELAY_KEEP_TEMP_SetLow();
 				  KEY_FUN_CONFIRM_LED_ON() ;
-				   ADD_DEC_LED_OFF();
+				  ADD_DEC_LED_OFF();
 
               }
 			  pro_t.fun_key_counter=0;
@@ -541,7 +542,7 @@ void Main_Process(void)
     
 		if(pro_t.gTimer_pro_disp_temp <2){
 
-		   Repeat_Keep_Heat_Setup_Digital_Numbers(pro_t.set_keep_tmep_value);
+		   Repeat_Keep_Heat_Setup_Digital_Numbers(pro_t.set_keep_temp_value);
 		   
 		 }
 		else{

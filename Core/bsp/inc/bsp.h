@@ -63,8 +63,8 @@ typedef struct{
    uint8_t fun_key_counter;
    uint8_t key_short_confirm_flag;
    uint8_t key_long_confirm_flag;
-   uint8_t set_keey_temp_define_flag;
-   uint8_t set_keep_tmep_value;
+   uint8_t set_keep_temp_fun_flag;
+   uint8_t set_keep_temp_value;
    uint8_t key_as_numbers_input_flag;
    uint8_t long_key_flag;
    uint8_t disp_temp_value;

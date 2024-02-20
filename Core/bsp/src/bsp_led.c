@@ -352,12 +352,14 @@ void Keep_Heat_Led_Filcker(void)
 	
 		KEEP_HEAT_LED_ON();
 		
+		
 	
 	   }
 	   else if(led_t.gTimer_flicker >0 && led_t.gTimer_flicker <2){
 	
 		 
 	     KEEP_HEAT_LED_OFF();
+		
 	
 	   }
 	   else{
@@ -405,7 +407,7 @@ void Keep_heat_SetUp_Led_Filcker(void)
 
 		KEY_FUN_CONFIRM_LED_ON();
 		KEEP_HEAT_LED_ON();	
-	    
+	    ADD_DEC_LED_ON(); //WT.EDIT 2024.02.20
 	  
 
 	}
@@ -414,6 +416,7 @@ void Keep_heat_SetUp_Led_Filcker(void)
 
 		KEY_FUN_CONFIRM_LED_OFF();
 		KEEP_HEAT_LED_OFF();
+	    ADD_DEC_LED_OFF(); //WT.EDIT 2024.02.20
 	   
 	    
 
@@ -422,6 +425,7 @@ void Keep_heat_SetUp_Led_Filcker(void)
 		led_t.gTimer_keey_heat_flicker=0;
 		KEY_FUN_CONFIRM_LED_ON();
 		KEEP_HEAT_LED_ON();	
+		ADD_DEC_LED_ON(); //WT.EDIT 2024.02.20
 
 	}
 
