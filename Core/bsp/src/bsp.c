@@ -30,7 +30,7 @@ void bsp_Idle(void)
    static uint8_t iwdg_times;
    static uint8_t parse_data;
    /* --- 喂狗 */
-    if((pro_t.gTimer_pro_feed_dog > 3 && FUN_KEY_VALUE()==KEY_DOWN)){
+    if((pro_t.gTimer_pro_feed_dog > 3 && FUN_KEY_VALUE()==KEY_DOWN && CONFIRM_KEY_VALUE()==KEY_DOWN)){
 		pro_t.gTimer_pro_feed_dog=0;
 		
 		pro_t.iwdg_detected_times  ++;
