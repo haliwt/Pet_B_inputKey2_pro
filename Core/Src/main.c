@@ -110,11 +110,9 @@ int main(void)
 	   power_on++;
 	   Smg_Display_Temp_Degree_Handler();
        pro_t.read_flash_data = STM32G030F6P6_Read_Flash_Data();
-	}
+	 }
 	  bsp_Idle();
-	// pro_t.key_value =  KEY_Scan();
-	
-	    key_value = ReadKey();
+	  key_value = ReadKey();
 		if(key_value==0){
 	    	Main_Process();
 			

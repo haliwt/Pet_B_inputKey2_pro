@@ -30,21 +30,22 @@ void bsp_Idle(void)
    static uint8_t iwdg_times;
    static uint8_t parse_data;
    /* --- 喂狗 */
-    if((pro_t.gTimer_pro_feed_dog > 3 && FUN_KEY_VALUE()==KEY_DOWN && CONFIRM_KEY_VALUE()==KEY_DOWN)){
+    if((pro_t.gTimer_pro_feed_dog > 3 && FUN_KEY_VALUE()==KEY_DOWN)){
 		pro_t.gTimer_pro_feed_dog=0;
-		pro_t.gTimer_pro_det_dog =0;
+		
 		pro_t.iwdg_detected_times  ++;
-	   
-	   Feed_Dog();
+		if(pro_t.iwdg_detected_times > 1){
+			IWDG_Detected_Times();
+		}
+	    else{
+	       Feed_Dog();
+		}
 
     }
-
-
-	if(pro_t.gTimer_pro_det_dog > 3){
-		 pro_t.gTimer_pro_det_dog =0;
-		 Feed_Dog();
+    if(pro_t.gTimer_pro_det_dog > 3 && pro_t.iwdg_detected_times <2){
+ 		 pro_t.gTimer_pro_det_dog =0;
+ 		 Feed_Dog();
 		
-
 	}
 	
 		
@@ -55,7 +56,7 @@ void bsp_Idle(void)
 	
 	/* 例如 uIP 协议，可以插入uip轮询函数 */
 	//TOUCH_CapScan();
-	IWDG_Detected_Times();
+	//IWDG_Detected_Times();
 	if(parse_data ==0){
 		parse_data =1;
 		Parse_Flash_Read_Data(pro_t.read_flash_data);
@@ -75,7 +76,7 @@ static void IWDG_Detected_Times(void)
    
 	 static uint8_t  iwdg_flag;
 	 uint16_t temp_value;
-     if(pro_t.iwdg_detected_times  > 100  && iwdg_flag ==0){
+     if(pro_t.iwdg_detected_times  > 1  && iwdg_flag ==0){
 		pro_t.gTimer_pro_feed_dog=0;
 		iwdg_flag ++;
 		Feed_Dog();
