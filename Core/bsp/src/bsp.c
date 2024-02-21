@@ -38,7 +38,7 @@ void bsp_Idle(void)
 			IWDG_Detected_Times();
 		}
 	    else{
-          Feed_Dog();
+         // Feed_Dog();
 		}
 
     }
