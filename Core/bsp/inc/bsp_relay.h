@@ -33,5 +33,7 @@ void Relay_Kill_State(void);
 
 void Relay_Temp_State(void);
 
+void Quantificat_FlashData_Handler(void);
+
 
 #endif 

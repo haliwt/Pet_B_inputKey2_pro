@@ -38,7 +38,7 @@ void bsp_Idle(void)
 			IWDG_Detected_Times();
 		}
 	    else{
-	       Feed_Dog();
+          Feed_Dog();
 		}
 
     }
@@ -79,7 +79,7 @@ static void IWDG_Detected_Times(void)
      if(pro_t.iwdg_detected_times  > 1  && iwdg_flag ==0){
 		pro_t.gTimer_pro_feed_dog=0;
 		iwdg_flag ++;
-		Feed_Dog();
+		//Feed_Dog();
 		Quantificat_FlashData_Handler();
 		
         if(relay_temp_flag_state()==1){
