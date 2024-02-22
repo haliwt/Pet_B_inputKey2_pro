@@ -94,6 +94,11 @@ static void IWDG_Detected_Times(void)
 		
 		STM32G030F6P6_Write_Flash_Data(write_flash_datta);
 		HAL_Delay(100);
+		
+		//__set_FAULTMASK(1);
+		__disable_irq(); //关闭全局中断
+        NVIC_SystemReset();
+		
 		 
 	}
 
