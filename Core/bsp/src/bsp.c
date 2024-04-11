@@ -523,7 +523,7 @@ void Main_Process(void)
 	switch(disp_keep_temp_value){
 
 	   case 0:
-			if((ctl_t.gTimer_read_adc >14) ||(p_disp < 3 )){
+			if((ctl_t.gTimer_read_adc >2) ||(p_disp < 3 )){
 			  ctl_t.gTimer_read_adc =0;
 		      p_disp++;
 			    Read_NTC_Temperature_Value_Handler();

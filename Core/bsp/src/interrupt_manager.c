@@ -40,11 +40,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 
     static uint16_t tm0;
-	static uint8_t tm2,tm1;
+	static uint8_t tm2,tm1,tm3;
     if(htim->Instance==TIM14){
        tm0++;
        tm1++;
 	   tm2++;
+	   tm3++;
+	   
 	    ctl_t.gTimer_smg_turn_on ++;
 	   if(tm2 > 9){
 		 	 tm2=0;
@@ -53,6 +55,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		    
 			pro_t.gTimer_pro_select++;
 	     }
+//	   if(tm3==10){
+//	   	  tm3=0;
+//		   pro_t.key_detected_flag =1;
+//       }
+
+	   
 		
 	   if(tm1>149){ //19 *10ms =190ms
 	   	 tm1=0;

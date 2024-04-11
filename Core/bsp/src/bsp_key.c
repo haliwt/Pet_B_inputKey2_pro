@@ -28,9 +28,10 @@ uint8_t ReadKey(void)
   //uint8_t 	 	value1 = 0;
  // uint8_t   	value2 = 0;
 
-//	if(!T1msFlag)  //10ms check once 
-//		return value1;
-//	T1msFlag = 0;
+	//if(!pro_t.key_detected_flag)  //10ms check once 
+	//	return value1;
+  //    pro_t.key_detected_flag =0;
+
 	
   if(FUN_KEY_VALUE() ==KEY_DOWN){ //KEY1 =POWER_KEY ,KEY2 = MODES
 		cnt = 0;

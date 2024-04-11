@@ -65,20 +65,17 @@ static uint16_t Get_Adc_Hex_Average(uint8_t times)
 } 
 
 
-uint16_t Get_Adc_Voltage_Value(uint8_t times)
-{
-
-   uint16_t temp_voltage_value,temp_hex_value;
-
+uint16_t Get_Adc_Voltage_Value(uint8_t times) {
+    // 定义一个变量，用于存储计算出的电压值
+    uint16_t temp_voltage_value;
+    // 定义一个变量，用于存储读取到的模拟电压的十六进制数
+    uint16_t temp_hex_value;
+    // 读取times次，计算平均值
     temp_hex_value = Get_Adc_Hex_Average(times);
-
-
-   temp_voltage_value = (temp_hex_value * 3300)/4096; //amplifcation -> 1000 multiple
-
-   return temp_voltage_value;
-      
-
-
+    // 使用公式计算出实际的电压值
+    temp_voltage_value = (temp_hex_value * 3300) / 4096; // amplification -> 1000 multiple
+    // 返回实际的电压值
+    return temp_voltage_value;
 }
 
 /* USER CODE END 1 */
