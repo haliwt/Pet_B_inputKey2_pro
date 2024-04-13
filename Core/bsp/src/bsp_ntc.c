@@ -6,7 +6,7 @@
 #define Zero_Degree           5828    
 #define ADC_Sample_Times      60
 
-#define COMPENSATION_VALUE    1
+#define COMPENSATION_VALUE    0
 
 
 
@@ -799,7 +799,7 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 	   		 if(i==0){
                if(*(pt+0) < key){
 
-			    if(key- *(pt+0) >=20){
+			    if(key- *(pt+0) >=10){
 
 				   ctl_t.temperature_rectify_value =0;//-1;
 				  
@@ -828,12 +828,12 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 			}
 	 	    else if(*(pt+i) >  key && (*(pt+i+1) < key)){ //high temperature degree is number is smaller
 
-            if(key- (*(pt+i+1)) >=20){ //10
-                 ctl_t.temperature_rectify_value =0;//1;
+            if(key- (*(pt+i+1)) >=10){ //10
+                 ctl_t.temperature_rectify_value =2;//1;
 				 
             }
 			else
-		      ctl_t.temperature_rectify_value =0;
+		      ctl_t.temperature_rectify_value =1;
 			
 		   temp_decimal_point = *(pt+i) -key;
 
@@ -852,12 +852,12 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
                if(*(pt+i) >  key){
 
 
-			   if((*(pt+i) - key) >=30){
-                 ctl_t.temperature_rectify_value =0;//1;
+			   if((*(pt+i) - key) >=10){
+                 ctl_t.temperature_rectify_value =2;
 				 
                }
 			   else
-		      	ctl_t.temperature_rectify_value =0;
+		      	ctl_t.temperature_rectify_value =1;
 
 			    temp_decimal_point = *(pt+i)-key; //小数点
 
