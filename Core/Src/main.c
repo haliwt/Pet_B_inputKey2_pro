@@ -29,6 +29,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+
 uint8_t key_value;
 /* USER CODE END PTD */
 
@@ -106,11 +107,14 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	#if OLDER_VERSION
 	if(power_on == 0){
 	   power_on++;
 	   Smg_Display_Temp_Degree_Handler();
        pro_t.read_flash_data = STM32G030F6P6_Read_Flash_Data();
 	 }
+	#endif
+	
 	  bsp_Idle();
 	  key_value = ReadKey();
 		if(key_value==0){

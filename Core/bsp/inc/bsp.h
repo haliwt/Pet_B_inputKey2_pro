@@ -21,6 +21,7 @@
 #include "bsp_flash.h"
 
 
+#define OLDER_VERSION   0
 
 
 

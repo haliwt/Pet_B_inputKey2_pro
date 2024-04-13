@@ -55,11 +55,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		    
 			pro_t.gTimer_pro_select++;
 	     }
-//	   if(tm3==10){
-//	   	  tm3=0;
-//		   pro_t.key_detected_flag =1;
-//       }
-
 	   
 		
 	   if(tm1>149){ //19 *10ms =190ms

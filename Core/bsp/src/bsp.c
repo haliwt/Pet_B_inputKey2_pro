@@ -30,6 +30,8 @@ void bsp_Idle(void)
    static uint8_t iwdg_times;
    static uint8_t parse_data;
    /* --- 喂狗 */
+
+   #if OLDER_VERSION
     if((pro_t.gTimer_pro_feed_dog > 3 && FUN_KEY_VALUE()==KEY_DOWN && CONFIRM_KEY_VALUE()==KEY_DOWN)){
 		pro_t.gTimer_pro_feed_dog=0;
 		
@@ -42,25 +44,26 @@ void bsp_Idle(void)
 		}
 
     }
+
+	
+	if(parse_data ==0){
+		parse_data =1;
+		Parse_Flash_Read_Data(pro_t.read_flash_data);
+	}
+	#endif 
+
+
+	
     if(pro_t.gTimer_pro_det_dog > 3 && pro_t.iwdg_detected_times <2){
  		 pro_t.gTimer_pro_det_dog =0;
  		 Feed_Dog();
 		
 	}
 	
-		
-	/* --- 让CPU进入休眠，由Systick定时中断唤醒或者其他中断唤醒 */
-	
-    /* 例如 emWin 图形库，可以插入图形库需要的轮询函数 */
-	//GUI_Exec();
-	
 	/* 例如 uIP 协议，可以插入uip轮询函数 */
 	//TOUCH_CapScan();
 	//IWDG_Detected_Times();
-	if(parse_data ==0){
-		parse_data =1;
-		Parse_Flash_Read_Data(pro_t.read_flash_data);
-	}
+	
 }
 /*
 *********************************************************************************************************
@@ -353,13 +356,13 @@ void Key_Handler(uint8_t key_value)
         
 		if( pro_t.set_keep_temp_fun_flag == 1){ //display has been set keep heat temperatur value .
 		pro_t.gTimer_pro_disp_temp=0;
-		 //pro_t.disp_temp_value=1;
+	
 		disp_keep_temp_value =1;
 
 		}
 		else{ //display "00:00"
 		  pro_t.gTimer_pro_disp_temp=0;
-		//  pro_t.disp_temp_value=1;
+		
 		  disp_keep_temp_value =2;
 		
 
@@ -533,7 +536,7 @@ void Main_Process(void)
 			if(ctl_t.gTimer_display > 10 ){
 		      ctl_t.gTimer_display=0; 
 			
-		       Smg_Display_Temp_Degree_Handler();
+		       Smg_Display_Temp_Degree_Handler(); //数码管显示
 			   
 			}
 

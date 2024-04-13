@@ -83,7 +83,7 @@ static uint8_t relay_kill_fun(void)
 
 /***********************************************************
 	*
-	*Function Name:static uint8_t relay_kill_fun(void) 
+	*Function Name:static uint8_t relay_temp_flag_fun(void)
 	*Function: open of clouse relay
 	*Input Ref: NO
 	*Retrun Ref: 1->open 0->close
