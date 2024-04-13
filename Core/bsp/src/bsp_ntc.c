@@ -6,7 +6,7 @@
 #define Zero_Degree           5828    
 #define ADC_Sample_Times      60
 
-#define COMPENSATION_VALUE    0
+#define COMPENSATION_VALUE    1
 
 
 
@@ -811,7 +811,7 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 				
 				    temp_decimal_point = key - *(pt+i);
 
-			        temp_decimal_point = temp_decimal_point +8;
+			        temp_decimal_point = temp_decimal_point +9;
 
 	   		       ctl_t.temperature_decimal_point_value =  temp_decimal_point/10  ;
 
@@ -837,7 +837,7 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 			
 		   temp_decimal_point = *(pt+i) -key;
 
-		   temp_decimal_point = temp_decimal_point +8;
+		   temp_decimal_point = temp_decimal_point +9;
            ctl_t.temperature_decimal_point_value =  temp_decimal_point/10 ;
 
             
@@ -861,7 +861,7 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 
 			    temp_decimal_point = *(pt+i)-key; //小数点
 
-		        temp_decimal_point = temp_decimal_point +8;
+		        temp_decimal_point = temp_decimal_point +9;
 
 
    		       ctl_t.temperature_decimal_point_value =  temp_decimal_point/10 ;
