@@ -27,8 +27,10 @@ uint64_t write_flash_datta;
 */
 void bsp_Idle(void)
 {
+  #if OLDER_VERSION
    static uint8_t iwdg_times;
    static uint8_t parse_data;
+   #endif 
    /* --- 喂狗 */
 
    #if OLDER_VERSION
@@ -74,6 +76,7 @@ void bsp_Idle(void)
 *	返 回 值: 无
 *********************************************************************************************************
 */
+#if OLDER_VERSION
 static void IWDG_Detected_Times(void)
 {
    
@@ -110,6 +113,7 @@ static void IWDG_Detected_Times(void)
     
 
 }
+
 /***********************************************************************************
 	*
 	*Function Name: static void Parse_Flash_Read_Data(uint32_t data)
@@ -261,6 +265,7 @@ static void Parse_Flash_Read_Data(uint32_t data)
 	}
 
 }
+#endif
 /*
 *********************************************************************************************************
 *	函 数 名: Key_Handler(uint8_t pro_t.key_value)
@@ -526,14 +531,14 @@ void Main_Process(void)
 	switch(disp_keep_temp_value){
 
 	   case 0:
-			if((ctl_t.gTimer_read_adc >2) ||(p_disp < 3 )){
+			if((ctl_t.gTimer_read_adc >9) ||(p_disp < 3 )){
 			  ctl_t.gTimer_read_adc =0;
 		      p_disp++;
 			    Read_NTC_Temperature_Value_Handler();
 				Smg_Display_Temp_Degree_Handler();
 		    }
 			
-			if(ctl_t.gTimer_display > 10 ){
+			if(ctl_t.gTimer_display > 2 ){
 		      ctl_t.gTimer_display=0; 
 			
 		       Smg_Display_Temp_Degree_Handler(); //数码管显示
@@ -542,7 +547,8 @@ void Main_Process(void)
 
 			if(pro_t.gTimer_display_relay_led > 3){
 			   pro_t.gTimer_display_relay_led =0;
-			   Relay_Confirm_Turn_OnOff_Fun();
+			   Relay_Confirm_Turn_OnOff_Fun();   
+			   Default_TurnOff_Ptc(); //over max 30 degree turn off ptc function,wt.2024.04.13
           	}
 
 		break;
@@ -557,7 +563,7 @@ void Main_Process(void)
 		else{
 		   disp_keep_temp_value =0;
 		   ctl_t.gTimer_read_adc  =20; //at once return NTC read tempeerature
-		   Smg_Display_Temp_Degree_Handler();
+		   Smg_Display_Temp_Degree_Handler(); //display ntc of read temperature value 
 		}
 
 	   break;
@@ -612,7 +618,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 
 			Relay_Kill_State();
 
-			Relay_Temp_State();
+			Relay_Keep_Temp_State();
 			
 			
 		}
@@ -644,7 +650,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 
 			Relay_Kill_State();
 
-			Relay_Temp_State();
+			Relay_Keep_Temp_State();
 	
        }
        else{
@@ -672,7 +678,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 
 			//Relay_Kill_State();
 
-			Relay_Temp_State();
+			Relay_Keep_Temp_State();
 			
 		}
 		else{
@@ -716,7 +722,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 
 			Relay_Kill_State();
 
-			//Relay_Temp_State();
+			//Relay_Keep_Temp_State();
 		
 		  }
 		  
@@ -728,7 +734,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 		    pro_t.gTimer_pro_key=50; //at once to switch normal relay display led 
 			ADD_DEC_LED_OFF();
 		    KEY_FUN_CONFIRM_LED_ON() ;
-			Relay_Temp_State();
+			Relay_Keep_Temp_State();
 		  }
 		  
 		if(pro_t.gTimer_pro_key > 20){//300ms

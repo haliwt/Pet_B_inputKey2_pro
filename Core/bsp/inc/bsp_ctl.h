@@ -105,7 +105,7 @@ void Run_InputKey_Model(uint8_t keyvalue);
 void Run_BoardCommand_Handler(void);
 
 
-
+void Default_TurnOff_Ptc(void);
 
 
 

@@ -52,7 +52,7 @@ void Relay_Kill_State(void)
     }
 }
 
-void Relay_Temp_State(void)
+void Relay_Keep_Temp_State(void)
 {
   relay_keep_temp_state();
 }
@@ -78,7 +78,7 @@ void Relay_Confirm_Turn_OnOff_Fun(void)
         Relay_Kill_State();
    
        
-        Relay_Temp_State();
+        Relay_Keep_Temp_State();  ////检查设置的温度值和实际检测到的温度值对比
     
     
 }

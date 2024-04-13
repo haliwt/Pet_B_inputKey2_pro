@@ -13,7 +13,7 @@ static uint8_t relay_tape_fun(void);
 static uint8_t relay_fan_fun(void);
 static uint8_t relay_kill_fun(void);
 static uint8_t relay_temp_flag_fun(void);
-static uint8_t relay_temp_fun(void);
+static uint8_t relay_keep_temp_fun(void);
 
 
 touchpad_t ctl_t;
@@ -33,7 +33,7 @@ void bsp_ctl_init(void)
 	Relay_Fan_Process(relay_fan_fun);
 	Relay_Kill_Process(relay_kill_fun);
 	 Relay_Temp_Flag_Handler(relay_temp_flag_fun);
-	Relay_Keep_Temp_Process(relay_temp_fun);
+	Relay_Keep_Temp_Process(relay_keep_temp_fun);
 
 }
 /***********************************************************
@@ -98,13 +98,13 @@ static uint8_t relay_temp_flag_fun(void)
 
 /***********************************************************
 	*
-	*Function Name: static uint8_t relay_temp_fun(void)
+	*Function Name: static uint8_t relay_keep_temp_fun(void)
 	*Function: open of clouse relay
 	*Input Ref: NO
 	*Retrun Ref: 1->open 0->close
 	*
 ***********************************************************/
-static uint8_t relay_temp_fun(void)
+static uint8_t relay_keep_temp_fun(void)
 {
 	if(relay_temp_flag_state() ==1){
 		if(pro_t.set_keep_temp_value >= ctl_t.temperature_value ){
@@ -132,6 +132,20 @@ static uint8_t relay_temp_fun(void)
 		KEY_FUN_CONFIRM_LED_ON() ;
 		ADD_DEC_LED_OFF();
 	}
+}
+
+void Default_TurnOff_Ptc(void)
+{
+	if(ctl_t.temperature_value > 29){
+		KEEP_HEAT_LED_OFF();
+		RELAY_KEEP_TEMP_SetLow();
+		//KEY_FUN_CONFIRM_LED_ON() ;
+		//ADD_DEC_LED_OFF();
+
+	}
+
+
+
 }
 
 /***********************************************************************************
@@ -224,10 +238,11 @@ void Quantificat_FlashData_Handler(void)
 *   大端(Big Endian)与小端(Little Endian)
 *********************************************************************************************************
 */
-uint16_t BEBufToUint16(uint8_t *_pBuf)
+uint16_t LEBufToUint16(uint8_t *_pBuf)
 {
-    return (((uint16_t)_pBuf[0] << 8) | _pBuf[1]);
+    return (((uint16_t)_pBuf[1] << 8) | _pBuf[0]);
 }
+
 
 /*
 *********************************************************************************************************
@@ -237,9 +252,9 @@ uint16_t BEBufToUint16(uint8_t *_pBuf)
 *	返 回 值: 16位整数值
 *********************************************************************************************************
 */
-uint16_t LEBufToUint16(uint8_t *_pBuf)
+uint16_t BEBufToUint16(uint8_t *_pBuf)
 {
-    return (((uint16_t)_pBuf[1] << 8) | _pBuf[0]);
+    return (((uint16_t)_pBuf[0] << 8) | _pBuf[1]);
 }
 
 

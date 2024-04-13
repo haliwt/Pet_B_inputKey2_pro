@@ -6,7 +6,7 @@
 #define Zero_Degree           5828    
 #define ADC_Sample_Times      60
 
-#define COMPENSATION_VALUE    1
+#define COMPENSATION_VALUE    0
 
 
 
@@ -111,7 +111,7 @@ typedef enum{
    degree_fourteen = 14,
    degree_fiveteen =15,
    degree_sixteen =16,
-   degree_seventenn =17,
+   degree_seventeen =17,
    degree_eighteen = 18,
    degree_nineteen = 19,
    degree_twenty = 20,
@@ -676,6 +676,100 @@ void Display_Speicial_Temperature_Value(uint8_t temp)
 			  ctl_t.temperature_value = 41 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
    
 		   break;
+   
+		  }
+
+
+   break;
+
+   case degree_fiveteen : //42~45 degree
+       array_subscript =  Calculate_Display_Temperature_Value(R10K_42_45,ctl_t.ntc_voltage_value,4);
+	    //   HAL_Delay(5);
+		 switch(array_subscript){
+   
+		   case 0:
+			  ctl_t.temperature_value = 42 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
+   
+		   break;
+   
+		   case 1:
+			  ctl_t.temperature_value = 43 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+   
+		   case 2:
+			  ctl_t.temperature_value = 44 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+
+		    case 3:
+			  ctl_t.temperature_value = 45 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+   
+		  }
+
+
+   break;
+
+
+   case degree_sixteen : //42~45 degree
+       array_subscript =  Calculate_Display_Temperature_Value(R10K_46_48,ctl_t.ntc_voltage_value,3);
+	    //   HAL_Delay(5);
+		 switch(array_subscript){
+   
+		   case 0:
+			  ctl_t.temperature_value = 46 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
+   
+		   break;
+   
+		   case 1:
+			  ctl_t.temperature_value = 47 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+   
+		   case 2:
+			  ctl_t.temperature_value = 48 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+
+		  
+   
+		  }
+
+
+   break;
+
+   case degree_seventeen : //49~45 degree
+       array_subscript =  Calculate_Display_Temperature_Value(R10K_49_53,ctl_t.ntc_voltage_value,5);
+	    //   HAL_Delay(5);
+		 switch(array_subscript){
+   
+		   case 0:
+			  ctl_t.temperature_value = 49 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
+   
+		   break;
+   
+		   case 1:
+			  ctl_t.temperature_value = 50 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+   
+		   case 2:
+			  ctl_t.temperature_value = 51 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+
+		    case 3:
+			  ctl_t.temperature_value = 52 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+
+		    case 4:
+			  ctl_t.temperature_value = 53 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+   
    
 		  }
 
