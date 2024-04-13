@@ -548,7 +548,7 @@ void Main_Process(void)
 			if(pro_t.gTimer_display_relay_led > 3){
 			   pro_t.gTimer_display_relay_led =0;
 			   Relay_Confirm_Turn_OnOff_Fun();   
-			   Default_TurnOff_Ptc(); //over max 30 degree turn off ptc function,wt.2024.04.13
+			   //Default_TurnOff_Ptc(); //over max 30 degree turn off ptc function,wt.2024.04.13
           	}
 
 		break;

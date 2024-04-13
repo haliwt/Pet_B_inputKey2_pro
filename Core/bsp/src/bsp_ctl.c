@@ -106,25 +106,50 @@ static uint8_t relay_temp_flag_fun(void)
 ***********************************************************/
 static uint8_t relay_keep_temp_fun(void)
 {
+   
+	static uint8_t set_value_off_flag;
+
 	if(relay_temp_flag_state() ==1){
-		if(pro_t.set_keep_temp_value >= ctl_t.temperature_value ){
-                   ctl_t.relay_keep_temp_flag =1; //open keep temperature "relay_d" 
-			       KEEP_HEAT_LED_ON();
-	               RELAY_KEEP_TEMP_SetHigh();
-				   KEY_FUN_CONFIRM_LED_ON() ;  
-				   ADD_DEC_LED_OFF();
-
-			  }
-              else{
-                  ctl_t.relay_keep_temp_flag =0;
-			      KEEP_HEAT_LED_OFF();
-	              RELAY_KEEP_TEMP_SetLow();
+	  if(pro_t.set_keep_temp_value > ctl_t.temperature_value){
+		  
+		  if(ctl_t.temperature_value==29){
+				ctl_t.relay_keep_temp_flag =0;
+				  KEEP_HEAT_LED_OFF();
+				  RELAY_KEEP_TEMP_SetLow();
 				  KEY_FUN_CONFIRM_LED_ON() ;
-				   ADD_DEC_LED_OFF();
+				  ADD_DEC_LED_OFF();
+			      set_value_off_flag =1;
+			  
+		   }
+		   else{
+			   ctl_t.relay_keep_temp_flag =1; //open keep temperature "relay_d" 
+			   KEEP_HEAT_LED_ON();
+			   RELAY_KEEP_TEMP_SetHigh();
+			   KEY_FUN_CONFIRM_LED_ON() ;  
+			   ADD_DEC_LED_OFF();
+		   }
 
-              }
+	    }
+		else{
+			
+		  if(set_value_off_flag ==1 && (ctl_t.temperature_value < 28)){
+			   set_value_off_flag =0;
+			   ctl_t.relay_keep_temp_flag =1; //open keep temperature "relay_d" 
+			   KEEP_HEAT_LED_ON();
+			   RELAY_KEEP_TEMP_SetHigh();
+			   KEY_FUN_CONFIRM_LED_ON() ;  
+			   ADD_DEC_LED_OFF();
+		  
+		  }
+		  else{
+			  ctl_t.relay_keep_temp_flag =0;
+			  KEEP_HEAT_LED_OFF();
+			  RELAY_KEEP_TEMP_SetLow();
+			  KEY_FUN_CONFIRM_LED_ON() ;
+			   ADD_DEC_LED_OFF();
+		  }
 
-
+         }
 	}
 	else{
 		KEEP_HEAT_LED_OFF();
