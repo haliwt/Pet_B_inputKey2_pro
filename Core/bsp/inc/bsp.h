@@ -19,6 +19,7 @@
 #include "bsp_relay.h"
 #include "bsp_adc.h"
 #include "bsp_flash.h"
+#include "bsp_ntc_calculate.h"
 
 
 #define OLDER_VERSION   0
