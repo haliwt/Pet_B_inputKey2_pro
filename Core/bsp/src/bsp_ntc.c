@@ -316,7 +316,7 @@ void Read_NTC_Temperature_Value_Handler(void)
 	 Display_Speicial_Temperature_Value(ctl_t.temp_degree);
 	 
 	 if(pro_t.set_keep_temp_fun_flag == 1){
-         if(pro_t.set_keep_temp_value >= ctl_t.temperature_value ){
+         if(pro_t.set_keep_temp_value > ctl_t.temperature_value ){
                 
 			       KEEP_HEAT_LED_ON();
 	               RELAY_KEEP_TEMP_SetHigh();

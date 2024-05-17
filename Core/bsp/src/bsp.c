@@ -492,7 +492,7 @@ void Key_Handler(uint8_t key_value)
           
 		
 		   pro_t.set_keep_temp_value = ctl_t.digital_numbers;
-			   if(pro_t.set_keep_temp_value >= ctl_t.temperature_value ){
+			   if(pro_t.set_keep_temp_value > ctl_t.temperature_value ){
                  
 			       KEEP_HEAT_LED_ON();
 	               RELAY_KEEP_TEMP_SetHigh();
