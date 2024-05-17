@@ -6,7 +6,8 @@ void Relay_Init(void)
     ctl_t.relay_tape_flag =0;
     ctl_t.relay_fan_flag =0;
     ctl_t.relay_kill_flag =0;
-    ctl_t.relay_keep_temp_flag =0;
+
+    ctl_t.set_keep_heat_tempeature_flag =0 ; //WT.EIDT 2024.05.17
 
 
 }

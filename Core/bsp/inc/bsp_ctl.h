@@ -25,7 +25,7 @@ typedef struct _touchpad_t{
     uint8_t relay_fan_flag ;
     uint8_t relay_tape_flag ;
 	uint8_t relay_kill_flag ;
-	uint8_t relay_keep_temp_flag ;
+
 	
    
 
@@ -39,6 +39,7 @@ typedef struct _touchpad_t{
    uint8_t read_key_value;
    uint8_t run_process_tag;
    uint8_t keep_heat_flag;
+   uint8_t set_keep_heat_tempeature_flag;   //WT.EIDT .2024.05.17 new add item .
 
  
    //display net temperatur degree
@@ -64,9 +65,13 @@ typedef struct _touchpad_t{
   
    uint8_t temp_degree;
    
-    uint16_t gTimer_smg_turn_on ;
-   
 
+    uint8_t gTimer_keep_heat_led;
+    uint16_t gTimer_smg_turn_on ;
+    
+
+
+     
 	//taouchpad
 	 int8_t temperature_rectify_value;
 	 int8_t digital_numbers;

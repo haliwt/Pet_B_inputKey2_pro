@@ -12,7 +12,7 @@ uint8_t (*relay_keep_temp_state)(void);
 static uint8_t relay_tape_fun(void);
 static uint8_t relay_fan_fun(void);
 static uint8_t relay_kill_fun(void);
-static uint8_t relay_temp_flag_fun(void);
+static uint8_t relay_set_temp_flag_fun(void);
 static uint8_t relay_keep_temp_fun(void);
 
 
@@ -32,7 +32,7 @@ void bsp_ctl_init(void)
     Relay_Tape_Process(relay_tape_fun);
 	Relay_Fan_Process(relay_fan_fun);
 	Relay_Kill_Process(relay_kill_fun);
-	 Relay_Temp_Flag_Handler(relay_temp_flag_fun);
+	 Relay_Temp_Flag_Handler(relay_set_temp_flag_fun);
 	Relay_Keep_Temp_Process(relay_keep_temp_fun);
 
 }
@@ -83,13 +83,13 @@ static uint8_t relay_kill_fun(void)
 
 /***********************************************************
 	*
-	*Function Name:static uint8_t relay_temp_flag_fun(void)
+	*Function Name:static uint8_t relay_set_temp_flag_fun(void)
 	*Function: open of clouse relay
 	*Input Ref: NO
 	*Retrun Ref: 1->open 0->close
 	*
 ***********************************************************/
-static uint8_t relay_temp_flag_fun(void)
+static uint8_t relay_set_temp_flag_fun(void)
 {
    if(pro_t.set_keep_temp_fun_flag==1) return 1;
    else return 0;
@@ -109,20 +109,17 @@ static uint8_t relay_keep_temp_fun(void)
    
 	static uint8_t set_value_off_flag;
 
-	if(relay_temp_flag_state() ==1){
+	if(relay_temp_flag_state() ==1){ //has been set up temperature value 
 	  if(pro_t.set_keep_temp_value > ctl_t.temperature_value){
 		  
-		  if(ctl_t.temperature_value==29){
-				ctl_t.relay_keep_temp_flag =0;
-				  KEEP_HEAT_LED_OFF();
-				  RELAY_KEEP_TEMP_SetLow();
-				  KEY_FUN_CONFIRM_LED_ON() ;
-				  ADD_DEC_LED_OFF();
+		  if(ctl_t.temperature_value >29){  //default value compare set temp_value and ntc resistance by detectec temp value 
+				
+				  Set_KeepTempValue_DispLed(); //WT.EDIT 2024.05.17
 			      set_value_off_flag =1;
 			  
 		   }
 		   else{
-			   ctl_t.relay_keep_temp_flag =1; //open keep temperature "relay_d" 
+			  
 			   KEEP_HEAT_LED_ON();
 			   RELAY_KEEP_TEMP_SetHigh();
 			   KEY_FUN_CONFIRM_LED_ON() ;  
@@ -134,7 +131,7 @@ static uint8_t relay_keep_temp_fun(void)
 			
 		  if(set_value_off_flag ==1 && (ctl_t.temperature_value < 28)){
 			   set_value_off_flag =0;
-			   ctl_t.relay_keep_temp_flag =1; //open keep temperature "relay_d" 
+			 
 			   KEEP_HEAT_LED_ON();
 			   RELAY_KEEP_TEMP_SetHigh();
 			   KEY_FUN_CONFIRM_LED_ON() ;  
@@ -142,16 +139,18 @@ static uint8_t relay_keep_temp_fun(void)
 		  
 		  }
 		  else{
-			  ctl_t.relay_keep_temp_flag =0;
-			  KEEP_HEAT_LED_OFF();
-			  RELAY_KEEP_TEMP_SetLow();
-			  KEY_FUN_CONFIRM_LED_ON() ;
-			   ADD_DEC_LED_OFF();
+			 
+              Set_KeepTempValue_DispLed(); //WT.EDIT 2024.05.17
+//			  KEEP_HEAT_LED_OFF();
+//			  RELAY_KEEP_TEMP_SetLow();
+//			  KEY_FUN_CONFIRM_LED_ON() ;
+//			   ADD_DEC_LED_OFF();
 		  }
 
          }
 	}
 	else{
+        
 		KEEP_HEAT_LED_OFF();
 		RELAY_KEEP_TEMP_SetLow();
 		KEY_FUN_CONFIRM_LED_ON() ;

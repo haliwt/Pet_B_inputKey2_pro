@@ -29,13 +29,14 @@
 void TM1650_Write_Data(uint8_t address,uint8_t data) ;
 
 
-void Smg_Display_Temp_Degree_Handler(void);
+
 
 void I2C_SDA_OUT(void);
 void I2C_SDA_IN(void);//ÅäÖÃ³ÉÊä³ö
 void Smg_Display_Digital_Numbers_Changed(uint8_t numbers);
 void Repeat_Smg_Display_Digital_Numbers_Changed(uint8_t numbers);
 
+void Smg_Display_Temp_Degree_Handler(uint8_t temp_value);
 
 #endif 
 

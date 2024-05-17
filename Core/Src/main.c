@@ -8,6 +8,10 @@
   *
   * Pet-B Version : 2.0  DATA:2024.01.13
   * Pet-B Version : 2.1  DATA:2024.01.23  modify touchkey 
+  * Pet-B Version : 2.2  DATA:2024.03.23  modify touchkey ->pet_b office
+  * Pet-B Version : 2.3  DATA:2024.05.17  modify touchkey
+           modify read net temperature value is linera.
+          
   *
   * Return Factory 
   * Touch IC ouput is low level enable by hardware be changed .

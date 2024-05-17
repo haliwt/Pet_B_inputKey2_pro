@@ -359,8 +359,9 @@ void Key_Handler(uint8_t key_value)
       pro_t.iwdg_detected_times=0;
 	  if(pro_t.fun_key_counter==0){
         
-		if( pro_t.set_keep_temp_fun_flag == 1){ //display has been set keep heat temperatur value .
+	   if( pro_t.set_keep_temp_fun_flag == 1){ //display has been set keep heat temperatur value .
 		pro_t.gTimer_pro_disp_temp=0;
+      
 	
 		disp_keep_temp_value =1;
 
@@ -430,9 +431,9 @@ void Key_Handler(uint8_t key_value)
 
 			   case 1:
   
-			
+			     ctl_t.set_keep_heat_tempeature_flag=0; //WT.EDIT.2024.05.17
 			 	 pro_t.set_keep_temp_fun_flag=0;
-                 ctl_t.relay_keep_temp_flag =0;
+             
 				 ctl_t.gTimer_select_fun =10;
 				 pro_t.key_short_confirm_flag =1;
 			
@@ -484,13 +485,15 @@ void Key_Handler(uint8_t key_value)
 			ADD_DEC_LED_OFF();
 		
 		   pro_t.set_keep_temp_fun_flag = 1; //set keep temperature is complete.
+		   ctl_t.set_keep_heat_tempeature_flag = 1;   //WT.EIDT .2024.05.17 new add item .
 		   pro_t.long_key_flag =0; //repeat by pressed key_confirm .
 		   disp_keep_temp_value =0;
 		   ctl_t.gTimer_read_adc =20;
+          
 		
 		   pro_t.set_keep_temp_value = ctl_t.digital_numbers;
 			   if(pro_t.set_keep_temp_value >= ctl_t.temperature_value ){
-                   ctl_t.relay_keep_temp_flag =1; //open keep temperature "relay_d" 
+                 
 			       KEEP_HEAT_LED_ON();
 	               RELAY_KEEP_TEMP_SetHigh();
 				   KEY_FUN_CONFIRM_LED_ON() ;  
@@ -498,7 +501,7 @@ void Key_Handler(uint8_t key_value)
 
 			  }
               else{
-                  ctl_t.relay_keep_temp_flag =0;
+              
 			      KEEP_HEAT_LED_OFF();
 	              RELAY_KEEP_TEMP_SetLow();
 				  KEY_FUN_CONFIRM_LED_ON() ;
@@ -525,7 +528,7 @@ void Key_Handler(uint8_t key_value)
 void Main_Process(void)
 {
    
-    static uint8_t p_disp;
+    static uint8_t p_disp,temp_value;
     Relay_Tunr_OnOff_Fun(relay_id_led);
 
 	switch(disp_keep_temp_value){
@@ -535,13 +538,15 @@ void Main_Process(void)
 			  ctl_t.gTimer_read_adc =0;
 		      p_disp++;
 			    Read_NTC_Temperature_Value_Handler();
-				Smg_Display_Temp_Degree_Handler();
+               temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
+			    Smg_Display_Temp_Degree_Handler(temp_value);
 		    }
 			
 			if(ctl_t.gTimer_display > 2 ){
 		      ctl_t.gTimer_display=0; 
 			
-		       Smg_Display_Temp_Degree_Handler(); //数码管显示
+		      temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
+			  Smg_Display_Temp_Degree_Handler(temp_value);
 			   
 			}
 
@@ -563,7 +568,8 @@ void Main_Process(void)
 		else{
 		   disp_keep_temp_value =0;
 		   ctl_t.gTimer_read_adc  =20; //at once return NTC read tempeerature
-		   Smg_Display_Temp_Degree_Handler(); //display ntc of read temperature value 
+		   temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
+		    Smg_Display_Temp_Degree_Handler(temp_value);
 		}
 
 	   break;
@@ -578,7 +584,9 @@ void Main_Process(void)
 		   else{
 			  disp_keep_temp_value =0;
 			  ctl_t.gTimer_read_adc  =50;
-			  Smg_Display_Temp_Degree_Handler();
+			 // Smg_Display_Temp_Degree_Handler(ctl_t.temperature_value );
+			    temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
+			    Smg_Display_Temp_Degree_Handler(temp_value);
 		   }
 
 

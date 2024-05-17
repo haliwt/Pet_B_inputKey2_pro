@@ -24,6 +24,10 @@ uint8_t temp_decimal_point;
 uint16_t ntc_voltage_value;
 
 
+uint8_t disp_ntc_value[DISP_VALUE];
+
+
+
 static uint16_t Read_NTC_Temperature_Voltage(void);
 
 static int8_t  Binary_Search(const uint8_t *array ,uint8_t key,uint8_t length);
@@ -313,7 +317,7 @@ void Read_NTC_Temperature_Value_Handler(void)
 	 
 	 if(pro_t.set_keep_temp_fun_flag == 1){
          if(pro_t.set_keep_temp_value >= ctl_t.temperature_value ){
-                   ctl_t.relay_keep_temp_flag =1;
+                
 			       KEEP_HEAT_LED_ON();
 	               RELAY_KEEP_TEMP_SetHigh();
 				   KEY_FUN_CONFIRM_LED_ON() ;  
@@ -321,11 +325,16 @@ void Read_NTC_Temperature_Value_Handler(void)
 
 			  }
               else{
-                  ctl_t.relay_keep_temp_flag =0;
-			      KEEP_HEAT_LED_OFF();
-	              RELAY_KEEP_TEMP_SetLow();
-				  KEY_FUN_CONFIRM_LED_ON() ;
-				   ADD_DEC_LED_OFF();
+               if(ctl_t.set_keep_heat_tempeature_flag == 1){
+                 Set_KeepTempValue_DispLed();
+			   }
+			   else{
+                 
+					KEEP_HEAT_LED_OFF();
+					RELAY_KEEP_TEMP_SetLow();
+					KEY_FUN_CONFIRM_LED_ON() ;
+					ADD_DEC_LED_OFF();
+			   }
 
               }
 
@@ -334,6 +343,37 @@ void Read_NTC_Temperature_Value_Handler(void)
 
 	#endif 
   
+
+}
+
+void Set_KeepTempValue_DispLed(void)
+{
+
+	if(ctl_t.set_keep_heat_tempeature_flag == 1){//WT.EIDT .2024.05.17 new add item .LED blink
+
+	
+       RELAY_KEEP_TEMP_SetLow();
+		KEY_FUN_CONFIRM_LED_ON() ;
+		ADD_DEC_LED_OFF();
+
+	   if(ctl_t.gTimer_keep_heat_led < 2){
+
+			KEEP_HEAT_LED_OFF();
+		}
+		else if(ctl_t.gTimer_keep_heat_led  > 1 && ctl_t.gTimer_keep_heat_led <4){
+
+			KEEP_HEAT_LED_ON();
+
+		}
+		else{
+
+			ctl_t.gTimer_keep_heat_led =0;
+
+		}
+
+	} 
+	
+
 
 }
 
@@ -1030,4 +1070,85 @@ static uint8_t  error_range_calculate_value(uint8_t val)
 }
   
   
+uint8_t Disp_NtcRes_LinearValue(uint8_t ntc_value)
+{
+
+ //  static uint8_t *p ;
+   static uint8_t disp_init;
+
+             if(disp_init == 0){
+			  	  disp_init++ ;
+				// p = (uint8_t *)malloc(sizeof(uint8_t));
+			   //  p = &ntc_value;
+	             disp_ntc_value[0] =  ntc_value;
+
+	          }
+			  else 
+		          disp_ntc_value[1] = ntc_value;
+
+
+			  
+				
+				if(disp_ntc_value[1] -  disp_ntc_value[0]  >0){
+		 
+					  if(disp_ntc_value[1] -  disp_ntc_value[0] ==1){
+		 
+							// read_input_times =1;
+
+							//display_ntc_temp_value(disp_ntc_value[1]);
+                            Smg_Display_Temp_Degree_Handler(disp_ntc_value[1]);
+							HAL_Delay(200);
+							 return disp_ntc_value[1];
+		 
+					  }
+					  else	if(disp_ntc_value[1] - disp_ntc_value[0] > 1){
+		 
+						   
+							  //*p = ntc_value + 1 ;
+							  disp_ntc_value[0]= disp_ntc_value[0] + 1 ;
+		 
+							 // read_input_times =1;
+
+					         // display_ntc_temp_value(disp_ntc_value[0]);
+                              Smg_Display_Temp_Degree_Handler(disp_ntc_value[0]);
+					          HAL_Delay(200);
+		 
+							  return  disp_ntc_value[0]  ;
+		 
+		 
+					  }
+				  }
+				  else{
+		 
+					  if(disp_ntc_value[0] - disp_ntc_value[1] ==1){
+				  
+				
+
+					        // display_ntc_temp_value(disp_ntc_value[1]);
+					        Smg_Display_Temp_Degree_Handler(disp_ntc_value[1]);
+					         HAL_Delay(200);
+		   
+						   return disp_ntc_value[1];
+				  
+					  }
+					  else	if(disp_ntc_value[0]- disp_ntc_value[1] > 1){
+				  
+									 
+							// *p = ntc_value - 1 ;
+							 
+							 disp_ntc_value[0]= disp_ntc_value[0] - 1 ;
+
+					         //display_ntc_temp_value(disp_ntc_value[0]);
+					         Smg_Display_Temp_Degree_Handler(disp_ntc_value[0]);
+					         HAL_Delay(200);
+		 
+				
+		 
+							return disp_ntc_value[0] ;
+				  
+				  
+					 }
+		 
+				   }
+}
 
