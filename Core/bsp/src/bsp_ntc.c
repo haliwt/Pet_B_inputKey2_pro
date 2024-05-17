@@ -28,6 +28,8 @@ static uint16_t Read_NTC_Temperature_Voltage(void);
 
 static int8_t  Binary_Search(const uint8_t *array ,uint8_t key,uint8_t length);
 
+static uint8_t error_range_calculate_value(uint8_t val);
+
 
 
 
@@ -40,7 +42,12 @@ static uint8_t Calculate_Display_Temperature_19_21_Value(const uint16_t *pt,uint
 //static void Display_Speicial_Temperature_Value(uint8_t temp);
 
 
+
+
+
 uint8_t search_key;
+
+#if 0
 
 //std voltage
 static const uint16_t R10K_NTC[]={
@@ -92,7 +99,7 @@ static const uint16_t R10K_NTC_81[]={
     364,354						//80 ~ 81
     
 };
-
+#endif 
 
 
 
@@ -130,45 +137,48 @@ typedef enum{
 
 int8_t left_point =0;
 int8_t right_point ;
-int8_t length = sizeof(R10K_NTC_81)/(sizeof(R10K_NTC_81[0]));
+//int8_t length = sizeof(R10K_NTC_81)/(sizeof(R10K_NTC_81[0]));
 int8_t mid_value;
 //拆分成23个数组，mid =11
-static const uint16_t R10K_0_0[2]={2558,2528};
-static const uint16_t R10K_1_4[4]={2497,2466,2434,2402};
+static const uint16_t R10K_0_0[2]={2558,2528};   // //array[0]
+static const uint16_t R10K_1_4[4]={2497,2466,2434,2402};// //array[1]
 
 /*******************new cal************************/
-static const uint16_t R10K_5_7[3]={2382,2348,2314};
-static const uint16_t R10K_8_10[3]={2280,2245,2210};
-static const uint16_t R10K_11_13[3]={2174,2138,2102};
+/***************NTC RES F3950**********************/
+static const uint16_t R10K_5_7[3]={2382,2348,2314};  //array[2] =34
+static const uint16_t R10K_8_10[3]={2280,2245,2210};  //array[3] = 35
+static const uint16_t R10K_11_13[3]={2174,2138,2102};  //array[4] = 37
 
-static const uint16_t R10K_14_15[2]={2065,2028};
-static const uint16_t R10K_16_18[3]={1991,1954,1917};
+static const uint16_t R10K_14_15[2]={2065,2028};      //array[5] =37
+static const uint16_t R10K_16_18[3]={1991,1954,1917};   //array[6] =37
 
-static const uint16_t R10K_19_21[3]={1880, 1843,1806}; //array[7]
-static const uint16_t R10K_22_23[2]={1768,1731};       //array[8]
-static const uint16_t R10K_24_26[3]={1694,1658,1622};  //array[9]
+static const uint16_t R10K_19_21[3]={1880,1843,1806}; //array[7] =37
+static const uint16_t R10K_22_23[2]={1769,1731};       //array[8] =36
+static const uint16_t R10K_24_26[3]={1694,1658,1622};  //array[9]  = 36
 
-static const uint16_t R10K_27_29[3]={1586,1551,1516}; ////array[10]
-static const uint16_t R10K_30_32[3]={1481,1447,1413};//array[11]
+static const uint16_t R10K_27_29[3]={1586,1551,1516}; ////array[10] = 35
+static const uint16_t R10K_30_32[3]={1481,1447,1413};//array[11] =34
 
-static const uint16_t R10K_33_35[3]={1379,1346,1313};////array[12]
-static const uint16_t R10K_36_38[3]={1281,1249,1218}; //array[13]
+static const uint16_t R10K_33_35[3]={1379,1346,1313};////array[12] =33
+static const uint16_t R10K_36_38[3]={1281,1249,1218}; //array[13]=32
 
-static const uint16_t R10K_39_41[3]={1187,1157,1127};//array[14]
+static const uint16_t R10K_39_41[3]={1187,1157,1127};//array[14]=30
 
-static const uint16_t R10K_42_45[4]={1098,1069,1041,1013};//array[15]
-static const uint16_t R10K_46_49[4]={986,960,934,909};//array[16]
-static const uint16_t R10K_50_53[4]={884,860,836,813};//array[17]
+static const uint16_t R10K_42_45[4]={1098,1069,1041,1013};//array[15]=28
+static const uint16_t R10K_46_49[4]={986,960,934,909};//array[16]=25
+static const uint16_t R10K_50_53[4]={884,860,836,813};//array[17]=23
 
 
-static const uint16_t R10K_54_58[5]={790,768,747,762,706}; //array[18]
+static const uint16_t R10K_54_58[5]={790,768,747,762,706}; //array[18] =20
+
+static const uint16_t R10K_59_63[5]={686,667,648,629,612}; //array[19] =17
+
+static const uint16_t R10K_64_70[7]={594,577,561,545,529,514,500};//array[20] =14
+
+static const uint16_t R10K_71_76[6]={485,472,458,445,432,420};//array[21] =12
 /******************end new cal*************************************/
 
-static const uint16_t R10K_59_62[5]={686,667,654,635,617};
 
-static const uint16_t R10K_63_69[7]={599,582,565,549,533,518,503};
-static const uint16_t R10K_70_76[7]={488,474,460,447,434,422,409};
-static const uint16_t R10K_77_81[5]={398,386,375,364,354};
 
 static const uint8_t R10K_Init_0_81_simple[23]={
 
@@ -253,7 +263,7 @@ static void Read_Ntc_Decimal_Point_Numbers(void)
 {
    
    uint8_t temp_decimal_point;
-   temp_decimal_point = R10K_NTC_81[ctl_t.temperature_value] - R10K_NTC_81[ctl_t.temperature_value +1];
+   temp_decimal_point = R10K_Init_0_81_simple[ctl_t.temperature_value] - R10K_Init_0_81_simple[ctl_t.temperature_value +1];
 
    temp_decimal_point = temp_decimal_point +5;
 
@@ -843,7 +853,7 @@ case degree_nine ://24`~26 degree
 ******************************************************************************/
 static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t key,uint8_t length)
 {
-      uint8_t i;
+      uint8_t i,error_value;
 	
 	
 	  uint16_t temp_temperature_value;
@@ -852,19 +862,23 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 	   if(i==0){
                if(*(pt+0) < key){
 
-			    if(key- *(pt+0) >=34){
 
-				 ctl_t.temperature_rectify_value = -1;
+			      error_value = error_range_calculate_value(key);
+
+
+			    if(key- *(pt+0) >=error_value){
+
+				 	ctl_t.temperature_rectify_value = -1;
 				 }
 				else{
-				ctl_t.temperature_rectify_value =0;
+					ctl_t.temperature_rectify_value =0;
 				}
 				
 				    temp_decimal_point = key - *(pt+i);
 
-			        temp_decimal_point = temp_decimal_point +5;
+			        temp_decimal_point = temp_decimal_point  + 5;
 
-	   		       ctl_t.temperature_decimal_point_value =  temp_decimal_point/10  ;
+	   		       ctl_t.temperature_decimal_point_value =  temp_decimal_point %10;
 
                }
 
@@ -879,17 +893,12 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 			}
 	 	  else if(*(pt+i) >=  key && (*(pt+i+1) <= key)){ //high temperature degree is number is smaller
 
-            if(key- (*(pt+i+1)) >=34){ //10
-                 ctl_t.temperature_rectify_value = 1;//1;
-				 
-            }
-			else
-		      ctl_t.temperature_rectify_value = 0;
+           
 			
 		   temp_decimal_point = *(pt+i) -key;
 
-		   temp_decimal_point = temp_decimal_point +4;
-           ctl_t.temperature_decimal_point_value =  temp_decimal_point/10 ;
+		   temp_decimal_point = temp_decimal_point  +4;
+           ctl_t.temperature_decimal_point_value =temp_decimal_point %10;  //temp_decimal_point/10 ;
 
             
 				temp_temperature_value =  i;
@@ -903,7 +912,8 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
                if(*(pt+i) >  key){
 
 
-			   if((*(pt+i) - key) >=34){
+                error_value = error_range_calculate_value(key);
+			   if((*(pt+i) - key) >=error_value){
                  ctl_t.temperature_rectify_value =1;
 				 
                }
@@ -915,7 +925,7 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 		        temp_decimal_point = temp_decimal_point +3;
 
 
-   		       ctl_t.temperature_decimal_point_value =  temp_decimal_point/10 ;
+   		       ctl_t.temperature_decimal_point_value = temp_decimal_point %10; //temp_decimal_point/10 ;
 
                 temp_temperature_value  = i;
 
@@ -932,7 +942,92 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 
 
 
-  
+static uint8_t  error_range_calculate_value(uint8_t val)
+{
+
+  uint8_t ret;
+  switch(val){
+
+
+  case 2:
+
+  case 3:
+
+  case 4:
+
+  case 5:
+
+   case 9: //R10K_24_26
+
+    ret = 36;
+
+    return ret;
+   break;
+
+   case 13: //R10K_36_38
+
+     ret = 32;
+
+     return ret;
+
+   break;
+
+   case 15:
+
+      ret = 28;
+
+     return ret;
+
+   break;
+
+   case 17: //R10K_46_49
+
+      ret = 23;
+
+     return ret;
+
+   break;
+
+
+   case 18:
+   	  ret = 20;
+
+     return ret;
+
+   break;
+
+
+   case 19:
+   	   ret = 17;
+
+     return ret;
+
+   break;
+
+   case 20:
+   	   ret = 14;
+
+     return ret;
+
+   break;
+
+   case 21:
+   	   ret = 12;
+
+     return ret;
+
+   break;
+
+
+
+
+
+  }
+
+
+
+
+}
   
   
 
