@@ -274,26 +274,6 @@ static void Read_Ntc_Decimal_Point_Numbers(void)
    ctl_t.temperature_decimal_point_value =  temp_decimal_point/10 ;
    
 }
-/******************************************************************************
-	*
-	*Function Name: Read_NTC_Temperature_Value_Handler(void)
-	*
-	*
-	*
-******************************************************************************/
-void Read_NTC_Temperature_Power_On(void)
-{
-
-      
-  ctl_t.ntc_voltage_value=Read_NTC_Temperature_Voltage_Power_On(); //Read_NTC_Temperature_Voltage();
-  temp_uint16_t_vlue= ctl_t.ntc_voltage_value/100;
-  length_simple = sizeof(R10K_Init_0_81_simple)/sizeof(R10K_Init_0_81_simple[0]);
-    
-  ctl_t.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
-
-  Display_Speicial_Temperature_Value(ctl_t.temp_degree);
-
-}
 
 /******************************************************************************
 	*
@@ -304,8 +284,8 @@ void Read_NTC_Temperature_Power_On(void)
 ******************************************************************************/
 void Read_NTC_Temperature_Value_Handler(void)
 {
-    
-  
+   
+     
 	 #if 1
 	 ctl_t.ntc_voltage_value= Read_NTC_Temperature_Voltage();
      temp_uint16_t_vlue= ctl_t.ntc_voltage_value /100;
@@ -314,9 +294,11 @@ void Read_NTC_Temperature_Value_Handler(void)
    	 ctl_t.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
 
 	 Display_Speicial_Temperature_Value(ctl_t.temp_degree);
+
+    //read_temp_value =  Disp_NtcRes_LinearValue(ctl_t.temperature_value);
 	 
-	 if(pro_t.set_keep_temp_fun_flag == 1){
-         if(pro_t.set_keep_temp_value > ctl_t.temperature_value ){
+	 if(relay_temp_flag_state() == 1){
+         if(pro_t.set_keep_temp_value >   ctl_t.temperature_value ){
 
                    if(ctl_t.again_open_relay_ptc == 0){ //open
                     
@@ -329,9 +311,21 @@ void Read_NTC_Temperature_Value_Handler(void)
                     }
                     else{
 
+                        if(ctl_t.again_open == 1){
+                            
+                           ctl_t.again_open =2;
 
-                        if((pro_t.set_keep_temp_value - ctl_t.temperature_value)   >2){ //WT.EDIT 2024.05.18
+                           ctl_t.gTimer_again_open_ptc =0;
+                           KEEP_HEAT_LED_OFF();
 
+                        }
+                        else if(ctl_t.gTimer_again_open_ptc > 7 && ctl_t.again_open ==2){
+                           ctl_t.again_open ++;
+
+                        }
+                        else if(pro_t.set_keep_temp_value > (ctl_t.temperature_value - 2) && ctl_t.again_open !=2){ //WT.EDIT 2024.05.18
+
+                           
                            KEEP_HEAT_LED_ON();  // ptc open 
                            RELAY_KEEP_TEMP_SetHigh(); //open ptc heat relay .
                            KEY_FUN_CONFIRM_LED_ON() ;  
@@ -347,6 +341,8 @@ void Read_NTC_Temperature_Value_Handler(void)
               else{
                if(ctl_t.set_keep_heat_tempeature_flag == 1){
                  Set_KeepTempValue_DispLed();
+                  ctl_t.again_open_relay_ptc=1;
+                  ctl_t.again_open =1;
 			   }
 			   else{
                  

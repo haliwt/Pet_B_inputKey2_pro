@@ -106,9 +106,10 @@ static uint8_t relay_set_temp_flag_fun(void)
 ***********************************************************/
 static uint8_t relay_keep_temp_fun(void)
 {
-   
+   static uint8_t read_temp_value;
 	
-
+  // read_temp_value =  Disp_NtcRes_LinearValue(ctl_t.temperature_value);
+    
 	if(relay_temp_flag_state() ==1){ //has been set up temperature value 
 	 
          if(pro_t.set_keep_temp_value > ctl_t.temperature_value ){
@@ -123,9 +124,21 @@ static uint8_t relay_keep_temp_fun(void)
 
                     }
                     else{
+                        if(ctl_t.again_open == 1){
+                            
+                           ctl_t.again_open =2;
+
+                           ctl_t.gTimer_again_open_ptc =0;
+                            KEEP_HEAT_LED_OFF();
+
+                        }
+                        else if(ctl_t.gTimer_again_open_ptc > 7 && ctl_t.again_open ==2){
+                           ctl_t.again_open ++;
 
 
-                        if((pro_t.set_keep_temp_value - ctl_t.temperature_value)   >2){ //WT.EDIT 2024.05.18
+
+                        }
+                        if(pro_t.set_keep_temp_value > (ctl_t.temperature_value - 2) && ctl_t.again_open !=2){ //WT.EDIT 2024.05.18
 
                            KEEP_HEAT_LED_ON();  // ptc open 
                            RELAY_KEEP_TEMP_SetHigh(); //open ptc heat relay .
@@ -142,6 +155,8 @@ static uint8_t relay_keep_temp_fun(void)
               else{
                if(ctl_t.set_keep_heat_tempeature_flag == 1){
                  Set_KeepTempValue_DispLed();
+                 ctl_t.again_open_relay_ptc=1;
+                  ctl_t.again_open=1;
 			   }
 			   else{
                  
@@ -178,85 +193,7 @@ void Default_TurnOff_Ptc(void)
 
 }
 
-/***********************************************************************************
-	*
-	*Function Name: void Quantificat_FlashData_Handler(void)
-	*Function:  tape =0x01,fan=0x02,kill= 0x04,keep_temp =0x08
-	*Input Ref: NO
-	*Retrun Ref: NO
-	*
-************************************************************************************/
-void Quantificat_FlashData_Handler(void)
-{
 
-		if(relay_tape_state() == 1 && relay_fan_state() == 1 && relay_kill_state() == 1 && relay_temp_flag_state() ==1){//TAP+FAN+KILL+TEMP//
-			ctl_t.relay_flag_flash_data = 0x0f;
-		}
-        else if(relay_tape_state() == 1 && relay_fan_state() == 1 && relay_kill_state() == 1 && relay_temp_flag_state() ==0){ //TAP+FAN+KILL
-			ctl_t.relay_flag_flash_data= 0x07;
-		}
-        else if(relay_tape_state() == 1 && relay_fan_state() == 1  && relay_temp_flag_state() ==0 && relay_kill_state() == 0 ){ //TAP+FAN
-				ctl_t.relay_flag_flash_data= 0x03;
-		}
-		else if(relay_tape_state() == 1 && relay_kill_state() == 1 && relay_temp_flag_state() ==0 && relay_fan_state() == 0 ){ //TAPE+ KILL
-			ctl_t.relay_flag_flash_data= 0x05;
-		}
-		else if(relay_tape_state() == 1 &&  relay_temp_flag_state() ==1 && relay_fan_state() ==0 && relay_kill_state() == 0 ){ //TAP+TEMP
-			ctl_t.relay_flag_flash_data = 0x09;
-		}
-		else if(relay_tape_state() == 1 && relay_fan_state() == 1 && relay_temp_flag_state() ==1 && relay_kill_state() == 0){ //TAPE+FAN+TEMP
-			ctl_t.relay_flag_flash_data = 0x0B;
-		}
-		else if(relay_tape_state() == 1 && relay_kill_state() == 1 && relay_temp_flag_state() ==1 && relay_fan_state() == 0 ){ //TAPE+KILL+TEMP
-			ctl_t.relay_flag_flash_data = 0x0D;
-		}
-		else if(relay_tape_state() == 1 && relay_kill_state() == 0 && relay_temp_flag_state() ==0 && relay_fan_state() == 0  ){ //TAPE
-				ctl_t.relay_flag_flash_data= 0x01;
-		}
-        else if(relay_fan_state() == 1 && relay_kill_state() == 1 && relay_temp_flag_state() ==1 && relay_tape_state() == 0){ //FAN+KILL+TEMP
-
-			ctl_t.relay_flag_flash_data= 0x0E;
-
-       }
-	   else if(relay_fan_state() == 1 && relay_kill_state() == 1  && relay_temp_flag_state() ==0 && relay_tape_state() == 0 ){ //FAN+KILL
-		
-			ctl_t.relay_flag_flash_data= 0x06;
-		}
-	   	else if(relay_fan_state() == 1 && relay_temp_flag_state() ==1 && relay_kill_state() ==0 && relay_tape_state() == 0){ //FAN+TEMP
-
-			ctl_t.relay_flag_flash_data= 0x0A;
-
-       }
-	    else if(relay_fan_state() == 1 && relay_temp_flag_state() ==0 && relay_kill_state() ==0 && relay_tape_state() == 0){ //FAN
-		
-			ctl_t.relay_flag_flash_data= 0x02;
-		}
-		else if(relay_kill_state() == 1 && relay_temp_flag_state() ==1 && relay_fan_state() ==0 && relay_tape_state() == 0 ){//KILL+TEMP
-
-			ctl_t.relay_flag_flash_data= 0x0C;
-
-       }
-	   else if(relay_kill_state() == 1 && relay_fan_state() ==0 && relay_keep_temp_state() ==0 && relay_tape_state() == 0){//KILL
-
-			ctl_t.relay_flag_flash_data= 0x04;
-
-       }
-	  	else if(relay_temp_flag_state() ==1 && relay_fan_state() ==0 && relay_kill_state() ==0 && relay_tape_state() == 0){//KEEP TEMP 
-		
-			  ctl_t.relay_flag_flash_data= 0x08;
-		}
-
-
-//		//RELAY KEEP TEMP
-//		if(relay_temp_flag_state()==1){
-//
-//		   
-//           ctl_t.relay_keep_temp_data =pro_t.set_keep_tmep_value ;
-//
-//		}
-//		
-
-}
 
 /*
 *********************************************************************************************************

@@ -76,6 +76,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		pro_t.gTimer_display_relay_led ++;
 		pro_t.gTimer_pro_det_dog++;
         ctl_t.gTimer_keep_heat_led++;
+        ctl_t.gTimer_again_open_ptc++;
 		}
 	}
  }
