@@ -285,7 +285,7 @@ static void Read_Ntc_Decimal_Point_Numbers(void)
 void Read_NTC_Temperature_Value_Handler(void)
 {
    
-     
+     static uint8_t set_flag_temp_high;
 	 #if 1
 	 ctl_t.ntc_voltage_value= Read_NTC_Temperature_Voltage();
      temp_uint16_t_vlue= ctl_t.ntc_voltage_value /100;
@@ -316,31 +316,43 @@ void Read_NTC_Temperature_Value_Handler(void)
                            ctl_t.again_open =2;
 
                            ctl_t.gTimer_again_open_ptc =0;
-                           KEEP_HEAT_LED_OFF();
+                           
 
                         }
-                        else if(ctl_t.gTimer_again_open_ptc > 18 && ctl_t.again_open ==2){
+                        else if(ctl_t.gTimer_again_open_ptc > 20 && ctl_t.again_open ==2){
+                           
                            ctl_t.again_open ++;
 
                         }
                         else if(pro_t.set_keep_temp_value > (ctl_t.temperature_value - 3) && ctl_t.again_open !=2){ //WT.EDIT 2024.05.18
 
-                           
+                           set_flag_temp_high=1;
                            KEEP_HEAT_LED_ON();  // ptc open 
                            RELAY_KEEP_TEMP_SetHigh(); //open ptc heat relay .
                            KEY_FUN_CONFIRM_LED_ON() ;  
                            ADD_DEC_LED_OFF();
+                           
 
                         }
+                        if(set_flag_temp_high==0){
+
+
+                           Set_KeepTempValue_DispLed();
+
+
+                        }
+                        
                        
                    }
 
 			  }
               else{
                if(ctl_t.set_keep_heat_tempeature_flag == 1){
+                
                  Set_KeepTempValue_DispLed();
                   ctl_t.again_open_relay_ptc=1;
                   ctl_t.again_open =1;
+                  set_flag_temp_high=0;
 			   }
 			   else{
                  
@@ -370,11 +382,11 @@ void Set_KeepTempValue_DispLed(void)
 		KEY_FUN_CONFIRM_LED_ON() ;
 		ADD_DEC_LED_OFF();
 
-	   if(ctl_t.gTimer_keep_heat_led < 2){
+	   if(ctl_t.gTimer_keep_heat_led < 1){
 
 			KEEP_HEAT_LED_OFF();
 		}
-		else if(ctl_t.gTimer_keep_heat_led  > 1 && ctl_t.gTimer_keep_heat_led <4){
+		else if(ctl_t.gTimer_keep_heat_led  > 0 && ctl_t.gTimer_keep_heat_led <2){
 
 			KEEP_HEAT_LED_ON();
 
