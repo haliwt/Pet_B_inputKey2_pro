@@ -132,13 +132,13 @@ static uint8_t relay_keep_temp_fun(void)
                             KEEP_HEAT_LED_OFF();
 
                         }
-                        else if(ctl_t.gTimer_again_open_ptc > 7 && ctl_t.again_open ==2){
+                        else if(ctl_t.gTimer_again_open_ptc > 18 && ctl_t.again_open ==2){
                            ctl_t.again_open ++;
 
 
 
                         }
-                        if(pro_t.set_keep_temp_value > (ctl_t.temperature_value - 2) && ctl_t.again_open !=2){ //WT.EDIT 2024.05.18
+                        if(pro_t.set_keep_temp_value > (ctl_t.temperature_value - 3) && ctl_t.again_open !=2){ //WT.EDIT 2024.05.18
 
                            KEEP_HEAT_LED_ON();  // ptc open 
                            RELAY_KEEP_TEMP_SetHigh(); //open ptc heat relay .

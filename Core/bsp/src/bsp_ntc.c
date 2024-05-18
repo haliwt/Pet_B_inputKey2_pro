@@ -319,19 +319,17 @@ void Read_NTC_Temperature_Value_Handler(void)
                            KEEP_HEAT_LED_OFF();
 
                         }
-                        else if(ctl_t.gTimer_again_open_ptc > 7 && ctl_t.again_open ==2){
+                        else if(ctl_t.gTimer_again_open_ptc > 18 && ctl_t.again_open ==2){
                            ctl_t.again_open ++;
 
                         }
-                        else if(pro_t.set_keep_temp_value > (ctl_t.temperature_value - 2) && ctl_t.again_open !=2){ //WT.EDIT 2024.05.18
+                        else if(pro_t.set_keep_temp_value > (ctl_t.temperature_value - 3) && ctl_t.again_open !=2){ //WT.EDIT 2024.05.18
 
                            
                            KEEP_HEAT_LED_ON();  // ptc open 
                            RELAY_KEEP_TEMP_SetHigh(); //open ptc heat relay .
                            KEY_FUN_CONFIRM_LED_ON() ;  
                            ADD_DEC_LED_OFF();
-
-
 
                         }
                        
