@@ -107,48 +107,54 @@ static uint8_t relay_set_temp_flag_fun(void)
 static uint8_t relay_keep_temp_fun(void)
 {
    
-	static uint8_t set_value_off_flag;
+	
 
 	if(relay_temp_flag_state() ==1){ //has been set up temperature value 
-	  if(pro_t.set_keep_temp_value > ctl_t.temperature_value){
-		  
-		  if(ctl_t.temperature_value >29){  //default value compare set temp_value and ntc resistance by detectec temp value 
-				
-				  Set_KeepTempValue_DispLed(); //WT.EDIT 2024.05.17
-			      set_value_off_flag =1;
-			  
-		   }
-		   else{
-			  
-			   KEEP_HEAT_LED_ON();
-			   RELAY_KEEP_TEMP_SetHigh();
-			   KEY_FUN_CONFIRM_LED_ON() ;  
-			   ADD_DEC_LED_OFF();
-		   }
+	 
+         if(pro_t.set_keep_temp_value > ctl_t.temperature_value ){
 
-	    }
-		else{
-			
-		  if(set_value_off_flag ==1 && (ctl_t.temperature_value < 28)){
-			   set_value_off_flag =0;
-			 
-			   KEEP_HEAT_LED_ON();
-			   RELAY_KEEP_TEMP_SetHigh();
-			   KEY_FUN_CONFIRM_LED_ON() ;  
-			   ADD_DEC_LED_OFF();
-		  
-		  }
-		  else{
-			 
-              Set_KeepTempValue_DispLed(); //WT.EDIT 2024.05.17
-//			  KEEP_HEAT_LED_OFF();
-//			  RELAY_KEEP_TEMP_SetLow();
-//			  KEY_FUN_CONFIRM_LED_ON() ;
-//			   ADD_DEC_LED_OFF();
-		  }
+                   if(ctl_t.again_open_relay_ptc == 0){ //open
+                    
+                       ctl_t.again_open_relay_ptc++;
+    			       KEEP_HEAT_LED_ON();  // ptc open 
+    	               RELAY_KEEP_TEMP_SetHigh();
+    				   KEY_FUN_CONFIRM_LED_ON() ;  
+    				   ADD_DEC_LED_OFF();
 
-         }
-	}
+                    }
+                    else{
+
+
+                        if((pro_t.set_keep_temp_value - ctl_t.temperature_value)   >2){ //WT.EDIT 2024.05.18
+
+                           KEEP_HEAT_LED_ON();  // ptc open 
+                           RELAY_KEEP_TEMP_SetHigh(); //open ptc heat relay .
+                           KEY_FUN_CONFIRM_LED_ON() ;  
+                           ADD_DEC_LED_OFF();
+
+
+
+                        }
+                       
+                   }
+
+			  }
+              else{
+               if(ctl_t.set_keep_heat_tempeature_flag == 1){
+                 Set_KeepTempValue_DispLed();
+			   }
+			   else{
+                 
+					KEEP_HEAT_LED_OFF();
+					RELAY_KEEP_TEMP_SetLow();
+					KEY_FUN_CONFIRM_LED_ON() ;
+					ADD_DEC_LED_OFF();
+			   }
+
+              }
+
+
+	 }
 	else{
         
 		KEEP_HEAT_LED_OFF();

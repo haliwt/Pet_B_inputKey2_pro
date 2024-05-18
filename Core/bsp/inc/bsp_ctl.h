@@ -58,6 +58,7 @@ typedef struct _touchpad_t{
   
    uint8_t keep_heat_run_flag;
    uint8_t keep_heat_fun_digital_numbers;
+   uint8_t again_open_relay_ptc;
   
   
 

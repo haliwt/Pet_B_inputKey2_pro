@@ -305,7 +305,7 @@ void Read_NTC_Temperature_Power_On(void)
 void Read_NTC_Temperature_Value_Handler(void)
 {
     
-    
+  
 	 #if 1
 	 ctl_t.ntc_voltage_value= Read_NTC_Temperature_Voltage();
      temp_uint16_t_vlue= ctl_t.ntc_voltage_value /100;
@@ -317,11 +317,31 @@ void Read_NTC_Temperature_Value_Handler(void)
 	 
 	 if(pro_t.set_keep_temp_fun_flag == 1){
          if(pro_t.set_keep_temp_value > ctl_t.temperature_value ){
-                
-			       KEEP_HEAT_LED_ON();
-	               RELAY_KEEP_TEMP_SetHigh();
-				   KEY_FUN_CONFIRM_LED_ON() ;  
-				   ADD_DEC_LED_OFF();
+
+                   if(ctl_t.again_open_relay_ptc == 0){ //open
+                    
+                       ctl_t.again_open_relay_ptc ++;
+    			       KEEP_HEAT_LED_ON();  // ptc open 
+    	               RELAY_KEEP_TEMP_SetHigh();
+    				   KEY_FUN_CONFIRM_LED_ON() ;  
+    				   ADD_DEC_LED_OFF();
+
+                    }
+                    else{
+
+
+                        if((pro_t.set_keep_temp_value - ctl_t.temperature_value)   >2){ //WT.EDIT 2024.05.18
+
+                           KEEP_HEAT_LED_ON();  // ptc open 
+                           RELAY_KEEP_TEMP_SetHigh(); //open ptc heat relay .
+                           KEY_FUN_CONFIRM_LED_ON() ;  
+                           ADD_DEC_LED_OFF();
+
+
+
+                        }
+                       
+                   }
 
 			  }
               else{
