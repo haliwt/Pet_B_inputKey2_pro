@@ -285,7 +285,7 @@ static void Read_Ntc_Decimal_Point_Numbers(void)
 void Read_NTC_Temperature_Value_Handler(void)
 {
    
-     static uint8_t set_flag_temp_high;
+   
 	 #if 1
 	 ctl_t.ntc_voltage_value= Read_NTC_Temperature_Voltage();
      temp_uint16_t_vlue= ctl_t.ntc_voltage_value /100;
@@ -294,11 +294,12 @@ void Read_NTC_Temperature_Value_Handler(void)
    	 ctl_t.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
 
 	 Display_Speicial_Temperature_Value(ctl_t.temp_degree);
+   //  ctl_t.disp_net_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
 
     //read_temp_value =  Disp_NtcRes_LinearValue(ctl_t.temperature_value);
 	 
 	 if(relay_temp_flag_state() == 1){
-         if(pro_t.set_keep_temp_value >   ctl_t.temperature_value ){
+         if(pro_t.set_keep_temp_value >   ctl_t.disp_net_temp_value){
 
                    if(ctl_t.again_open_relay_ptc == 0){ //open
                     
@@ -311,22 +312,13 @@ void Read_NTC_Temperature_Value_Handler(void)
                     }
                     else{
 
-                        if(ctl_t.again_open == 1){
-                            
-                           ctl_t.again_open =2;
+                    
 
-                           ctl_t.gTimer_again_open_ptc =0;
-                           
+                      if((pro_t.set_keep_temp_value - 3)> ctl_t.disp_net_temp_value){ //WT.EDIT 2024.05.18
 
-                        }
-                        else if(ctl_t.gTimer_again_open_ptc > 20 && ctl_t.again_open ==2){
-                           
-                           ctl_t.again_open ++;
-
-                        }
-                        else if(pro_t.set_keep_temp_value > (ctl_t.temperature_value - 3) && ctl_t.again_open !=2){ //WT.EDIT 2024.05.18
-
-                           set_flag_temp_high=1;
+                           ctl_t.again_open=1;
+                           ctl_t.temperature_decimal_point_value =0;
+                      
                            KEEP_HEAT_LED_ON();  // ptc open 
                            RELAY_KEEP_TEMP_SetHigh(); //open ptc heat relay .
                            KEY_FUN_CONFIRM_LED_ON() ;  
@@ -334,7 +326,7 @@ void Read_NTC_Temperature_Value_Handler(void)
                            
 
                         }
-                        if(set_flag_temp_high==0){
+                        if(ctl_t.again_open==0){
 
 
                            Set_KeepTempValue_DispLed();
@@ -351,8 +343,9 @@ void Read_NTC_Temperature_Value_Handler(void)
                 
                  Set_KeepTempValue_DispLed();
                   ctl_t.again_open_relay_ptc=1;
-                  ctl_t.again_open =1;
-                  set_flag_temp_high=0;
+                  ctl_t.again_open =0;
+              
+                 
 			   }
 			   else{
                  

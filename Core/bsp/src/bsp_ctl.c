@@ -106,13 +106,13 @@ static uint8_t relay_set_temp_flag_fun(void)
 ***********************************************************/
 static uint8_t relay_keep_temp_fun(void)
 {
-   static uint8_t read_temp_value,set_flag_temp_high;
+   
 	
-  // read_temp_value =  Disp_NtcRes_LinearValue(ctl_t.temperature_value);
+  //  ctl_t.disp_net_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
     
 	if(relay_temp_flag_state() ==1){ //has been set up temperature value 
 	 
-         if(pro_t.set_keep_temp_value > ctl_t.temperature_value ){
+         if(pro_t.set_keep_temp_value > ctl_t.disp_net_temp_value ){
 
                    if(ctl_t.again_open_relay_ptc == 0){ //open
                     
@@ -124,25 +124,11 @@ static uint8_t relay_keep_temp_fun(void)
 
                     }
                     else{
-                        if(ctl_t.again_open == 1){
-                            
-                           ctl_t.again_open =2;
+                      
+                        if((pro_t.set_keep_temp_value -3)> ctl_t.disp_net_temp_value ){ //WT.EDIT 2024.05.18
 
-                           ctl_t.gTimer_again_open_ptc =0;
-                            Set_KeepTempValue_DispLed();
-
-                        }
-                        else if(ctl_t.gTimer_again_open_ptc > 21 && ctl_t.again_open ==2){
-                           ctl_t.again_open ++;
-
-                          Set_KeepTempValue_DispLed();
-
-
-                        }
-                        if(pro_t.set_keep_temp_value > (ctl_t.temperature_value - 3) && ctl_t.again_open !=2){ //WT.EDIT 2024.05.18
-
-                           set_flag_temp_high=1;
-
+                           ctl_t.again_open=1;
+                           ctl_t.temperature_decimal_point_value =0;
                            KEEP_HEAT_LED_ON();  // ptc open 
                            RELAY_KEEP_TEMP_SetHigh(); //open ptc heat relay .
                            KEY_FUN_CONFIRM_LED_ON() ;  
@@ -152,7 +138,7 @@ static uint8_t relay_keep_temp_fun(void)
 
                         }
 
-                        if(set_flag_temp_high==0){
+                        if( ctl_t.again_open==0){
 
 
                            Set_KeepTempValue_DispLed();
@@ -167,8 +153,9 @@ static uint8_t relay_keep_temp_fun(void)
                if(ctl_t.set_keep_heat_tempeature_flag == 1){
                  Set_KeepTempValue_DispLed();
                  ctl_t.again_open_relay_ptc=1;
-                  ctl_t.again_open=1;
-                  set_flag_temp_high=0;
+                  ctl_t.again_open=0;
+                  
+                  
 			   }
 			   else{
                  
@@ -191,19 +178,6 @@ static uint8_t relay_keep_temp_fun(void)
 	}
 }
 
-void Default_TurnOff_Ptc(void)
-{
-	if(ctl_t.temperature_value > 29){
-		KEEP_HEAT_LED_OFF();
-		RELAY_KEEP_TEMP_SetLow();
-		//KEY_FUN_CONFIRM_LED_ON() ;
-		//ADD_DEC_LED_OFF();
-
-	}
-
-
-
-}
 
 
 

@@ -106,7 +106,7 @@ void MX_GPIO_Init(void)
 	/*Configure GPIO pins : PB0 PBPin */
 	 GPIO_InitStruct.Pin = INPUT_KEY_FUN_Pin|INPUT_KEY_CONFIRM_Pin;
 	 GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-	 GPIO_InitStruct.Pull = GPIO_NOPULL;
+	 GPIO_InitStruct.Pull = GPIO_PULLUP;//GPIO_NOPULL;
 	 HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 	
 	 /* EXTI interrupt init*/

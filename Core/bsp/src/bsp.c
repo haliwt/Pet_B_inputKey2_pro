@@ -212,7 +212,7 @@ void Key_Handler(uint8_t key_value)
   
 			     ctl_t.set_keep_heat_tempeature_flag=0; //WT.EDIT.2024.05.17
 			 	 pro_t.set_keep_temp_fun_flag=0;
-                 ctl_t.again_open_relay_ptc=0;//WT.EDIT.2024.05.18
+           
              
 				 ctl_t.gTimer_select_fun =10;
 				 pro_t.key_short_confirm_flag =1;
@@ -273,6 +273,7 @@ void Key_Handler(uint8_t key_value)
 		
 		   pro_t.set_keep_temp_value = ctl_t.digital_numbers;
 			   if(pro_t.set_keep_temp_value > ctl_t.temperature_value ){
+               
                  
 			       KEEP_HEAT_LED_ON();
 	               RELAY_KEEP_TEMP_SetHigh();
@@ -308,32 +309,32 @@ void Key_Handler(uint8_t key_value)
 void Main_Process(void)
 {
    
-    static uint8_t p_disp,temp_value;
+    static uint8_t p_disp;
     Relay_Tunr_OnOff_Fun(relay_id_led);
 
 	switch(disp_keep_temp_value){
 
 	   case 0:
-			if((ctl_t.gTimer_read_adc >9) ||(p_disp < 3 )){
+			if((ctl_t.gTimer_read_adc >5) ||(p_disp < 3 )){
 			  ctl_t.gTimer_read_adc =0;
 		      p_disp++;
 			    Read_NTC_Temperature_Value_Handler();
-               temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
-			    Smg_Display_Temp_Degree_Handler(temp_value);
+               ctl_t.disp_net_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
+			    Smg_Display_Temp_Degree_Handler(ctl_t.disp_net_temp_value);
 		    }
 			
-			if(ctl_t.gTimer_display > 2 ){
-		      ctl_t.gTimer_display=0; 
-			
-		      temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
-			  Smg_Display_Temp_Degree_Handler(temp_value);
-			   
-			}
+//			if(ctl_t.gTimer_display > 2 ){
+//		      ctl_t.gTimer_display=0; 
+//			
+//		      ctl_t.disp_net_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
+//			  Smg_Display_Temp_Degree_Handler(ctl_t.disp_net_temp_value);
+//			   
+//			}
 
 			if(pro_t.gTimer_display_relay_led > 3){
 			   pro_t.gTimer_display_relay_led =0;
 			   Relay_Confirm_Turn_OnOff_Fun();   
-			   //Default_TurnOff_Ptc(); //over max 30 degree turn off ptc function,wt.2024.04.13
+			 
           	}
 
 		break;
@@ -348,8 +349,8 @@ void Main_Process(void)
 		else{
 		   disp_keep_temp_value =0;
 		   ctl_t.gTimer_read_adc  =20; //at once return NTC read tempeerature
-		   temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
-		    Smg_Display_Temp_Degree_Handler(temp_value);
+		   ctl_t.disp_net_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
+		   Smg_Display_Temp_Degree_Handler(ctl_t.disp_net_temp_value);
 		}
 
 	   break;
@@ -365,8 +366,8 @@ void Main_Process(void)
 			  disp_keep_temp_value =0;
 			  ctl_t.gTimer_read_adc  =50;
 			 // Smg_Display_Temp_Degree_Handler(ctl_t.temperature_value );
-			    temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
-			    Smg_Display_Temp_Degree_Handler(temp_value);
+			    ctl_t.disp_net_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
+			    Smg_Display_Temp_Degree_Handler(ctl_t.disp_net_temp_value);
 		   }
 
 
