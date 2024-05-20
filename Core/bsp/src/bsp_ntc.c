@@ -301,9 +301,13 @@ void Read_NTC_Temperature_Value_Handler(void)
 	 if(relay_temp_flag_state() == 1){
          if(pro_t.set_keep_temp_value >   ctl_t.disp_net_temp_value){
 
-                   if(ctl_t.again_open_relay_ptc == 0){ //open
+                   if(ctl_t.again_open_relay_ptc != 2){ //open
+
+                       ctl_t.again_open_relay_ptc++;
+                       ctl_t.open_has_been_open = 1;
+                        ctl_t.again_open=1;
+                        ctl_t.temperature_decimal_point_value =0;
                     
-                       ctl_t.again_open_relay_ptc ++;
     			       KEEP_HEAT_LED_ON();  // ptc open 
     	               RELAY_KEEP_TEMP_SetHigh();
     				   KEY_FUN_CONFIRM_LED_ON() ;  
@@ -314,7 +318,7 @@ void Read_NTC_Temperature_Value_Handler(void)
 
                     
 
-                      if((pro_t.set_keep_temp_value - 3)> ctl_t.disp_net_temp_value){ //WT.EDIT 2024.05.18
+                      if((pro_t.set_keep_temp_value - 3)> ctl_t.disp_net_temp_value && ctl_t.open_has_been_open ==0 ){ //WT.EDIT 2024.05.18
 
                            ctl_t.again_open=1;
                            ctl_t.temperature_decimal_point_value =0;
@@ -326,23 +330,34 @@ void Read_NTC_Temperature_Value_Handler(void)
                            
 
                         }
-                        if(ctl_t.again_open==0){
-
-
-                           Set_KeepTempValue_DispLed();
-
-
-                        }
+                       
                         
                        
                    }
 
+                   if(ctl_t.again_open==0){
+
+
+                       Set_KeepTempValue_DispLed();
+
+
+                     }
+
 			  }
               else{
                if(ctl_t.set_keep_heat_tempeature_flag == 1){
+
+                 if(ctl_t.again_open_relay_ptc == 0){ //open
+                    
+                      ctl_t.again_open_relay_ptc ++;
+                   }
+                 else if(ctl_t.again_open_relay_ptc == 2){
+                   ctl_t.open_has_been_open = 0;
+
+                 }
                 
                  Set_KeepTempValue_DispLed();
-                  ctl_t.again_open_relay_ptc=1;
+                
                   ctl_t.again_open =0;
               
                  

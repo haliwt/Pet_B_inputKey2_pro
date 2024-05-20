@@ -57,6 +57,8 @@ void bsp_Idle(void)
 void Key_Handler(uint8_t key_value)
 {
  
+  static uint8_t the_first_dec_key;
+
   switch(key_value){
 
 
@@ -240,8 +242,16 @@ void Key_Handler(uint8_t key_value)
 			    ctl_t.gTimer_select_fun=0;
 				pro_t.gTimer_pro_disp_temp=0;
 				disp_keep_temp_value = 0xff;
+                if(the_first_dec_key==0){
+                     the_first_dec_key++;
+                     ctl_t.digital_numbers--; //scope : 16~30度
+				    if(ctl_t.digital_numbers <16) ctl_t.digital_numbers=30;
+
+                }
+                else{
 				ctl_t.digital_numbers--; //scope : 16~30度
 				if(ctl_t.digital_numbers <16) ctl_t.digital_numbers=16;
+                }
 				Run_Keep_Heat_Setup_Digital_Numbers(ctl_t.digital_numbers);
 			  }
 			  
@@ -266,13 +276,15 @@ void Key_Handler(uint8_t key_value)
 		
 		   pro_t.set_keep_temp_fun_flag = 1; //set keep temperature is complete.
 		   ctl_t.set_keep_heat_tempeature_flag = 1;   //WT.EIDT .2024.05.17 new add item .
+		   ctl_t.again_open_relay_ptc=0;  //WT.EDIT .2024.05.20 the first times at once open PTC .
+            
 		   pro_t.long_key_flag =0; //repeat by pressed key_confirm .
 		   disp_keep_temp_value =0;
 		   ctl_t.gTimer_read_adc =20;
           
 		
 		   pro_t.set_keep_temp_value = ctl_t.digital_numbers;
-			   if(pro_t.set_keep_temp_value > ctl_t.temperature_value ){
+		if(pro_t.set_keep_temp_value > ctl_t.temperature_value ){
                
                  
 			       KEEP_HEAT_LED_ON();
@@ -315,7 +327,7 @@ void Main_Process(void)
 	switch(disp_keep_temp_value){
 
 	   case 0:
-			if((ctl_t.gTimer_read_adc >5) ||(p_disp < 3 )){
+			if((ctl_t.gTimer_read_adc >4) ||(p_disp < 3 )){
 			  ctl_t.gTimer_read_adc =0;
 		      p_disp++;
 			    Read_NTC_Temperature_Value_Handler();
