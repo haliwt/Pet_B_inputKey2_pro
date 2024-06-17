@@ -98,7 +98,7 @@ extern uint8_t (*relay_tape_state)(void);
 extern uint8_t (*relay_fan_state)(void);
 extern uint8_t (*relay_kill_state)(void);
 extern uint8_t (*relay_temp_flag_state)(void);
-extern uint8_t (*relay_keep_temp_state)(void);
+extern uint8_t (*relay_keep_temp_run_state)(void);
 
 void Relay_Tape_Process(uint8_t(*relay_a_handler)(void));
 void Relay_Fan_Process(uint8_t(*relay_b_handler)(void));

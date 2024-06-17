@@ -6,14 +6,14 @@ uint8_t (*relay_tape_state)(void);
 uint8_t (*relay_fan_state)(void);
 uint8_t (*relay_kill_state)(void);
 uint8_t (*relay_temp_flag_state)(void);
-uint8_t (*relay_keep_temp_state)(void);
+uint8_t (*relay_keep_temp_run_state)(void);
 
 
 static uint8_t relay_tape_fun(void);
 static uint8_t relay_fan_fun(void);
 static uint8_t relay_kill_fun(void);
 static uint8_t relay_set_temp_flag_fun(void);
-static uint8_t relay_keep_temp_fun(void);
+static uint8_t relay_keep_temp_run_fun(void);
 
 
 touchpad_t ctl_t;
@@ -32,8 +32,8 @@ void bsp_ctl_init(void)
     Relay_Tape_Process(relay_tape_fun);
 	Relay_Fan_Process(relay_fan_fun);
 	Relay_Kill_Process(relay_kill_fun);
-	 Relay_Temp_Flag_Handler(relay_set_temp_flag_fun);
-	Relay_Keep_Temp_Process(relay_keep_temp_fun);
+	Relay_Temp_Flag_Handler(relay_set_temp_flag_fun);
+	Relay_Keep_Temp_Process(relay_keep_temp_run_fun);
 
 }
 /***********************************************************
@@ -104,7 +104,7 @@ static uint8_t relay_set_temp_flag_fun(void)
 	*Retrun Ref: 1->open 0->close
 	*
 ***********************************************************/
-static uint8_t relay_keep_temp_fun(void)
+static uint8_t relay_keep_temp_run_fun(void)
 {
    
 	
@@ -261,7 +261,7 @@ void Relay_Kill_Process(uint8_t(*relay_kill_handler)(void))
 }
 void Relay_Keep_Temp_Process(uint8_t(*relay_temp_handler)(void))
 {
-   relay_keep_temp_state = relay_temp_handler;
+   relay_keep_temp_run_state = relay_temp_handler;
 
 }
 void Relay_Temp_Flag_Handler(uint8_t(*relay_temp_flag_handler)(void))

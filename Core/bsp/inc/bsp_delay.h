@@ -4,8 +4,8 @@
 
 
 /* 开关全局中断的宏 */
-#define ENABLE_INT()	__set_PRIMASK(0)	/* 使能全局中断 */
-#define DISABLE_INT()	__set_PRIMASK(1)	/* 禁止全局中断 */
+//#define ENABLE_INT()	__set_PRIMASK(0)	/* 使能全局中断 */
+//#define DISABLE_INT()	__set_PRIMASK(1)	/* 禁止全局中断 */
 
 
 void delay_init(uint16_t SYSCLK);

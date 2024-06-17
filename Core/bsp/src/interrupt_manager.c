@@ -1,6 +1,7 @@
 #include "interrupt_manager.h"
 #include "bsp.h"
 
+#if 0
 void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 {
 
@@ -27,7 +28,7 @@ void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 
 
 }
-
+#endif 
 
 /*******************************************************************************
   *
@@ -52,8 +53,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		 	 tm2=0;
 		     pro_t.gTimer_pro_key++;
 	         pro_t.gTimer_pro_disp++;
-		    
-			pro_t.gTimer_pro_select++;
+		     pro_t.gTimer_pro_select++;
             
 	     }
 	   
@@ -68,18 +68,21 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 	  if(tm0>999){ //10ms * 100 =1000ms =1s
         tm0=0;
-		pro_t.gTimer_pro_feed_dog++;
+
         ctl_t.gTimer_smg++;
 		ctl_t.gTimer_read_adc++;
 	    ctl_t.gTimer_display++;
 		ctl_t.gTimer_select_fun++;
 		ctl_t.gTimer_keep_heat_fun++;
+        ctl_t.gTimer_again_open_ptc++;
+        ctl_t.gTimer_keep_heat_led++;
+        
 		pro_t.gTimer_pro_disp_temp++;
 		pro_t.gTimer_display_relay_led ++;
 		pro_t.gTimer_pro_det_dog++;
+        pro_t.gTimer_pro_long_key_timer++;
         
-        ctl_t.gTimer_again_open_ptc++;
-        ctl_t.gTimer_keep_heat_led++;
+       
 		}
 	}
  }

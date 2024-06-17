@@ -4,8 +4,7 @@ main_prcess_t pro_t;
 
 static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag);
 
-static void IWDG_Detected_Times(void);
-static void Parse_Flash_Read_Data(uint32_t data);
+
 
 
 
@@ -33,11 +32,11 @@ void bsp_Idle(void)
    #endif 
    /* --- 喂狗 */
 
-   if(pro_t.gTimer_pro_det_dog > 3 && pro_t.iwdg_detected_times <2){
- 		 pro_t.gTimer_pro_det_dog =0;
- 		 Feed_Dog();
-		
-	}
+//   if(pro_t.gTimer_pro_det_dog > 10 ){
+// 		 pro_t.gTimer_pro_det_dog =0;
+// 		 Feed_Dog();
+//		
+//	}
 	
 	/* 例如 uIP 协议，可以插入uip轮询函数 */
 	//TOUCH_CapScan();
@@ -58,6 +57,7 @@ void Key_Handler(uint8_t key_value)
 {
  
   static uint8_t the_first_dec_key;
+
 
   switch(key_value){
 
@@ -80,7 +80,7 @@ void Key_Handler(uint8_t key_value)
 			  
 			break;
 
-		 case 0:
+		 case 0: // relay of switch form A to D 
 		 pro_t.iwdg_detected_times=0;
 		 KEY_FUN_CONFIRM_LED_ON() ; 
          pro_t.key_fun++;
@@ -132,6 +132,8 @@ void Key_Handler(uint8_t key_value)
 		  break;
 		
         }
+
+     
      break;
 		
      //confirm key 
@@ -210,7 +212,7 @@ void Key_Handler(uint8_t key_value)
 
 			  switch(pro_t.set_keep_temp_fun_flag){
 
-			   case 1:
+			   case 1: //normal 
   
 			     ctl_t.set_keep_heat_tempeature_flag=0; //WT.EDIT.2024.05.17
 			 	 pro_t.set_keep_temp_fun_flag=0;
@@ -258,10 +260,14 @@ void Key_Handler(uint8_t key_value)
 			  break;
 
 		     }
+              
 
 		  break;
       }
+
+      
 	 }
+        
 	  break;
 	  
      //function key long be pressed 
@@ -284,27 +290,37 @@ void Key_Handler(uint8_t key_value)
           
 		
 		   pro_t.set_keep_temp_value = ctl_t.digital_numbers;
-		if(pro_t.set_keep_temp_value > ctl_t.temperature_value ){
-               
-                 
-			       KEEP_HEAT_LED_ON();
+		   if(pro_t.set_keep_temp_value > ctl_t.temperature_value ){
+                   KEEP_HEAT_LED_ON();
 	               RELAY_KEEP_TEMP_SetHigh();
 				   KEY_FUN_CONFIRM_LED_ON() ;  
 				   ADD_DEC_LED_OFF();
 
-			  }
-              else{
+			}
+            else{
               
 			      KEEP_HEAT_LED_OFF();
 	              RELAY_KEEP_TEMP_SetLow();
 				  KEY_FUN_CONFIRM_LED_ON() ;
 				  ADD_DEC_LED_OFF();
 
-              }
-			  pro_t.fun_key_counter=0;
+            }
+		   pro_t.fun_key_counter=0;
 		}
 
+
+
+
 	 break;
+
+     case fun_long_key :
+        
+       SetRelay_TurnOff_Fun();
+
+     
+
+
+     break;
   
 	}
 }
@@ -327,21 +343,15 @@ void Main_Process(void)
 	switch(disp_keep_temp_value){
 
 	   case 0:
-			if((ctl_t.gTimer_read_adc >4) ||(p_disp < 3 )){
+			if((ctl_t.gTimer_read_adc >4)){
 			  ctl_t.gTimer_read_adc =0;
-		      p_disp++;
+		     
 			    Read_NTC_Temperature_Value_Handler();
                ctl_t.disp_net_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
 			    Smg_Display_Temp_Degree_Handler(ctl_t.disp_net_temp_value);
 		    }
 			
-//			if(ctl_t.gTimer_display > 2 ){
-//		      ctl_t.gTimer_display=0; 
-//			
-//		      ctl_t.disp_net_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
-//			  Smg_Display_Temp_Degree_Handler(ctl_t.disp_net_temp_value);
-//			   
-//			}
+
 
 			if(pro_t.gTimer_display_relay_led > 3){
 			   pro_t.gTimer_display_relay_led =0;

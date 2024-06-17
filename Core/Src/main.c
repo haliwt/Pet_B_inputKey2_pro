@@ -21,6 +21,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 #include "adc.h"
 #include "iwdg.h"
 #include "tim.h"
@@ -55,6 +56,7 @@ uint8_t key_value;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -70,6 +72,7 @@ void SystemClock_Config(void);
   */
 int main(void)
 {
+
   /* USER CODE BEGIN 1 */
   static uint8_t power_on ;
   /* USER CODE END 1 */
@@ -93,17 +96,26 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_ADC1_Init();
-  MX_IWDG_Init();
+  //MX_IWDG_Init();
   MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
    bsp_ctl_init();
    delay_init(24);
    Relay_Init();
+   HAL_TIM_Base_Start_IT(&htim14);//HAL_TIM_Base_Start(&htim3);
+
+   freeRTOS_Handler();
 
   /* USER CODE END 2 */
-   HAL_TIM_Base_Start_IT(&htim14);//HAL_TIM_Base_Start(&htim3);
-   Feed_Dog();
-   
+
+  /* Call init function for freertos objects (in cmsis_os2.c) */
+ // MX_FREERTOS_Init();
+
+  /* Start scheduler */
+ // osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -111,19 +123,9 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	
-	  bsp_Idle();
-	  key_value = ReadKey();
-		if(key_value==0){
-	    	Main_Process();
-			
-		}
-		else{
-	   		Key_Handler(key_value); 
-		}
 
-      }
   /* USER CODE END 3 */
+    }
 }
 
 /**

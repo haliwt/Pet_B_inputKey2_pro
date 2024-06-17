@@ -55,7 +55,7 @@ void Relay_Kill_State(void)
 
 void Relay_Keep_Temp_State(void)
 {
-  relay_keep_temp_state();
+  relay_keep_temp_run_state();
 }
 
 /********************************************************************************
@@ -85,6 +85,21 @@ void Relay_Confirm_Turn_OnOff_Fun(void)
 }
 
 
+void SetRelay_TurnOff_Fun(void)
+{
+
+   Relay_Init();
+
+   Relay_Confirm_Turn_OnOff_Fun();
+
+   pro_t.set_keep_temp_fun_flag = 0;
+
+   KEEP_HEAT_LED_OFF();
+   RELAY_KEEP_TEMP_SetLow();
+   KEY_FUN_CONFIRM_LED_ON() ;
+   ADD_DEC_LED_OFF();
+
+}
 
 
 

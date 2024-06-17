@@ -57,7 +57,6 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-//
 #define SCL_Pin 					GPIO_PIN_7
 #define SCL_GPIO_Port 				GPIOB
 
@@ -111,12 +110,6 @@ void Error_Handler(void);
 #define INPUT_KEY_CONFIRM_GPIO_Port GPIOB
 #define INPUT_KEY_CONFIRM_EXTI_IRQn EXTI2_3_IRQn
 
-//
-//#define INPUT_KEY_FUN_Pin               GPIO_PIN_0
-//#define INPUT_KEY_FUN_GPIO_Port           GPIOB
-//
-//#define INPUT_KEY_CONFIRM_Pin             GPIO_PIN_3
-//#define INPUT_KEY_CONFIRM_GPIO_Port       GPIOB
 
 /* USER CODE BEGIN Private defines */
 

@@ -4,7 +4,7 @@
 
 
 #define NORMAL_KEY_1       0
-#define NORMAL_KEY_2       1
+#define NORMAL_KEY_2       0
 
 
 #define FUN_KEY_VALUE()                                 HAL_GPIO_ReadPin(INPUT_KEY_FUN_GPIO_Port ,INPUT_KEY_FUN_Pin )

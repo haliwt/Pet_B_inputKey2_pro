@@ -4,7 +4,7 @@
 
 
 #define Zero_Degree           5828    
-#define ADC_Sample_Times      60
+#define ADC_Sample_Times      20// 60
 
 #define COMPENSATION_VALUE    1
 
@@ -933,6 +933,8 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 	  uint16_t temp_temperature_value;
       for(i=0;i<length;i++){
 
+      #if 0
+
 	   if(i==0){
                if(*(pt+0) < key){
 
@@ -965,18 +967,25 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 
 
 			}
-	 	  else if(*(pt+i) >=  key && (*(pt+i+1) <= key)){ //high temperature degree is number is smaller
+	 	  else 
+      #endif 
+          if(*(pt+i) == key){
+             ctl_t.temperature_decimal_point_value =0;
 
            
-			
-		   temp_decimal_point = *(pt+i) -key;
+              return i ;
 
-		   temp_decimal_point = temp_decimal_point  +4;
+
+          }
+          else if(*(pt+i) > key && (*(pt+i+1) < key)){ //high temperature degree is number is smaller
+
+           temp_decimal_point = *(pt+i) -key;
+
+		   temp_decimal_point = temp_decimal_point  +3;
            ctl_t.temperature_decimal_point_value =temp_decimal_point %10;  //temp_decimal_point/10 ;
 
-            
-				temp_temperature_value =  i;
-				return temp_temperature_value ;
+           temp_temperature_value =  i;
+		   return temp_temperature_value ;
 
             
 
@@ -987,7 +996,7 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 
 
                 error_value = error_range_calculate_value(key);
-			   if((*(pt+i) - key) >=error_value){
+			   if((*(pt+i) - key) >error_value || (*(pt+i) - key) == error_value){
                  ctl_t.temperature_rectify_value =1;
 				 
                }
@@ -995,11 +1004,21 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 		      	  ctl_t.temperature_rectify_value =0;
 
 			    temp_decimal_point = *(pt+i)-key; //小数点
+			    
+                error_value = error_range_calculate_value(temp_decimal_point);
 
+                error_value = error_value + 5 ;
+
+               if((*(pt+i) - key) >error_value || (*(pt+i) - key) == error_value){
+                 ctl_t.temperature_rectify_value =1;
+                 ctl_t.temperature_decimal_point_value =0;
+				 
+               }
+               else {
 		        temp_decimal_point = temp_decimal_point +3;
 
-
-   		       ctl_t.temperature_decimal_point_value = temp_decimal_point %10; //temp_decimal_point/10 ;
+                ctl_t.temperature_decimal_point_value = temp_decimal_point %10; //temp_decimal_point/10 ;
+                }
 
                 temp_temperature_value  = i;
 
@@ -1011,7 +1030,7 @@ static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t k
 		 }
 		
 	  }
-	  return 0;
+	  return i;
 }
 
 
@@ -1184,5 +1203,7 @@ uint8_t Disp_NtcRes_LinearValue(uint8_t ntc_value)
 					 }
 		 
 				   }
+
+       return disp_ntc_value[0] ;
 }
 

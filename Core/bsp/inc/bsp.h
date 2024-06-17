@@ -20,10 +20,28 @@
 #include "bsp_adc.h"
 #include "bsp_flash.h"
 #include "bsp_ntc_calculate.h"
+#include "bsp_freertos.h"
 
 
 #define OLDER_VERSION   0
 
+#define __STM32G0F3P6_BSP_VERSION		"1.0"
+
+
+
+#define  USE_FreeRTOS      1
+
+#if USE_FreeRTOS == 1
+    #include "FreeRTOS.h"
+	#include "task.h"
+
+	#define DISABLE_INT()    taskENTER_CRITICAL()
+	#define ENABLE_INT()     taskEXIT_CRITICAL()
+#else
+	/* ¿ª¹ØÈ«¾ÖÖÐ¶ÏµÄºê */
+	#define ENABLE_INT()	__set_PRIMASK(0)	/* Enable global interrupt  */
+	#define DISABLE_INT()	__set_PRIMASK(1)	/* ½ûÖ¹È«¾ÖÖÐ¶Ï */
+#endif
 
 
 
@@ -31,7 +49,8 @@ typedef enum{
 
     fun_key =0x01,
 	confirm_short_key,
-	confirm_long_key =0x82
+	confirm_long_key =0x82,
+	fun_long_key = 0x83
 
 
 }key_id_state;
@@ -73,7 +92,7 @@ typedef struct{
    uint8_t iwdg_detected_times;
    uint8_t key_detected_flag;
    
-   uint8_t gTimer_pro_feed_dog;
+   uint8_t gTimer_pro_long_key_timer;
    uint8_t gTimer_pro_key;
    uint8_t gTimer_pro_disp;
    uint8_t gTimer_pro_disp_temp;
@@ -81,12 +100,8 @@ typedef struct{
    uint8_t gTimer_display_relay_led ;
    uint8_t gTimer_pro_det_dog;
    
-  
-   //read flash data
-   uint32_t read_flash_data;
-
-
-}main_prcess_t;
+   
+ }main_prcess_t;
 
 
 extern main_prcess_t pro_t;

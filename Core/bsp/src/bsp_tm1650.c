@@ -260,9 +260,6 @@ void Smg_Display_Temp_Degree_Handler(uint8_t temp_value)
       uint8_t decade_temp=0,uint_temp=0,decimal_point;
 
 
-      
-
-
       decade_temp  =temp_value /10; //ctl_t.temperature_value / 10;
       uint_temp =  temp_value %10 ; //ctl_t.temperature_value  % 10;
 	
