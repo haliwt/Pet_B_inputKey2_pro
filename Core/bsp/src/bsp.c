@@ -436,6 +436,8 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 
 			//Relay_Keep_Temp_State();
 			relay_keep_temperature_led_on_off();
+
+            ctl_t.select_fun_led_blink_flag = 1;
 			
 			
 		}
@@ -443,6 +445,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 			pro_t.fun_key_counter=0;
 		    pro_t.key_as_numbers_input_flag =0;
 		    pro_t.gTimer_pro_key=50; //at once to switch normal relay display led 
+		    ctl_t.select_fun_led_blink_flag = 0;
 		    //Relay_Tape_State();
 		}
 		
@@ -469,10 +472,11 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 
 			//Relay_Keep_Temp_State();
 			relay_keep_temperature_led_on_off();
+            ctl_t.select_fun_led_blink_flag = 1;
 	
        }
        else{
-	   	 
+	   	  ctl_t.select_fun_led_blink_flag = 0;
 		  pro_t.fun_key_counter=0;
 		  pro_t.key_as_numbers_input_flag =0;
 	      pro_t.gTimer_pro_key=50; //at once to switch normal relay display led 
@@ -498,9 +502,11 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 
 			//Relay_Keep_Temp_State();
 			relay_keep_temperature_led_on_off();
+            ctl_t.select_fun_led_blink_flag =1;
 			
 		}
 		else{
+            ctl_t.select_fun_led_blink_flag = 0;
 			pro_t.fun_key_counter=0;
 			pro_t.key_as_numbers_input_flag =0;
 		     pro_t.gTimer_pro_key=50; //at once to switch normal relay display led 
@@ -528,18 +534,20 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 			  Relay_Fan_State();
 
 			 Relay_Kill_State();
+             ctl_t.select_fun_led_blink_flag = 1;
 			
 
 			  
 	       }
 	       else{
-
+           
 			 Keep_heat_SetUp_Led_Filcker();
 			 Relay_Tape_State();
 
 			Relay_Fan_State();
 
 			Relay_Kill_State();
+            ctl_t.select_fun_led_blink_flag = 1;
 
 			//Relay_Keep_Temp_State();
 		
@@ -548,6 +556,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 		
        	}
 	    else{
+            ctl_t.select_fun_led_blink_flag = 0;
 			pro_t.fun_key_counter =0;
 			pro_t.key_as_numbers_input_flag =0;
 		    pro_t.gTimer_pro_key=50; //at once to switch normal relay display led 

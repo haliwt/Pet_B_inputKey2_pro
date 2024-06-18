@@ -52,6 +52,7 @@ typedef struct _touchpad_t{
    uint8_t again_open_relay_ptc;
 
    uint8_t relay_keep_temp_on_off_flag ;
+   uint8_t select_fun_led_blink_flag;
  
 
  

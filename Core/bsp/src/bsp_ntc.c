@@ -428,20 +428,24 @@ void Set_KeepTempValue_DispLed(void)
 		KEY_FUN_CONFIRM_LED_ON() ;
 		ADD_DEC_LED_OFF();
 
-	   if(ctl_t.gTimer_keep_heat_led < 1){
+       if(pro_t.key_value != fun_key &&  ctl_t.select_fun_led_blink_flag == 0 ){
 
-			KEEP_HEAT_LED_OFF();
-		}
-		else if(ctl_t.gTimer_keep_heat_led  > 0 && ctl_t.gTimer_keep_heat_led <2){
+    	   if(ctl_t.gTimer_keep_heat_led < 1 ){
 
-			KEEP_HEAT_LED_ON();
+    			KEEP_HEAT_LED_OFF();
+    		}
+    		else if(ctl_t.gTimer_keep_heat_led  > 0 && ctl_t.gTimer_keep_heat_led <2){
 
-		}
-		else{
+    			KEEP_HEAT_LED_ON();
 
-			ctl_t.gTimer_keep_heat_led =0;
+    		}
+    		else{
 
-		}
+    			ctl_t.gTimer_keep_heat_led =0;
+
+    		}
+
+        }
 
 	} 
 	

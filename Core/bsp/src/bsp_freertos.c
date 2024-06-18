@@ -164,10 +164,10 @@ static void vTaskMsgPro(void *pvParameters)
            if(pro_t.key_value == fun_key || pro_t.key_value == confirm_short_key ||pro_t.key_value  == confirm_long_key \
                || pro_t.key_value == fun_long_key){
             
-            Key_Handler(pro_t.key_value);
+             Key_Handler(pro_t.key_value);
             pro_t.key_value =0xff;
 
-            Relay_Confirm_Turn_OnOff_Fun();
+           
           }
 
           if(pro_t.gTimer_pro_long_key_timer >1 && (confirm_long_key_flag ==1 ||  fun_long_key_flag ==1)){
