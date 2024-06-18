@@ -85,6 +85,32 @@ void Relay_Confirm_Turn_OnOff_Fun(void)
 }
 
 
+/***********************************************************
+ *
+ *Function Name : relay_keep_temperature_led_on_off(void)
+ *
+ *
+ *
+ *
+***********************************************************/
+void relay_keep_temperature_led_on_off(void)
+{
+     if(ctl_t.relay_keep_temp_on_off_flag == keep_temp_open){
+        KEEP_HEAT_LED_ON();  // ptc open 
+    	RELAY_KEEP_TEMP_SetHigh();
+
+     }
+     else if( ctl_t.relay_keep_temp_on_off_flag == keep_temp_close){
+        KEEP_HEAT_LED_OFF();
+		RELAY_KEEP_TEMP_SetLow();
+
+     }
+
+
+}
+
+
+
 void SetRelay_TurnOff_Fun(void)
 {
 
@@ -93,6 +119,7 @@ void SetRelay_TurnOff_Fun(void)
    Relay_Confirm_Turn_OnOff_Fun();
 
    pro_t.set_keep_temp_fun_flag = 0;
+   ctl_t.relay_keep_temp_on_off_flag =0;
 
    KEEP_HEAT_LED_OFF();
    RELAY_KEEP_TEMP_SetLow();

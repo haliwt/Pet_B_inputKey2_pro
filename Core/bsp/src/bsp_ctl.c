@@ -114,6 +114,9 @@ static uint8_t relay_keep_temp_run_fun(void)
 	 
          if(pro_t.set_keep_temp_value > ctl_t.disp_ntc_res_liner_temp_value ){
 
+
+                    ctl_t.relay_keep_temp_on_off_flag = keep_temp_open; //open 
+
                    if(ctl_t.again_open_relay_ptc != 2){ //open
                     
                        ctl_t.again_open_relay_ptc++;
@@ -155,6 +158,7 @@ static uint8_t relay_keep_temp_run_fun(void)
 
 			  }
               else{
+               ctl_t.relay_keep_temp_on_off_flag = keep_temp_close; //cloused 
                if(ctl_t.set_keep_heat_tempeature_flag == 1){
                  if(ctl_t.again_open_relay_ptc==0){
                     ctl_t.again_open_relay_ptc++;

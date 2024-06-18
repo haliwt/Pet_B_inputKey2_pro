@@ -75,6 +75,7 @@ static void vTaskRunPro(void *pvParameters)
    {
      bsp_Idle();
      Main_Process();
+   
      vTaskDelay(40);
   }
 	
@@ -165,6 +166,8 @@ static void vTaskMsgPro(void *pvParameters)
             
             Key_Handler(pro_t.key_value);
             pro_t.key_value =0xff;
+
+            Relay_Confirm_Turn_OnOff_Fun();
           }
 
           if(pro_t.gTimer_pro_long_key_timer >1 && (confirm_long_key_flag ==1 ||  fun_long_key_flag ==1)){

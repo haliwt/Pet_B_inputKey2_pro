@@ -434,7 +434,8 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 
 			Relay_Kill_State();
 
-			Relay_Keep_Temp_State();
+			//Relay_Keep_Temp_State();
+			relay_keep_temperature_led_on_off();
 			
 			
 		}
@@ -466,7 +467,8 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 
 			Relay_Kill_State();
 
-			Relay_Keep_Temp_State();
+			//Relay_Keep_Temp_State();
+			relay_keep_temperature_led_on_off();
 	
        }
        else{
@@ -494,7 +496,8 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 
 			//Relay_Kill_State();
 
-			Relay_Keep_Temp_State();
+			//Relay_Keep_Temp_State();
+			relay_keep_temperature_led_on_off();
 			
 		}
 		else{

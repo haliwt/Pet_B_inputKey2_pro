@@ -18,6 +18,14 @@ typedef enum{
 
 }open_state;
 
+typedef enum{
+
+   keep_temp_open = 1,
+   keep_temp_close = 2
+
+
+}keep_temp_state;
+
 
 typedef struct _touchpad_t{
 
@@ -42,6 +50,8 @@ typedef struct _touchpad_t{
    uint8_t set_keep_heat_tempeature_flag;   //WT.EIDT .2024.05.17 new add item .
    uint8_t disp_ntc_res_liner_temp_value;
    uint8_t again_open_relay_ptc;
+
+   uint8_t relay_keep_temp_on_off_flag ;
  
 
  
