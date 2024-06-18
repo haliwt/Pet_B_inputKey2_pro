@@ -40,7 +40,7 @@ typedef struct _touchpad_t{
    uint8_t run_process_tag;
    uint8_t keep_heat_flag;
    uint8_t set_keep_heat_tempeature_flag;   //WT.EIDT .2024.05.17 new add item .
-   uint8_t disp_net_temp_value;
+   uint8_t disp_ntc_res_liner_temp_value;
    uint8_t again_open_relay_ptc;
  
 

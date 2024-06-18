@@ -96,7 +96,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_ADC1_Init();
-  //MX_IWDG_Init();
+  MX_IWDG_Init();
   MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
    bsp_ctl_init();

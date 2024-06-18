@@ -45,6 +45,7 @@ static uint8_t Calculate_Display_Temperature_19_21_Value(const uint16_t *pt,uint
 
 //static void Display_Speicial_Temperature_Value(uint8_t temp);
 
+static uint16_t Read_NTC_Temperature_Voltage_Init(void);
 
 
 
@@ -206,6 +207,19 @@ static uint16_t Read_NTC_Temperature_Voltage_Power_On(void)
 }
 
 
+static uint16_t Read_NTC_Temperature_Voltage_Init(void)
+{
+      uint16_t read_ntc_value;
+	 
+	  read_ntc_value = Get_Adc_Voltage_Value(100);
+	
+      
+
+	  return read_ntc_value;
+}
+
+
+
 
 static uint16_t Read_NTC_Temperature_Voltage(void)
 {
@@ -277,9 +291,36 @@ static void Read_Ntc_Decimal_Point_Numbers(void)
 
 /******************************************************************************
 	*
+	*Function Name: void Read_NTC_Temperature_Init_Handler(void)
+	*Function:
+	*Input Ref:
+	*Return Ref:
+	*
+******************************************************************************/
+void Read_NTC_Temperature_Init_Handler(void)
+{
+   
+	 ctl_t.ntc_voltage_value= Read_NTC_Temperature_Voltage();
+     temp_uint16_t_vlue= ctl_t.ntc_voltage_value /100;
+	 length_simple = sizeof(R10K_Init_0_81_simple)/sizeof(R10K_Init_0_81_simple[0]);
+    
+   	 ctl_t.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
+
+     
+
+	 Display_Speicial_Temperature_Value(ctl_t.temp_degree);
+
+     Smg_Display_Temp_Degree_Handler(ctl_t.temperature_value);
+
+}
+
+
+/******************************************************************************
+	*
 	*Function Name: Read_NTC_Temperature_Value_Handler(void)
-	*
-	*
+	*Function:
+	*Input Ref:
+	*Return Ref:
 	*
 ******************************************************************************/
 void Read_NTC_Temperature_Value_Handler(void)
@@ -294,19 +335,19 @@ void Read_NTC_Temperature_Value_Handler(void)
    	 ctl_t.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
 
 	 Display_Speicial_Temperature_Value(ctl_t.temp_degree);
-   //  ctl_t.disp_net_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
+   //  ctl_t.disp_ntc_res_liner_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
 
     //read_temp_value =  Disp_NtcRes_LinearValue(ctl_t.temperature_value);
 	 
 	 if(relay_temp_flag_state() == 1){
-         if(pro_t.set_keep_temp_value >   ctl_t.disp_net_temp_value){
+         if(pro_t.set_keep_temp_value >   ctl_t.disp_ntc_res_liner_temp_value){
 
                    if(ctl_t.again_open_relay_ptc != 2){ //open
 
                        ctl_t.again_open_relay_ptc++;
                        ctl_t.open_has_been_open = 1;
-                        ctl_t.again_open=1;
-                        ctl_t.temperature_decimal_point_value =0;
+                       ctl_t.again_open=1;
+                       ctl_t.temperature_decimal_point_value =0;
                     
     			       KEEP_HEAT_LED_ON();  // ptc open 
     	               RELAY_KEEP_TEMP_SetHigh();
@@ -316,9 +357,7 @@ void Read_NTC_Temperature_Value_Handler(void)
                     }
                     else{
 
-                    
-
-                      if((pro_t.set_keep_temp_value - 3)> ctl_t.disp_net_temp_value && ctl_t.open_has_been_open ==0 ){ //WT.EDIT 2024.05.18
+                       if((pro_t.set_keep_temp_value - 3)> ctl_t.disp_ntc_res_liner_temp_value && ctl_t.open_has_been_open ==0 ){ //WT.EDIT 2024.05.18
 
                            ctl_t.again_open=1;
                            ctl_t.temperature_decimal_point_value =0;
@@ -331,11 +370,9 @@ void Read_NTC_Temperature_Value_Handler(void)
 
                         }
                        
-                        
-                       
                    }
 
-                   if(ctl_t.again_open==0){
+                   if(ctl_t.again_open==0){ //has been set temperature value ,control ptc of LED blink.
 
 
                        Set_KeepTempValue_DispLed();
@@ -345,35 +382,36 @@ void Read_NTC_Temperature_Value_Handler(void)
 
 			  }
               else{
-               if(ctl_t.set_keep_heat_tempeature_flag == 1){
+                   if(ctl_t.set_keep_heat_tempeature_flag == 1){
 
-                 if(ctl_t.again_open_relay_ptc == 0){ //open
+                     if(ctl_t.again_open_relay_ptc == 0){ //open
+                        
+                          ctl_t.again_open_relay_ptc ++;
+                       }
+                     else if(ctl_t.again_open_relay_ptc == 2){
+                       ctl_t.open_has_been_open = 0;
+
+                     }
                     
-                      ctl_t.again_open_relay_ptc ++;
-                   }
-                 else if(ctl_t.again_open_relay_ptc == 2){
-                   ctl_t.open_has_been_open = 0;
+                     Set_KeepTempValue_DispLed();
+                    
+                      ctl_t.again_open =0;
+                  
+                     
+    			   }
+    			   else{
+                     
+    					KEEP_HEAT_LED_OFF();
+    					RELAY_KEEP_TEMP_SetLow();
+    					KEY_FUN_CONFIRM_LED_ON() ;
+    					ADD_DEC_LED_OFF();
+    			   }
 
-                 }
-                
-                 Set_KeepTempValue_DispLed();
-                
-                  ctl_t.again_open =0;
-              
-                 
-			   }
-			   else{
-                 
-					KEEP_HEAT_LED_OFF();
-					RELAY_KEEP_TEMP_SetLow();
-					KEY_FUN_CONFIRM_LED_ON() ;
-					ADD_DEC_LED_OFF();
-			   }
-
-              }
+             }
 
 
 	 }
+     
 
 	#endif 
   
@@ -386,7 +424,7 @@ void Set_KeepTempValue_DispLed(void)
 	if(ctl_t.set_keep_heat_tempeature_flag == 1){//WT.EIDT .2024.05.17 new add item .LED blink
 
 	
-       RELAY_KEEP_TEMP_SetLow();
+        RELAY_KEEP_TEMP_SetLow();
 		KEY_FUN_CONFIRM_LED_ON() ;
 		ADD_DEC_LED_OFF();
 
@@ -912,6 +950,137 @@ case degree_nine ://24`~26 degree
 
 
    break;
+
+
+    case degree_nineteen : //59~63 degree
+       array_subscript =  Calculate_Display_Temperature_Value(R10K_59_63,ctl_t.ntc_voltage_value,5);
+	    //   HAL_Delay(5);
+		 switch(array_subscript){
+   
+		   case 0:
+			  ctl_t.temperature_value = 59 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
+   
+		   break;
+   
+		   case 1:
+			  ctl_t.temperature_value = 60 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+   
+		   case 2:
+			  ctl_t.temperature_value = 61 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+
+		    case 3:
+			  ctl_t.temperature_value = 62 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+
+		    case 4:
+			  ctl_t.temperature_value = 63 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+   
+   
+		  }
+
+
+   break;
+
+
+    case degree_twenty : //64~70 degree
+       array_subscript =  Calculate_Display_Temperature_Value(R10K_64_70,ctl_t.ntc_voltage_value,7);
+	    //   HAL_Delay(5);
+		 switch(array_subscript){
+   
+		   case 0:
+			  ctl_t.temperature_value = 64 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
+   
+		   break;
+   
+		   case 1:
+			  ctl_t.temperature_value = 65 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+   
+		   case 2:
+			  ctl_t.temperature_value = 66 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+
+		    case 3:
+			  ctl_t.temperature_value = 67 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+
+		    case 4:
+			  ctl_t.temperature_value = 68 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+
+            case 5:
+			  ctl_t.temperature_value = 69 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+
+		    case 6:
+			  ctl_t.temperature_value = 70 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+   
+		   break;
+
+
+           }
+
+
+   break;
+
+
+   
+    case degree_twenty_one : //71~76 degree
+           array_subscript =  Calculate_Display_Temperature_Value(R10K_71_76,ctl_t.ntc_voltage_value,6);
+            //   HAL_Delay(5);
+             switch(array_subscript){
+       
+               case 0:
+                  ctl_t.temperature_value = 71 + ctl_t.temperature_rectify_value + COMPENSATION_VALUE;
+       
+               break;
+       
+               case 1:
+                  ctl_t.temperature_value = 72 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+       
+               break;
+       
+               case 2:
+                  ctl_t.temperature_value = 73 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+       
+               break;
+    
+                case 3:
+                  ctl_t.temperature_value = 74 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+       
+               break;
+    
+                case 4:
+                  ctl_t.temperature_value = 75 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+       
+               break;
+    
+                case 5:
+                  ctl_t.temperature_value = 76 + ctl_t.temperature_rectify_value +COMPENSATION_VALUE;
+       
+               break;
+    
+               
+    
+    
+               }
+    
+    
+       break;
+
+    
    
 
 
@@ -1111,16 +1280,12 @@ static uint8_t  error_range_calculate_value(uint8_t val)
 
    break;
 
-
-
-
-
-  }
-
-
-
+   }
+  
+   return 0;
 
 }
+
   
   
 uint8_t Disp_NtcRes_LinearValue(uint8_t ntc_value)

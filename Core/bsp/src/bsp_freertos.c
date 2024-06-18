@@ -17,14 +17,9 @@
 #define FUN_LONG_KEY_2                (1 << 2)
 #define CONFIRM_LONG_KEY_3            (1 << 3)
 
-
-
-
-/*
-**********************************************************************************************************
+/*********************************************************************************************************
 											函数声明
-**********************************************************************************************************
-*/
+***********************************************************************************************************/
 //static void vTaskTaskUserIF(void *pvParameters);
 static void vTaskRunPro(void *pvParameters);
 static void vTaskMsgPro(void *pvParameters);
@@ -43,14 +38,8 @@ static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
 
 
-
-
 uint32_t confirm_long_key_counter;
 uint32_t fun_key_long_counter;
-
-
-
-
 
 /**********************************************************************************************************
 *	函 数 名: main
@@ -178,7 +167,7 @@ static void vTaskMsgPro(void *pvParameters)
             pro_t.key_value =0xff;
           }
 
-           if(pro_t.gTimer_pro_long_key_timer >1 && (confirm_long_key_flag ==1 ||  fun_long_key_flag ==1)){
+          if(pro_t.gTimer_pro_long_key_timer >1 && (confirm_long_key_flag ==1 ||  fun_long_key_flag ==1)){
 
                  if(confirm_long_key_flag ==1){
                    confirm_long_key_flag =0;

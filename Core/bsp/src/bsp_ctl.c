@@ -108,11 +108,11 @@ static uint8_t relay_keep_temp_run_fun(void)
 {
    
 	
-  //  ctl_t.disp_net_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
+  //  ctl_t.disp_ntc_res_liner_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
     
 	if(relay_temp_flag_state() ==1){ //has been set up temperature value 
 	 
-         if(pro_t.set_keep_temp_value > ctl_t.disp_net_temp_value ){
+         if(pro_t.set_keep_temp_value > ctl_t.disp_ntc_res_liner_temp_value ){
 
                    if(ctl_t.again_open_relay_ptc != 2){ //open
                     
@@ -128,7 +128,7 @@ static uint8_t relay_keep_temp_run_fun(void)
                     }
                     else{
                       
-                        if((pro_t.set_keep_temp_value -3)> ctl_t.disp_net_temp_value &&  ctl_t.open_has_been_open ==0){ //WT.EDIT 2024.05.18
+                        if((pro_t.set_keep_temp_value -3)> ctl_t.disp_ntc_res_liner_temp_value &&  ctl_t.open_has_been_open ==0){ //WT.EDIT 2024.05.18
 
                            ctl_t.again_open=1;
                            ctl_t.temperature_decimal_point_value =0;

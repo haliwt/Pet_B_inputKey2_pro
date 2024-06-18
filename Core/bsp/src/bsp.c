@@ -32,11 +32,11 @@ void bsp_Idle(void)
    #endif 
    /* --- 喂狗 */
 
-//   if(pro_t.gTimer_pro_det_dog > 10 ){
-// 		 pro_t.gTimer_pro_det_dog =0;
-// 		 Feed_Dog();
-//		
-//	}
+   if(pro_t.gTimer_pro_det_dog > 10 ){
+ 		 pro_t.gTimer_pro_det_dog =0;
+ 		 Feed_Dog();
+		
+	}
 	
 	/* 例如 uIP 协议，可以插入uip轮询函数 */
 	//TOUCH_CapScan();
@@ -343,17 +343,22 @@ void Main_Process(void)
 	switch(disp_keep_temp_value){
 
 	   case 0:
-			if((ctl_t.gTimer_read_adc >4)){
+			if((ctl_t.gTimer_read_adc >4) && p_disp==1){
 			  ctl_t.gTimer_read_adc =0;
 		     
 			    Read_NTC_Temperature_Value_Handler();
-               ctl_t.disp_net_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
-			    Smg_Display_Temp_Degree_Handler(ctl_t.disp_net_temp_value);
+               ctl_t.disp_ntc_res_liner_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
+			    Smg_Display_Temp_Degree_Handler(ctl_t.disp_ntc_res_liner_temp_value);
 		    }
+
+            if(p_disp == 0 && ctl_t.gTimer_read_adc < 6){
+                p_disp ++ ;  
+                Read_NTC_Temperature_Init_Handler();
+               
+            }
+             
 			
-
-
-			if(pro_t.gTimer_display_relay_led > 3){
+           if(pro_t.gTimer_display_relay_led > 3){
 			   pro_t.gTimer_display_relay_led =0;
 			   Relay_Confirm_Turn_OnOff_Fun();   
 			 
@@ -371,8 +376,8 @@ void Main_Process(void)
 		else{
 		   disp_keep_temp_value =0;
 		   ctl_t.gTimer_read_adc  =20; //at once return NTC read tempeerature
-		   ctl_t.disp_net_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
-		   Smg_Display_Temp_Degree_Handler(ctl_t.disp_net_temp_value);
+		   ctl_t.disp_ntc_res_liner_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
+		   Smg_Display_Temp_Degree_Handler(ctl_t.disp_ntc_res_liner_temp_value);
 		}
 
 	   break;
@@ -388,8 +393,8 @@ void Main_Process(void)
 			  disp_keep_temp_value =0;
 			  ctl_t.gTimer_read_adc  =50;
 			 // Smg_Display_Temp_Degree_Handler(ctl_t.temperature_value );
-			    ctl_t.disp_net_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
-			    Smg_Display_Temp_Degree_Handler(ctl_t.disp_net_temp_value);
+			    ctl_t.disp_ntc_res_liner_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
+			    Smg_Display_Temp_Degree_Handler(ctl_t.disp_ntc_res_liner_temp_value);
 		   }
 
 

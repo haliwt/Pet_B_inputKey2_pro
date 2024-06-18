@@ -25,4 +25,7 @@ void Display_Speicial_Temperature_Value(uint8_t temp);
 uint8_t Disp_NtcRes_LinearValue(uint8_t ntc_value);
 
 void Set_KeepTempValue_DispLed(void);
+
+void Read_NTC_Temperature_Init_Handler(void);
+
 #endif 
