@@ -33,6 +33,7 @@ typedef struct _touchpad_t{
     uint8_t relay_fan_flag ;
     uint8_t relay_tape_flag ;
 	uint8_t relay_kill_flag ;
+    uint8_t thefirst_detected_temp_falg;
 
 	
    

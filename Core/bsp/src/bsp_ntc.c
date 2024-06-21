@@ -301,16 +301,28 @@ void Read_NTC_Temperature_Init_Handler(void)
 {
    
 	 ctl_t.ntc_voltage_value= Read_NTC_Temperature_Voltage();
-     temp_uint16_t_vlue= ctl_t.ntc_voltage_value /100;
-	 length_simple = sizeof(R10K_Init_0_81_simple)/sizeof(R10K_Init_0_81_simple[0]);
-    
-   	 ctl_t.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
+     if(ctl_t.ntc_voltage_value > 0xC1C || ctl_t.ntc_voltage_value ==0xC1C){ //hasn't ntc temperature probe
+        
+         ctl_t.temperature_value =0;
+         ctl_t.temperature_decimal_point_value =0;
+         Smg_Display_Temp_Degree_Handler(ctl_t.temperature_value);
+         ctl_t.thefirst_detected_temp_falg =0;
+         ctl_t.gTimer_read_adc=0;
 
-     
+     }
+     else{
+         temp_uint16_t_vlue= ctl_t.ntc_voltage_value /100;
+    	 length_simple = sizeof(R10K_Init_0_81_simple)/sizeof(R10K_Init_0_81_simple[0]);
+        
+       	 ctl_t.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
 
-	 Display_Speicial_Temperature_Value(ctl_t.temp_degree);
+         
 
-     Smg_Display_Temp_Degree_Handler(ctl_t.temperature_value);
+    	 Display_Speicial_Temperature_Value(ctl_t.temp_degree);
+
+         Smg_Display_Temp_Degree_Handler(ctl_t.temperature_value);
+
+     }
 
 }
 
@@ -329,6 +341,17 @@ void Read_NTC_Temperature_Value_Handler(void)
    
 	 #if 1
 	 ctl_t.ntc_voltage_value= Read_NTC_Temperature_Voltage();
+     if(ctl_t.ntc_voltage_value > 0xC1C || ctl_t.ntc_voltage_value ==0xC1C){ //hasn't ntc temperature probe
+        
+         ctl_t.temperature_value =0;
+         ctl_t.temperature_decimal_point_value = 0;
+
+         Smg_Display_Temp_Degree_Handler(ctl_t.temperature_value);
+         ctl_t.thefirst_detected_temp_falg =0;
+         ctl_t.gTimer_read_adc=0;
+
+     }
+     else{
      temp_uint16_t_vlue= ctl_t.ntc_voltage_value /100;
 	 length_simple = sizeof(R10K_Init_0_81_simple)/sizeof(R10K_Init_0_81_simple[0]);
     
@@ -416,8 +439,8 @@ void Read_NTC_Temperature_Value_Handler(void)
 	#endif 
   
 
+    }
 }
-
 void Set_KeepTempValue_DispLed(void)
 {
 

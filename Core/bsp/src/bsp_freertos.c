@@ -72,7 +72,7 @@ static void vTaskRunPro(void *pvParameters)
 {
 
   while(1)
-   {
+  {
      bsp_Idle();
      Main_Process();
    

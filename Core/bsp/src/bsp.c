@@ -337,13 +337,13 @@ void Key_Handler(uint8_t key_value)
 void Main_Process(void)
 {
    
-    static uint8_t p_disp;
+    
     Relay_Tunr_OnOff_Fun(relay_id_led);
 
 	switch(disp_keep_temp_value){
 
 	   case 0:
-			if((ctl_t.gTimer_read_adc >4) && p_disp==1){
+			if((ctl_t.gTimer_read_adc >4) && ctl_t.thefirst_detected_temp_falg==1){
 			  ctl_t.gTimer_read_adc =0;
 		     
 			    Read_NTC_Temperature_Value_Handler();
@@ -351,8 +351,8 @@ void Main_Process(void)
 			    Smg_Display_Temp_Degree_Handler(ctl_t.disp_ntc_res_liner_temp_value);
 		    }
 
-            if(p_disp == 0 && ctl_t.gTimer_read_adc < 6){
-                p_disp ++ ;  
+            if(ctl_t.thefirst_detected_temp_falg == 0 && ctl_t.gTimer_read_adc < 6){
+                ctl_t.thefirst_detected_temp_falg ++ ;  
                 Read_NTC_Temperature_Init_Handler();
                
             }
