@@ -71,7 +71,7 @@ void Key_Handler(uint8_t key_value)
 			 
 			ctl_t.gTimer_select_fun=0;
 			disp_keep_temp_value =0xff;
-			pro_t.gTimer_pro_disp_temp=0; //display set keep temperature timer timing 
+			pro_t.gTimer_pro_disp_temp=0; //display set keep temperature value
 			//
 			ctl_t.digital_numbers++; //scope : 16~30度
 			if(ctl_t.digital_numbers <16)ctl_t.digital_numbers =16;
@@ -140,9 +140,9 @@ void Key_Handler(uint8_t key_value)
 	case confirm_short_key: // confirm key
 
       pro_t.iwdg_detected_times=0;
-	  if(pro_t.fun_key_counter==0){
+	  if(pro_t.fun_key_counter==0){ //if don't be pressed "select key(fun key)",display set temp value 
         
-	   if( pro_t.set_keep_temp_fun_flag == 1){ //display has been set keep heat temperatur value .
+	   if( pro_t.set_temp_value_success_flag == 1){ //display has been set keep heat temperatur value .
 		pro_t.gTimer_pro_disp_temp=0;
       
 	
@@ -159,7 +159,7 @@ void Key_Handler(uint8_t key_value)
 
 
      }
-	 else{// confrim key define speical led on or off.
+	 else{// confrim key be used to "confrm" key done .
 
       switch(relay_id_led){
 
@@ -208,14 +208,14 @@ void Key_Handler(uint8_t key_value)
 				
 		    break;
 
-			case relay_keep_temp_led_on: //keep temperature value
+			case relay_keep_temp_led_on: //keep temperature value by confirm done.
 
-			  switch(pro_t.set_keep_temp_fun_flag){
+			  switch(pro_t.set_temp_value_success_flag){
 
-			   case 1: //normal 
+			   case 1: //normal -> cancle 
   
 			     ctl_t.set_keep_heat_tempeature_flag=0; //WT.EDIT.2024.05.17
-			 	 pro_t.set_keep_temp_fun_flag=0;
+			 	 pro_t.set_temp_value_success_flag=0;
            
              
 				 ctl_t.gTimer_select_fun =10;
@@ -280,7 +280,7 @@ void Key_Handler(uint8_t key_value)
 		
 			ADD_DEC_LED_OFF();
 		
-		   pro_t.set_keep_temp_fun_flag = 1; //set keep temperature is complete.
+		   pro_t.set_temp_value_success_flag = 1; //set keep temperature is complete.
 		   ctl_t.set_keep_heat_tempeature_flag = 1;   //WT.EIDT .2024.05.17 new add item .
 		   ctl_t.again_open_relay_ptc=0;  //WT.EDIT .2024.05.20 the first times at once open PTC .
             
@@ -434,7 +434,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 
 			Relay_Kill_State();
 
-			//Relay_Keep_Temp_State();
+		
 			relay_keep_temperature_led_on_off();
 
             ctl_t.select_fun_led_blink_flag = 1;
@@ -470,7 +470,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 
 			Relay_Kill_State();
 
-			//Relay_Keep_Temp_State();
+	
 			relay_keep_temperature_led_on_off();
             ctl_t.select_fun_led_blink_flag = 1;
 	
@@ -500,7 +500,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 
 			//Relay_Kill_State();
 
-			//Relay_Keep_Temp_State();
+			
 			relay_keep_temperature_led_on_off();
             ctl_t.select_fun_led_blink_flag =1;
 			
@@ -549,7 +549,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 			Relay_Kill_State();
             ctl_t.select_fun_led_blink_flag = 1;
 
-			//Relay_Keep_Temp_State();
+			
 		
 		  }
 		  

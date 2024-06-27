@@ -128,6 +128,7 @@ void Run_InputKey_Model(uint8_t keyvalue);
 
 void Run_BoardCommand_Handler(void);
 
+uint8_t relay_keep_temp_run_fun(void);
 
 
 

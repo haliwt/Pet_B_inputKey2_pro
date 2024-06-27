@@ -13,7 +13,7 @@ static uint8_t relay_tape_fun(void);
 static uint8_t relay_fan_fun(void);
 static uint8_t relay_kill_fun(void);
 static uint8_t relay_set_temp_flag_fun(void);
-static uint8_t relay_keep_temp_run_fun(void);
+//static uint8_t relay_keep_temp_run_fun(void);
 
 
 touchpad_t ctl_t;
@@ -91,7 +91,7 @@ static uint8_t relay_kill_fun(void)
 ***********************************************************/
 static uint8_t relay_set_temp_flag_fun(void)
 {
-   if(pro_t.set_keep_temp_fun_flag==1) return 1;
+   if(pro_t.set_temp_value_success_flag==1) return 1;
    else return 0;
 
 }
@@ -104,7 +104,7 @@ static uint8_t relay_set_temp_flag_fun(void)
 	*Retrun Ref: 1->open 0->close
 	*
 ***********************************************************/
-static uint8_t relay_keep_temp_run_fun(void)
+uint8_t relay_keep_temp_run_fun(void)
 {
    
 	
