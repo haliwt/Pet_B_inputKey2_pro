@@ -109,13 +109,13 @@ extern touchpad_t ctl_t;
 extern uint8_t (*relay_tape_state)(void);
 extern uint8_t (*relay_fan_state)(void);
 extern uint8_t (*relay_kill_state)(void);
-extern uint8_t (*relay_temp_flag_state)(void);
+extern uint8_t (*relay_settemp_flag_state)(void);
 extern uint8_t (*relay_keep_temp_run_state)(void);
 
 void Relay_Tape_Process(uint8_t(*relay_a_handler)(void));
 void Relay_Fan_Process(uint8_t(*relay_b_handler)(void));
 void Relay_Kill_Process(uint8_t(*relay_c_handler)(void));
-void Relay_Temp_Flag_Handler(uint8_t(*relay_flag_handler)(void));
+void Relay_SetTemp_Flag_Handler(uint8_t(*relay_flag_handler)(void));
 void Relay_Keep_Temp_Process(uint8_t(*relay_d_handler)(void));
 
 

@@ -362,7 +362,7 @@ void Read_NTC_Temperature_Value_Handler(void)
 
     //read_temp_value =  Disp_NtcRes_LinearValue(ctl_t.temperature_value);
 	 
-	 if(relay_temp_flag_state() == 1){
+	 if(relay_settemp_flag_state() == 1){
          if(pro_t.set_keep_temp_value >   ctl_t.disp_ntc_res_liner_temp_value){
 
                    if(ctl_t.again_open_relay_ptc != 2){ //open

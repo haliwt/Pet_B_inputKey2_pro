@@ -76,7 +76,7 @@ static void vTaskRunPro(void *pvParameters)
      bsp_Idle();
      Main_Process();
    
-     vTaskDelay(40);
+     vTaskDelay(40);//(40)
   }
 	
 }
@@ -92,7 +92,7 @@ static void vTaskRunPro(void *pvParameters)
 static void vTaskMsgPro(void *pvParameters)
 {
     BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(30); /* 设置最大等待时间为500ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为300ms */
 	uint32_t ulValue;
     static uint8_t fun_long_key_flag,confirm_long_key_flag;
    
@@ -120,7 +120,7 @@ static void vTaskMsgPro(void *pvParameters)
 		xResult = xTaskNotifyWait(0x00000000,      
 						          0xFFFFFFFF,      
 						          &ulValue,        /* 保存ulNotifiedValue到变量ulValue中 */
-						          xMaxBlockTime);  /* 最大允许延迟时间 */
+						          xMaxBlockTime);  /* 最大允许延迟时间   30*/
 		
 		if( xResult == pdPASS )
 		{
@@ -210,7 +210,7 @@ static void vTaskStart(void *pvParameters)
         while(FUN_KEY_VALUE()== KEY_DOWN && fun_key_long_counter < 2965500){
                
                fun_key_long_counter++;
-               if(fun_key_long_counter > 2960000){
+               if(fun_key_long_counter > 2860000){ //2960000
                    fun_key_long_counter = 2965900;
 
                 xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
@@ -222,7 +222,7 @@ static void vTaskStart(void *pvParameters)
          }
 
 
-         if(fun_key_long_counter < 2960000 ){
+         if(fun_key_long_counter < 2965900 ){
 
              
                xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
@@ -240,7 +240,7 @@ static void vTaskStart(void *pvParameters)
          while(CONFIRM_KEY_VALUE() == KEY_DOWN && confirm_long_key_counter < 2965500){
 
                confirm_long_key_counter++;
-               if(confirm_long_key_counter > 2960000){
+               if(confirm_long_key_counter > 2860000){//2960000
                    confirm_long_key_counter = 2965900;
                
                xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
@@ -252,7 +252,7 @@ static void vTaskStart(void *pvParameters)
 
          }
          
-         if(confirm_long_key_counter < 2960000 ){
+         if(confirm_long_key_counter < 2965900 ){//
             
            xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
                          CONFIRM_KEY_1,            /* 设置目标任务事件标志位bit0  */

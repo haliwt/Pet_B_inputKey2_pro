@@ -96,7 +96,7 @@ void Key_Handler(uint8_t key_value)
 
 		        relay_id_led = relay_tape_led_on;
 				ctl_t.gTimer_select_fun=0;
-				pro_t.fun_key_counter=1;
+				pro_t.fun_key_be_pressing_flag=1;
 		 
 
 		   break;
@@ -105,7 +105,7 @@ void Key_Handler(uint8_t key_value)
 				relay_id_led = relay_fan_led_on;
 				ctl_t.gTimer_select_fun=0;
 				pro_t.key_short_confirm_flag=0;
-				pro_t.fun_key_counter=1;
+				pro_t.fun_key_be_pressing_flag=1;
 				
 
 		    break;
@@ -114,7 +114,7 @@ void Key_Handler(uint8_t key_value)
 				relay_id_led = relay_kill_led_on;
 				ctl_t.gTimer_select_fun=0;
 				pro_t.key_short_confirm_flag=0;
-				 pro_t.fun_key_counter=1;
+				 pro_t.fun_key_be_pressing_flag=1;
 				
 		    break;
 
@@ -124,7 +124,7 @@ void Key_Handler(uint8_t key_value)
 				relay_id_led = relay_keep_temp_led_on;
 				ctl_t.gTimer_select_fun=0;
 				pro_t.key_short_confirm_flag=0;//WT.EDIT 2023.12.20
-				pro_t.fun_key_counter=1;
+				pro_t.fun_key_be_pressing_flag=1;
 			 
 		    break;
 
@@ -140,13 +140,11 @@ void Key_Handler(uint8_t key_value)
 	case confirm_short_key: // confirm key
 
       pro_t.iwdg_detected_times=0;
-	  if(pro_t.fun_key_counter==0){ //if don't be pressed "select key(fun key)",display set temp value 
+	  if(pro_t.fun_key_be_pressing_flag==0){ //if don't be pressed "select key(fun key)",display set temp value 
         
-	   if( pro_t.set_temp_value_success_flag == 1){ //display has been set keep heat temperatur value .
+	   if( pro_t.set_temp_value_success_flag == 1){ //display has been set keep heat temperatur value .exmalpe "28"
 		pro_t.gTimer_pro_disp_temp=0;
-      
-	
-		disp_keep_temp_value =1;
+        disp_keep_temp_value =1;
 
 		}
 		else{ //display "00:00"
@@ -167,43 +165,49 @@ void Key_Handler(uint8_t key_value)
 
 		      if(ctl_t.relay_tape_flag ==0){
 				 ctl_t.relay_tape_flag =1;
+                  pro_t.key_fun=0;
 				  TAPE_LED_ON();
 				  RELAY_TAPE_SetHigh();
 			  } 
 			  else{
 				  ctl_t.relay_tape_flag =0;
+                   pro_t.key_fun=0;
 				   TAPE_LED_OFF(); 
 				  RELAY_TAPE_SetLow();
 			  } 
-		      pro_t.fun_key_counter=0;
+		      pro_t.fun_key_be_pressing_flag=0;
 
 		   break;
 		 
 		    case relay_fan_led_on:
 				if(ctl_t.relay_fan_flag==0){
 					ctl_t.relay_fan_flag=1;
+                     pro_t.key_fun=0;
 					 FAN_LED_ON();
 					RELAY_FAN_SetHigh();
 				}
 				else{
 					ctl_t.relay_fan_flag=0;
+                     pro_t.key_fun=0;
 					FAN_LED_OFF(); 
 		            RELAY_FAN_SetLow();
 				}
-				 pro_t.fun_key_counter=0;
+				 pro_t.fun_key_be_pressing_flag=0;
 			break;
 
 			case relay_kill_led_on:  // 
 				if(ctl_t.relay_kill_flag==0){
 					ctl_t.relay_kill_flag=1;
+                     pro_t.key_fun=0;
 					KILL_LED_ON();
 		            RELAY_KILL_SetHigh();
 				}else{
 					ctl_t.relay_kill_flag=0;
+                     pro_t.key_fun=0;
 					 KILL_LED_OFF(); 
 		             RELAY_KILL_SetLow();
 				}
-				 pro_t.fun_key_counter=0;
+				 pro_t.fun_key_be_pressing_flag=0;
 				
 				
 		    break;
@@ -213,7 +217,7 @@ void Key_Handler(uint8_t key_value)
 			  switch(pro_t.set_temp_value_success_flag){
 
 			   case 1: //normal -> cancle 
-  
+                 pro_t.key_fun=0; //WT.EDIT 2024.07.11
 			     ctl_t.set_keep_heat_tempeature_flag=0; //WT.EDIT.2024.05.17
 			 	 pro_t.set_temp_value_success_flag=0;
            
@@ -222,7 +226,7 @@ void Key_Handler(uint8_t key_value)
 				 pro_t.key_short_confirm_flag =1;
 			
 				 KEY_FUN_CONFIRM_LED_OFF() ;  
-			     pro_t.fun_key_counter=0;
+			     pro_t.fun_key_be_pressing_flag=0;
 				  KEEP_HEAT_LED_OFF();
 	              RELAY_KEEP_TEMP_SetLow();
 				  KEY_FUN_CONFIRM_LED_ON() ;
@@ -305,7 +309,7 @@ void Key_Handler(uint8_t key_value)
 				  ADD_DEC_LED_OFF();
 
             }
-		   pro_t.fun_key_counter=0;
+		   pro_t.fun_key_be_pressing_flag=0;
 		}
 
 
@@ -342,7 +346,7 @@ void Main_Process(void)
 
 	switch(disp_keep_temp_value){
 
-	   case 0:
+	   case 0: //works normal temperature value 
 			if((ctl_t.gTimer_read_adc >4) && ctl_t.thefirst_detected_temp_falg==1){
 			  ctl_t.gTimer_read_adc =0;
 		     
@@ -425,7 +429,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 	case relay_tape_led_on:
 
          //relay_a_tape
-		if(ctl_t.gTimer_select_fun < 6 && pro_t.fun_key_counter==1){
+		if(ctl_t.gTimer_select_fun < 6 && pro_t.fun_key_be_pressing_flag==1){
 		
 			Tape_Led_Filcker();
 			//Relay_Tape_State();
@@ -442,7 +446,8 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 			
 		}
 		else{
-			pro_t.fun_key_counter=0;
+            pro_t.key_fun=0; //WT.EDIT 2024.07.11
+			pro_t.fun_key_be_pressing_flag=0;
 		    pro_t.key_as_numbers_input_flag =0;
 		    pro_t.gTimer_pro_key=50; //at once to switch normal relay display led 
 		    ctl_t.select_fun_led_blink_flag = 0;
@@ -462,7 +467,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
     case relay_fan_led_on:
 
 
-      if(ctl_t.gTimer_select_fun < 6 &&  pro_t.fun_key_counter ==1){
+      if(ctl_t.gTimer_select_fun < 6 &&  pro_t.fun_key_be_pressing_flag ==1){
         	Fan_Led_Flicker();//Tape_Led_Filcker();
         	Relay_Tape_State();
 
@@ -476,8 +481,9 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 	
        }
        else{
+           pro_t.key_fun=0; //WT.EDIT 2024.07.11
 	   	  ctl_t.select_fun_led_blink_flag = 0;
-		  pro_t.fun_key_counter=0;
+		  pro_t.fun_key_be_pressing_flag=0;
 		  pro_t.key_as_numbers_input_flag =0;
 	      pro_t.gTimer_pro_key=50; //at once to switch normal relay display led 
 	   	//  Relay_Fan_State();
@@ -492,7 +498,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 	case relay_kill_led_on:
 
 		//relay_a_tape
-		if(ctl_t.gTimer_select_fun < 6 && pro_t.fun_key_counter==1){
+		if(ctl_t.gTimer_select_fun < 6 && pro_t.fun_key_be_pressing_flag==1){
 			Sterilization_Led_Filcker();//Fan_Led_Flicker();
 			Relay_Tape_State();
 
@@ -506,8 +512,9 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 			
 		}
 		else{
+            pro_t.key_fun=0; //WT.EDIT 2024.07.11
             ctl_t.select_fun_led_blink_flag = 0;
-			pro_t.fun_key_counter=0;
+			pro_t.fun_key_be_pressing_flag=0;
 			pro_t.key_as_numbers_input_flag =0;
 		     pro_t.gTimer_pro_key=50; //at once to switch normal relay display led 
 			
@@ -524,7 +531,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 	case relay_keep_temp_led_on: //keep temperature be set up value 16~30 degree
 
 	    //KEEP HEAT Display of LED 
-        if(ctl_t.gTimer_select_fun < 6 && pro_t.fun_key_counter ==1){
+        if(ctl_t.gTimer_select_fun < 6 && pro_t.fun_key_be_pressing_flag ==1){
 
 	       if(pro_t.key_as_numbers_input_flag ==0){
 		   	
@@ -540,7 +547,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 			  
 	       }
 	       else{
-           
+             
 			 Keep_heat_SetUp_Led_Filcker();
 			 Relay_Tape_State();
 
@@ -556,8 +563,9 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 		
        	}
 	    else{
+            pro_t.key_fun=0; //WT.EDIT 2024.07.11
             ctl_t.select_fun_led_blink_flag = 0;
-			pro_t.fun_key_counter =0;
+			pro_t.fun_key_be_pressing_flag =0;
 			pro_t.key_as_numbers_input_flag =0;
 		    pro_t.gTimer_pro_key=50; //at once to switch normal relay display led 
 			ADD_DEC_LED_OFF();

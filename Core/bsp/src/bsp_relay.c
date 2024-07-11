@@ -95,14 +95,14 @@ void Relay_Confirm_Turn_OnOff_Fun(void)
 ***********************************************************/
 void relay_keep_temperature_led_on_off(void)
 {
-     if(ctl_t.relay_keep_temp_on_off_flag == keep_temp_open){
+     if(ctl_t.relay_keep_temp_on_off_flag == keep_temp_open && relay_settemp_flag_state() ==1){
         KEEP_HEAT_LED_ON();  // ptc open 
-    	//RELAY_KEEP_TEMP_SetHigh();
+    	RELAY_KEEP_TEMP_SetHigh();
 
      }
      else if(ctl_t.relay_keep_temp_on_off_flag == keep_temp_close){
         KEEP_HEAT_LED_OFF();
-		//RELAY_KEEP_TEMP_SetLow();
+		RELAY_KEEP_TEMP_SetLow();
 
      }
 

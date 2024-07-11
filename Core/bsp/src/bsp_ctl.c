@@ -5,7 +5,7 @@
 uint8_t (*relay_tape_state)(void);
 uint8_t (*relay_fan_state)(void);
 uint8_t (*relay_kill_state)(void);
-uint8_t (*relay_temp_flag_state)(void);
+uint8_t (*relay_settemp_flag_state)(void);
 uint8_t (*relay_keep_temp_run_state)(void);
 
 
@@ -32,7 +32,7 @@ void bsp_ctl_init(void)
     Relay_Tape_Process(relay_tape_fun);
 	Relay_Fan_Process(relay_fan_fun);
 	Relay_Kill_Process(relay_kill_fun);
-	Relay_Temp_Flag_Handler(relay_set_temp_flag_fun);
+	Relay_SetTemp_Flag_Handler(relay_set_temp_flag_fun);
 	Relay_Keep_Temp_Process(relay_keep_temp_run_fun);
 
 }
@@ -110,7 +110,7 @@ uint8_t relay_keep_temp_run_fun(void)
 	
   //  ctl_t.disp_ntc_res_liner_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
     
-	if(relay_temp_flag_state() ==1){ //has been set up temperature value 
+	if(relay_settemp_flag_state() ==1){ //has been set up temperature value 
 	 
          if(pro_t.set_keep_temp_value > ctl_t.disp_ntc_res_liner_temp_value ){
 
@@ -186,7 +186,7 @@ uint8_t relay_keep_temp_run_fun(void)
 
 	 }
 	else{
-        
+        ctl_t.relay_keep_temp_on_off_flag = keep_temp_close; //open 
 		KEEP_HEAT_LED_OFF();
 		RELAY_KEEP_TEMP_SetLow();
 		KEY_FUN_CONFIRM_LED_ON() ;
@@ -268,10 +268,10 @@ void Relay_Keep_Temp_Process(uint8_t(*relay_temp_handler)(void))
    relay_keep_temp_run_state = relay_temp_handler;
 
 }
-void Relay_Temp_Flag_Handler(uint8_t(*relay_temp_flag_handler)(void))
+void Relay_SetTemp_Flag_Handler(uint8_t(*relay_temp_flag_handler)(void))
 {
 
-	relay_temp_flag_state = relay_temp_flag_handler;
+	relay_settemp_flag_state = relay_temp_flag_handler;
 
 }
 
