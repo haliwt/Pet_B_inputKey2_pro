@@ -82,7 +82,7 @@ typedef struct{
    uint8_t key_fun;
    uint8_t key_value;
    uint8_t fun_key_be_pressing_flag;
-   uint8_t key_short_confirm_flag;
+ 
    uint8_t key_long_confirm_flag;
    uint8_t set_temp_value_success_flag;
    uint8_t set_keep_temp_value;
@@ -99,6 +99,7 @@ typedef struct{
    uint8_t gTimer_pro_select;
    uint8_t gTimer_display_relay_led ;
    uint8_t gTimer_pro_det_dog;
+   uint8_t gTimer_counter_exit_select_fun;
    
    
  }main_prcess_t;
@@ -113,6 +114,7 @@ void Key_Handler(uint8_t key_value);
 void Main_Process(void);
 
 
+void exit_select_position_flag(void);
 
 #endif 
 

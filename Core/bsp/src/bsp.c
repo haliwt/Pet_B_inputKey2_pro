@@ -62,7 +62,7 @@ void Key_Handler(uint8_t key_value)
   switch(key_value){
 
 
-     case fun_key:  //fun key 
+     case fun_key:  //fun -sekect key 
 
         switch(pro_t.key_as_numbers_input_flag){
 
@@ -76,11 +76,14 @@ void Key_Handler(uint8_t key_value)
 			ctl_t.digital_numbers++; //scope : 16~30度
 			if(ctl_t.digital_numbers <16)ctl_t.digital_numbers =16;
 			if(ctl_t.digital_numbers>30) ctl_t.digital_numbers=30;
+
+            pro_t.gTimer_counter_exit_select_fun =0;
 			Run_Keep_Heat_Setup_Digital_Numbers(ctl_t.digital_numbers);
 			  
 			break;
 
-		 case 0: // relay of switch form A to D 
+		 case 0: // relay by select  from A to D --normal function is selection 
+		 
 		 pro_t.iwdg_detected_times=0;
 		 KEY_FUN_CONFIRM_LED_ON() ; 
          pro_t.key_fun++;
@@ -96,6 +99,8 @@ void Key_Handler(uint8_t key_value)
 
 		        relay_id_led = relay_tape_led_on;
 				ctl_t.gTimer_select_fun=0;
+          
+                pro_t.gTimer_counter_exit_select_fun =0;
 				pro_t.fun_key_be_pressing_flag=1;
 		 
 
@@ -104,7 +109,8 @@ void Key_Handler(uint8_t key_value)
 		    case relay_b_fan_led:
 				relay_id_led = relay_fan_led_on;
 				ctl_t.gTimer_select_fun=0;
-				pro_t.key_short_confirm_flag=0;
+			
+                pro_t.gTimer_counter_exit_select_fun =0;
 				pro_t.fun_key_be_pressing_flag=1;
 				
 
@@ -113,7 +119,8 @@ void Key_Handler(uint8_t key_value)
 			case relay_c_kill_led:  // 
 				relay_id_led = relay_kill_led_on;
 				ctl_t.gTimer_select_fun=0;
-				pro_t.key_short_confirm_flag=0;
+			
+                pro_t.gTimer_counter_exit_select_fun =0;
 				 pro_t.fun_key_be_pressing_flag=1;
 				
 		    break;
@@ -123,7 +130,8 @@ void Key_Handler(uint8_t key_value)
 			   
 				relay_id_led = relay_keep_temp_led_on;
 				ctl_t.gTimer_select_fun=0;
-				pro_t.key_short_confirm_flag=0;//WT.EDIT 2023.12.20
+			
+				pro_t.gTimer_counter_exit_select_fun =0;
 				pro_t.fun_key_be_pressing_flag=1;
 			 
 		    break;
@@ -157,7 +165,7 @@ void Key_Handler(uint8_t key_value)
 
 
      }
-	 else{// confrim key be used to "confrm" key done .
+	 else{// confrim key be used to "confrm" key done .---> confirm wich led of by sure done.
 
       switch(relay_id_led){
 
@@ -165,50 +173,50 @@ void Key_Handler(uint8_t key_value)
 
 		      if(ctl_t.relay_tape_flag ==0){
 				 ctl_t.relay_tape_flag =1;
-                  pro_t.key_fun=0;
+               
 				  TAPE_LED_ON();
 				  RELAY_TAPE_SetHigh();
 			  } 
 			  else{
 				  ctl_t.relay_tape_flag =0;
-                   pro_t.key_fun=0;
 				   TAPE_LED_OFF(); 
 				  RELAY_TAPE_SetLow();
 			  } 
 		      pro_t.fun_key_be_pressing_flag=0;
+              pro_t.gTimer_counter_exit_select_fun =0;
 
 		   break;
 		 
 		    case relay_fan_led_on:
 				if(ctl_t.relay_fan_flag==0){
 					ctl_t.relay_fan_flag=1;
-                     pro_t.key_fun=0;
 					 FAN_LED_ON();
 					RELAY_FAN_SetHigh();
 				}
 				else{
 					ctl_t.relay_fan_flag=0;
-                     pro_t.key_fun=0;
+               
 					FAN_LED_OFF(); 
 		            RELAY_FAN_SetLow();
 				}
 				 pro_t.fun_key_be_pressing_flag=0;
+                 pro_t.gTimer_counter_exit_select_fun =0;
 			break;
 
 			case relay_kill_led_on:  // 
 				if(ctl_t.relay_kill_flag==0){
 					ctl_t.relay_kill_flag=1;
-                     pro_t.key_fun=0;
+                     
 					KILL_LED_ON();
 		            RELAY_KILL_SetHigh();
 				}else{
 					ctl_t.relay_kill_flag=0;
-                     pro_t.key_fun=0;
+                     
 					 KILL_LED_OFF(); 
 		             RELAY_KILL_SetLow();
 				}
 				 pro_t.fun_key_be_pressing_flag=0;
-				
+				 pro_t.gTimer_counter_exit_select_fun =0;
 				
 		    break;
 
@@ -217,13 +225,13 @@ void Key_Handler(uint8_t key_value)
 			  switch(pro_t.set_temp_value_success_flag){
 
 			   case 1: //normal -> cancle 
-                 pro_t.key_fun=0; //WT.EDIT 2024.07.11
+                
 			     ctl_t.set_keep_heat_tempeature_flag=0; //WT.EDIT.2024.05.17
 			 	 pro_t.set_temp_value_success_flag=0;
            
              
 				 ctl_t.gTimer_select_fun =10;
-				 pro_t.key_short_confirm_flag =1;
+				
 			
 				 KEY_FUN_CONFIRM_LED_OFF() ;  
 			     pro_t.fun_key_be_pressing_flag=0;
@@ -231,7 +239,7 @@ void Key_Handler(uint8_t key_value)
 	              RELAY_KEEP_TEMP_SetLow();
 				  KEY_FUN_CONFIRM_LED_ON() ;
 				  ADD_DEC_LED_OFF();
-
+                  pro_t.gTimer_counter_exit_select_fun =0;
 			 
 			  break;
 
@@ -240,6 +248,7 @@ void Key_Handler(uint8_t key_value)
 			  if(pro_t.key_as_numbers_input_flag ==0){
 				  pro_t.key_as_numbers_input_flag =1;
 				  ctl_t.gTimer_select_fun=0;
+                  pro_t.gTimer_counter_exit_select_fun =0;
 		          ADD_DEC_LED_ON();
 
 			  }
@@ -247,6 +256,7 @@ void Key_Handler(uint8_t key_value)
 
 			    ctl_t.gTimer_select_fun=0;
 				pro_t.gTimer_pro_disp_temp=0;
+                pro_t.gTimer_counter_exit_select_fun =0;
 				disp_keep_temp_value = 0xff;
                 if(the_first_dec_key==0){
                      the_first_dec_key++;
@@ -260,6 +270,8 @@ void Key_Handler(uint8_t key_value)
                 }
 				Run_Keep_Heat_Setup_Digital_Numbers(ctl_t.digital_numbers);
 			  }
+
+             
 			  
 			  break;
 
@@ -274,7 +286,6 @@ void Key_Handler(uint8_t key_value)
         
 	  break;
 	  
-     //function key long be pressed 
 	 case confirm_long_key: //confirm long by pressed 
          pro_t.iwdg_detected_times=0;
 	    if(pro_t.key_as_numbers_input_flag ==1){
@@ -310,6 +321,8 @@ void Key_Handler(uint8_t key_value)
 
             }
 		   pro_t.fun_key_be_pressing_flag=0;
+
+           pro_t.gTimer_counter_exit_select_fun = 0;
 		}
 
 
@@ -317,11 +330,11 @@ void Key_Handler(uint8_t key_value)
 
 	 break;
 
-     case fun_long_key :
+     case fun_long_key : //all function be shut off
         
        SetRelay_TurnOff_Fun();
 
-     
+      pro_t.gTimer_counter_exit_select_fun = 40; //at once to switch form raly A number: 1.
 
 
      break;
@@ -446,7 +459,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 			
 		}
 		else{
-            pro_t.key_fun=0; //WT.EDIT 2024.07.11
+
 			pro_t.fun_key_be_pressing_flag=0;
 		    pro_t.key_as_numbers_input_flag =0;
 		    pro_t.gTimer_pro_key=50; //at once to switch normal relay display led 
@@ -481,7 +494,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 	
        }
        else{
-           pro_t.key_fun=0; //WT.EDIT 2024.07.11
+ 
 	   	  ctl_t.select_fun_led_blink_flag = 0;
 		  pro_t.fun_key_be_pressing_flag=0;
 		  pro_t.key_as_numbers_input_flag =0;
@@ -512,7 +525,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 			
 		}
 		else{
-            pro_t.key_fun=0; //WT.EDIT 2024.07.11
+           
             ctl_t.select_fun_led_blink_flag = 0;
 			pro_t.fun_key_be_pressing_flag=0;
 			pro_t.key_as_numbers_input_flag =0;
@@ -563,7 +576,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 		
        	}
 	    else{
-            pro_t.key_fun=0; //WT.EDIT 2024.07.11
+          
             ctl_t.select_fun_led_blink_flag = 0;
 			pro_t.fun_key_be_pressing_flag =0;
 			pro_t.key_as_numbers_input_flag =0;
@@ -583,6 +596,17 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
     break;
 
     }
+
+}
+
+
+void exit_select_position_flag(void)
+{
+    if(pro_t.gTimer_counter_exit_select_fun > 29){
+        pro_t.key_fun=0;    
+
+    }
+
 
 }
 

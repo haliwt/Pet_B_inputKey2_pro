@@ -74,6 +74,7 @@ static void vTaskRunPro(void *pvParameters)
   while(1)
   {
      bsp_Idle();
+     exit_select_position_flag();
      Main_Process();
    
      vTaskDelay(40);//(40)
@@ -185,6 +186,8 @@ static void vTaskMsgPro(void *pvParameters)
                  } 
 
               }
+
+              
         
            }
              
@@ -210,7 +213,7 @@ static void vTaskStart(void *pvParameters)
         while(FUN_KEY_VALUE()== KEY_DOWN && fun_key_long_counter < 2965500){
                
                fun_key_long_counter++;
-               if(fun_key_long_counter > 2860000){ //2960000
+               if(fun_key_long_counter > 1800001){ //2960000
                    fun_key_long_counter = 2965900;
 
                 xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
@@ -240,7 +243,7 @@ static void vTaskStart(void *pvParameters)
          while(CONFIRM_KEY_VALUE() == KEY_DOWN && confirm_long_key_counter < 2965500){
 
                confirm_long_key_counter++;
-               if(confirm_long_key_counter > 2860000){//2960000
+               if(confirm_long_key_counter > 1800001){//2960000
                    confirm_long_key_counter = 2965900;
                
                xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */

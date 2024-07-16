@@ -81,6 +81,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		pro_t.gTimer_display_relay_led ++;
 		pro_t.gTimer_pro_det_dog++;
         pro_t.gTimer_pro_long_key_timer++;
+        pro_t.gTimer_counter_exit_select_fun++;
         
        
 		}
