@@ -114,6 +114,7 @@ void relay_keep_temperature_led_on_off(void)
 void SetRelay_TurnOff_Fun(void)
 {
 
+   ctl_t.gTimer_select_fun = 10;
    Relay_Init();
 
    Relay_Confirm_Turn_OnOff_Fun();
@@ -121,11 +122,15 @@ void SetRelay_TurnOff_Fun(void)
    pro_t.set_temp_value_success_flag = 0;
    ctl_t.relay_keep_temp_on_off_flag =0;
 
+ 
+
+   //keep temperature is turn off 
    KEEP_HEAT_LED_OFF();
    RELAY_KEEP_TEMP_SetLow();
    KEY_FUN_CONFIRM_LED_ON() ;
    ADD_DEC_LED_OFF();
 
+   
 }
 
 
