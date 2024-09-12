@@ -362,7 +362,7 @@ void Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
       decade_temp  = numbers / 10;
       uint_temp =   numbers  % 10;
 
-	  decimal_point =   0;//ctl_t.temperature_decimal_point_value ;
+	  decimal_point =  0;
    
  
 //   if(ctl_t.gTimer_smg_turn_on < 100){ //20*10 =200ms
@@ -373,10 +373,10 @@ void Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
 
         if(gpro_t.child_lock_flag == 0){
 
-		TM1650_Write_Data(0x6A,segNumber[uint_temp]+seg_h);//bit two
+		    TM1650_Write_Data(0x6A,segNumber[uint_temp]+seg_h);//bit two
 
 
-	    TM1650_Write_Data(0x6C,segNumber[decimal_point]);//decimal_point
+	         TM1650_Write_Data(0x6C,segNumber[decimal_point]);//decimal_point
         }
         else{
 
@@ -411,11 +411,11 @@ void Repeat_Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
       decade_temp  = numbers / 10;
       uint_temp =   numbers  % 10;
 
-	  decimal_point =   0;//ctl_t.temperature_decimal_point_value ;
+	  decimal_point = 0;
    
  
    if(ctl_t.gTimer_smg_turn_on < 300){ //20*10 =200ms
-	     TM1650_Write_Data(0x48,0x71);//初始化为7级灰度，开显示,power off TM1650_Set(0x48,0x30);
+	    
 	     
 		
 		TM1650_Write_Data(0x68,segNumber[decade_temp]);//bit one  
@@ -446,7 +446,7 @@ void Repeat_Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
 	}
 
 	
-	
+	 TM1650_Write_Data(0x48,0x71);//初始化为7级灰度，开显示,power off TM1650_Set(0x48,0x30);
 
 }
 
