@@ -268,7 +268,7 @@ void Smg_Display_Temp_Degree_Handler(uint8_t temp_value)
    
  
   
-	TM1650_Write_Data(0x48,0x71);//初始化为7级灰度，开显示,power off TM1650_Set(0x48,0x30);
+	
 	TM1650_Write_Data(0x68,segNumber[decade_temp]);//bit one  
    
     if(gpro_t.child_lock_flag ==0){
@@ -288,6 +288,8 @@ void Smg_Display_Temp_Degree_Handler(uint8_t temp_value)
 
 
     }
+
+  TM1650_Write_Data(0x48,0x71);//初始化为7级灰度，开显示,power off TM1650_Set(0x48,0x30);
 	
 }
 
@@ -304,7 +306,7 @@ void Smg_Display_Temp_Degree_And_Char_L_Handler(uint8_t temp_value)
    
  
   
-	TM1650_Write_Data(0x48,0x71);//初始化为7级灰度，开显示,power off TM1650_Set(0x48,0x30);
+
 	TM1650_Write_Data(0x68,segNumber[decade_temp]);//bit one  
    
 
@@ -315,6 +317,8 @@ void Smg_Display_Temp_Degree_And_Char_L_Handler(uint8_t temp_value)
     //TM1650_Write_Data(0x6C,segNumber[decimal_point]);//decimal_point
 
     TM1650_Write_Data(0x6C,segL[0]);
+
+    TM1650_Write_Data(0x48,0x71);//初始化为7级灰度，开显示,power off TM1650_Set(0x48,0x30);
 	
 }
 

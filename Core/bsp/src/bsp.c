@@ -409,7 +409,7 @@ void Main_Process(void)
 
                 Read_NTC_Temperature_Value_Handler();
                 ctl_t.disp_ntc_res_liner_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
-                //Smg_Display_Temp_Degree_Handler(ctl_t.disp_ntc_res_liner_temp_value);
+        
                 Smg_Display_Temp_Degree_And_Char_L_Handler(ctl_t.disp_ntc_res_liner_temp_value);
                 }
 
