@@ -97,7 +97,7 @@ static void vTaskMsgPro(void *pvParameters)
     BaseType_t xResult;
 	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为300ms */
 	uint32_t ulValue;
-    static uint8_t fun_long_key_flag,confirm_long_key_flag;
+    static uint8_t fun_long_key_flag,confirm_long_key_flag,child_lock_flag;
    
 	
     while(1)
@@ -150,10 +150,13 @@ static void vTaskMsgPro(void *pvParameters)
                 
                    if(gpro_t.child_lock_flag ==0){
                        gpro_t.child_lock_flag = 1;
+                       child_lock_flag=1;
+                      
                     }
                     else{
-
+                       child_lock_flag= 2;
                        gpro_t.child_lock_flag = 0;
+                       
 
                     }
                    fun_long_key_flag=1;
@@ -170,6 +173,21 @@ static void vTaskMsgPro(void *pvParameters)
            
        }
 	   else{
+
+
+         if(child_lock_flag==1){
+             child_lock_flag= 4;
+             Smg_Display_Temp_Degree_And_Char_L_Handler(ctl_t.disp_ntc_res_liner_temp_value);
+
+         }
+         else if(child_lock_flag==2){
+
+               child_lock_flag =3;
+             Smg_Display_Temp_Degree_Handler(ctl_t.disp_ntc_res_liner_temp_value);
+
+         }
+
+          
 
 
           if(gpro_t.child_lock_flag ==0){
@@ -222,11 +240,11 @@ static void vTaskStart(void *pvParameters)
 
              confirm_long_key_counter=0;
 
-        while(FUN_KEY_VALUE()== KEY_DOWN && fun_key_long_counter < 2965000){ //child lock is funtion
+        while(FUN_KEY_VALUE()== KEY_DOWN && fun_key_long_counter < 2012345){ //child lock is funtion
                
                fun_key_long_counter++;
-               if(fun_key_long_counter > 1000099){//1000099(1.5s)//999999(1.2s)//900099(1s)//800001 //1800001(2s)//2960000
-                   fun_key_long_counter = 2965900;
+               if(fun_key_long_counter > 990099){//990099(1.5s)//999999(1.2s)//900001(1s)//800001 //1800001(2s)//2960000
+                  fun_key_long_counter = 2900909;
 
                 xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
                             FUN_LONGK_KEY_CHILD_LOCK_2,            /* 设置目标任务事件标志位bit0  */
@@ -237,7 +255,7 @@ static void vTaskStart(void *pvParameters)
          }
 
 
-         if(fun_key_long_counter < 2965900 ){
+         if(fun_key_long_counter < 990099){
 
              
                xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
