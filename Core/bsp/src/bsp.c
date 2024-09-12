@@ -526,10 +526,10 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 		    gpro_t.key_as_numbers_input_flag =0;
 		    gpro_t.gTimer_pro_key=50; //at once to switch normal relay display led 
 		    ctl_t.select_fun_led_blink_flag = 0;
-		    //Relay_Tape_State();
+		    
 		}
 		
-		if(gpro_t.gTimer_pro_key > 20){//200ms
+		if(gpro_t.gTimer_pro_key > 20 && ctl_t.select_fun_led_blink_flag == 0){//200ms
  			gpro_t.gTimer_pro_key=0;	
 			Relay_Confirm_Turn_OnOff_Fun();
 		}
@@ -561,9 +561,10 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 		  gpro_t.fun_key_be_pressing_flag=0;
 		  gpro_t.key_as_numbers_input_flag =0;
 	      gpro_t.gTimer_pro_key=50; //at once to switch normal relay display led 
-	   	//  Relay_Fan_State();
+	   	  
 	   }
-	   if(gpro_t.gTimer_pro_key > 20){//300ms
+       
+	   if(gpro_t.gTimer_pro_key > 20 && ctl_t.select_fun_led_blink_flag == 0){//300ms
 	       gpro_t.gTimer_pro_key=0;
 		  Relay_Confirm_Turn_OnOff_Fun();
 	    }		
@@ -594,7 +595,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 		     gpro_t.gTimer_pro_key=50; //at once to switch normal relay display led 
 			
 		}
-		if(gpro_t.gTimer_pro_key > 20){//200ms
+		if(gpro_t.gTimer_pro_key > 20 && ctl_t.select_fun_led_blink_flag == 0){//200ms
  			gpro_t.gTimer_pro_key=0;
             Relay_Confirm_Turn_OnOff_Fun();
 		}
@@ -648,7 +649,7 @@ static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 			Relay_Keep_Temp_State();
 		  }
 		  
-		if(gpro_t.gTimer_pro_key > 20){//300ms
+		if(gpro_t.gTimer_pro_key > 20 && ctl_t.select_fun_led_blink_flag == 0){//300ms
 			gpro_t.gTimer_pro_key=0;
              Relay_Confirm_Turn_OnOff_Fun();
 		}
