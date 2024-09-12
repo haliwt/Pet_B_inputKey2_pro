@@ -1357,7 +1357,7 @@ uint8_t Disp_NtcRes_LinearValue(uint8_t ntc_value)
                                Smg_Display_Temp_Degree_Handler(disp_ntc_value[1]);
                             else
                                 Smg_Display_Temp_Degree_And_Char_L_Handler(disp_ntc_value[1]);
-							osDelay(200);//HAL_Delay(200);
+							HAL_Delay(200);
 							 return disp_ntc_value[1];
 		 
 					  }
@@ -1373,7 +1373,7 @@ uint8_t Disp_NtcRes_LinearValue(uint8_t ntc_value)
                                  Smg_Display_Temp_Degree_Handler(disp_ntc_value[0]);
                              else
                                    Smg_Display_Temp_Degree_And_Char_L_Handler(disp_ntc_value[0]);
-					          osDelay(200);//HAL_Delay(200);
+					          HAL_Delay(200);
 		 
 							  return  disp_ntc_value[0]  ;
 		 
@@ -1389,8 +1389,8 @@ uint8_t Disp_NtcRes_LinearValue(uint8_t ntc_value)
 					       if(gpro_t.child_lock_flag == 0)
 					           Smg_Display_Temp_Degree_Handler(disp_ntc_value[1]);
                             else
-                                Smg_Display_Temp_Degree_And_Char_L_Handler(disp_ntc_value[0]);
-					        osDelay(200);// HAL_Delay(200);
+                                Smg_Display_Temp_Degree_And_Char_L_Handler(disp_ntc_value[1]);
+					        HAL_Delay(200);
 		   
 						   return disp_ntc_value[1];
 				  
@@ -1407,7 +1407,7 @@ uint8_t Disp_NtcRes_LinearValue(uint8_t ntc_value)
                               else
                                 Smg_Display_Temp_Degree_And_Char_L_Handler(disp_ntc_value[0]);
                               
-					         osDelay(200);//HAL_Delay(200);
+					         HAL_Delay(200);
 		 
 				
 		 
