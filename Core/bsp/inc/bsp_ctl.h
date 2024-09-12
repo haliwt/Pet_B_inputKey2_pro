@@ -93,7 +93,7 @@ typedef struct _touchpad_t{
      
 	//taouchpad
 	 int8_t temperature_rectify_value;
-	 int8_t digital_numbers;
+	 int8_t set_digital_numbers;
 	 uint16_t ntc_voltage_value;
 	 uint64_t relay_flag_flash_data;
 	 uint64_t relay_keep_temp_data;

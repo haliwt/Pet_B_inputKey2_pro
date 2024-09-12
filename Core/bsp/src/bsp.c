@@ -15,6 +15,8 @@ uint8_t  disp_keep_temp_value ;
 
 uint64_t write_flash_datta;
 
+uint8_t keep_heat_temp_number_flag;
+
 /*
 *********************************************************************************************************
 *	函 数 名: bsp_Idle
@@ -73,12 +75,13 @@ void Key_Handler(uint8_t key_value)
 			disp_keep_temp_value =0xff;
 			gpro_t.gTimer_pro_disp_temp=0; //display set keep temperature value
 			//
-			ctl_t.digital_numbers++; //scope : 16~30度
-			if(ctl_t.digital_numbers <16)ctl_t.digital_numbers =16;
-			if(ctl_t.digital_numbers>30) ctl_t.digital_numbers=30;
+			ctl_t.set_digital_numbers++; //scope : 16~30度
+			if(ctl_t.set_digital_numbers <16)ctl_t.set_digital_numbers =16;
+			if(ctl_t.set_digital_numbers>30) ctl_t.set_digital_numbers=30;
 
             gpro_t.gTimer_counter_exit_select_fun =0;
-			Run_Keep_Heat_Setup_Digital_Numbers(ctl_t.digital_numbers);
+            keep_heat_temp_number_flag=1;
+			Run_Keep_Heat_Setup_Digital_Numbers(ctl_t.set_digital_numbers);
 			  
 			break;
 
@@ -150,7 +153,7 @@ void Key_Handler(uint8_t key_value)
       gpro_t.iwdg_detected_times=0;
 	  if(gpro_t.fun_key_be_pressing_flag==0){ //if don't be pressed "select key(fun key)",display set temp value 
         
-	   if( gpro_t.set_temp_value_success_flag == 1){ //display has been set keep heat temperatur value .exmalpe "28"
+	   if(gpro_t.set_temp_value_success_flag == 1){ //display has been set keep heat temperatur value .exmalpe "28"
 		gpro_t.gTimer_pro_disp_temp=0;
         disp_keep_temp_value =1;
 
@@ -225,7 +228,7 @@ void Key_Handler(uint8_t key_value)
 			  switch(gpro_t.set_temp_value_success_flag){
 
 
-			   case 1: //normal -> cancle 
+			   case 1: //normal -> cancle has been set temperature value .
                 
 			     ctl_t.set_keep_heat_tempeature_flag=0; //WT.EDIT.2024.05.17
 			 	 gpro_t.set_temp_value_success_flag=0;
@@ -261,15 +264,16 @@ void Key_Handler(uint8_t key_value)
 				disp_keep_temp_value = 0xff;
                 if(the_first_dec_key==0){
                      the_first_dec_key++;
-                     ctl_t.digital_numbers--; //scope : 16~30度
-				    if(ctl_t.digital_numbers <16) ctl_t.digital_numbers=30;
+                     ctl_t.set_digital_numbers--; //scope : 16~30度
+				    if(ctl_t.set_digital_numbers <16) ctl_t.set_digital_numbers=30;
 
                 }
                 else{
-				ctl_t.digital_numbers--; //scope : 16~30度
-				if(ctl_t.digital_numbers <16) ctl_t.digital_numbers=16;
+    				ctl_t.set_digital_numbers--; //scope : 16~30度
+    				if(ctl_t.set_digital_numbers <16) ctl_t.set_digital_numbers=16;
                 }
-				Run_Keep_Heat_Setup_Digital_Numbers(ctl_t.digital_numbers);
+                keep_heat_temp_number_flag=2;
+				Run_Keep_Heat_Setup_Digital_Numbers(ctl_t.set_digital_numbers);
 			  }
 
              
@@ -304,8 +308,20 @@ void Key_Handler(uint8_t key_value)
 		   disp_keep_temp_value =0;
 		   ctl_t.gTimer_read_adc =20;
           
-		
-		   gpro_t.set_keep_temp_value = ctl_t.digital_numbers;
+		   if(keep_heat_temp_number_flag > 0){ //WT.EDIT 2024.09.12
+                keep_heat_temp_number_flag=0;
+    		    gpro_t.set_keep_temp_value = ctl_t.set_digital_numbers;
+            }
+            else{
+
+               if(ctl_t.disp_ntc_res_liner_temp_value > 30)ctl_t.disp_ntc_res_liner_temp_value =30;
+               else if(ctl_t.disp_ntc_res_liner_temp_value <16 )ctl_t.disp_ntc_res_liner_temp_value =16;
+               
+               gpro_t.set_keep_temp_value = ctl_t.disp_ntc_res_liner_temp_value;
+
+            }
+
+           
 		   if(gpro_t.set_keep_temp_value > ctl_t.temperature_value ){
                    KEEP_HEAT_LED_ON();
 	               RELAY_KEEP_TEMP_SetHigh();
