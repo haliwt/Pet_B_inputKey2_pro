@@ -119,5 +119,8 @@ void Main_Process(void);
 
 void exit_select_position_flag(void);
 
+void confirm_key_long_fun(void);
+
+
 #endif 
 

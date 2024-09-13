@@ -157,8 +157,8 @@ uint8_t relay_keep_temp_run_fun(void)
 
                      }
 
-			  }
-              else{
+	    }
+        else{
                ctl_t.relay_keep_temp_on_off_flag = keep_temp_close; //cloused 
                if(ctl_t.set_keep_heat_tempeature_flag == 1){
                  if(ctl_t.again_open_relay_ptc==0){

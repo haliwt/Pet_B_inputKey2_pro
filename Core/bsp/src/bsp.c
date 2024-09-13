@@ -385,17 +385,15 @@ void Main_Process(void)
 
 	   case 0: //works normal temperature value 
 
-           switch(gpro_t.child_lock_flag){
-
-           case 0:
-
+          
            
 			if((ctl_t.gTimer_read_adc >4) && ctl_t.thefirst_detected_temp_falg==1){
 			  ctl_t.gTimer_read_adc =0;
 		     
                Read_NTC_Temperature_Value_Handler();
                ctl_t.disp_ntc_res_liner_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
-			    Smg_Display_Temp_Degree_Handler(ctl_t.disp_ntc_res_liner_temp_value);
+                Smg_Display_Temp_Degree_Handler(ctl_t.disp_ntc_res_liner_temp_value);
+                 
 		    }
 
             if(ctl_t.thefirst_detected_temp_falg == 0 && ctl_t.gTimer_read_adc < 8){
@@ -404,40 +402,12 @@ void Main_Process(void)
                
             }
 
-           
 
-           break;
-
-           case 1: //display child lock "23L"
-         
-
-                if((ctl_t.gTimer_read_adc >4) && ctl_t.thefirst_detected_temp_falg==1){
-                ctl_t.gTimer_read_adc =0;
-
-                Read_NTC_Temperature_Value_Handler();
-                ctl_t.disp_ntc_res_liner_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
-        
-                Smg_Display_Temp_Degree_And_Char_L_Handler(ctl_t.disp_ntc_res_liner_temp_value);
-                }
-
-                if(ctl_t.thefirst_detected_temp_falg == 0 && ctl_t.gTimer_read_adc < 8){
-                ctl_t.thefirst_detected_temp_falg ++ ;  
-                Read_NTC_Temperature_Init_Handler();
-
-                }
-
-            
-
-           break;
-             
-			
            if(gpro_t.gTimer_display_relay_led > 3){
 			   gpro_t.gTimer_display_relay_led =0;
 			   Relay_Confirm_Turn_OnOff_Fun();   
 			 
           	}
-
-          }
 
 		break;
 
@@ -456,7 +426,7 @@ void Main_Process(void)
 		      Smg_Display_Temp_Degree_Handler(ctl_t.disp_ntc_res_liner_temp_value);
             }
             else{
-                Smg_Display_Temp_Degree_And_Char_L_Handler(ctl_t.disp_ntc_res_liner_temp_value);
+               Smg_Display_Temp_Degree_And_Char_L_Handler(ctl_t.disp_ntc_res_liner_temp_value);
             }
 		}
 
@@ -684,4 +654,57 @@ void exit_select_position_flag(void)
 
 }
 
+void confirm_key_long_fun(void)
+{
+    gpro_t.iwdg_detected_times=0;
+	    if(gpro_t.key_as_numbers_input_flag ==1){
+
+	        ctl_t.gTimer_select_fun=20;
+			gpro_t.key_as_numbers_input_flag =0;
+		
+			ADD_DEC_LED_OFF();
+		
+		   gpro_t.set_temp_value_success_flag = 1; //set keep temperature is complete.
+		   ctl_t.set_keep_heat_tempeature_flag = 1;   //WT.EIDT .2024.05.17 new add item .
+		   ctl_t.again_open_relay_ptc=0;  //WT.EDIT .2024.05.20 the first times at once open PTC .
+            
+		   gpro_t.long_key_flag =0; //repeat by pressed key_confirm .
+		   disp_keep_temp_value =0;
+		   ctl_t.gTimer_read_adc =20;
+          
+		   if(keep_heat_temp_number_flag > 0){ //WT.EDIT 2024.09.12
+                keep_heat_temp_number_flag=0;
+    		    gpro_t.set_keep_temp_value = ctl_t.set_digital_numbers;
+            }
+            else{
+
+               if(ctl_t.disp_ntc_res_liner_temp_value > 30)ctl_t.disp_ntc_res_liner_temp_value =30;
+               else if(ctl_t.disp_ntc_res_liner_temp_value <16 )ctl_t.disp_ntc_res_liner_temp_value =16;
+               
+               gpro_t.set_keep_temp_value = ctl_t.disp_ntc_res_liner_temp_value;
+
+            }
+
+           
+		   if(gpro_t.set_keep_temp_value > ctl_t.temperature_value ){
+                   KEEP_HEAT_LED_ON();
+	               RELAY_KEEP_TEMP_SetHigh();
+				   KEY_FUN_CONFIRM_LED_ON() ;  
+				   ADD_DEC_LED_OFF();
+
+			}
+            else{
+              
+			      KEEP_HEAT_LED_OFF();
+	              RELAY_KEEP_TEMP_SetLow();
+				  KEY_FUN_CONFIRM_LED_ON() ;
+				  ADD_DEC_LED_OFF();
+
+            }
+		   gpro_t.fun_key_be_pressing_flag=0;
+
+           gpro_t.gTimer_counter_exit_select_fun = 0;
+		}
+
+}
 

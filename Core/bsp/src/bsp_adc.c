@@ -59,9 +59,9 @@ static uint16_t Get_Adc_Hex_Average(uint8_t times)
 	for(t=0;t<times;t++)
 	{
 		temp_val+=Get_Adc_Hex_Value();
-		//delay_ms(5);
+		HAL_Delay(10);
 	}
-	return temp_val/times;
+	return (uint16_t)temp_val/times;
 } 
 
 

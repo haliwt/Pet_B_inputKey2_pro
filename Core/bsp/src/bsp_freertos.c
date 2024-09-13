@@ -22,7 +22,7 @@
 											函数声明
 ***********************************************************************************************************/
 //static void vTaskTaskUserIF(void *pvParameters);
-static void vTaskRunPro(void *pvParameters);
+//static void vTaskRunPro(void *pvParameters);
 static void vTaskMsgPro(void *pvParameters);
 static void vTaskStart(void *pvParameters);
 static void AppTaskCreate (void);
@@ -34,13 +34,29 @@ static void AppTaskCreate (void);
 **********************************************************************************************************
 */
 //static TaskHandle_t xHandleTaskUserIF = NULL;
-static TaskHandle_t xHandleTaskRunPro = NULL;
+//static TaskHandle_t xHandleTaskRunPro = NULL;
 static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
 
 
-uint32_t confirm_long_key_counter;
-uint32_t fun_key_long_counter;
+
+
+typedef struct _KEY_STATE{
+
+    uint8_t  fun_key_flag;
+    uint8_t  ok_key_flag;
+    uint8_t  fun_key_long_flag;
+    uint8_t  ok_key_long_flag; 
+
+    
+    uint16_t confirm_long_key_counter;
+    uint16_t fun_key_long_counter;
+
+
+
+}KEY_STATE_REF;
+
+KEY_STATE_REF  g_ks;
 
 
 /**********************************************************************************************************
@@ -70,19 +86,19 @@ void freeRTOS_Handler(void)
 *   优 先 级: 3  
 *********************************************************************************************************
 */
-static void vTaskRunPro(void *pvParameters)
-{
-
-  while(1)
-  {
-     bsp_Idle();
-     exit_select_position_flag();
-     Main_Process();
-   
-     vTaskDelay(40);//(40)
-  }
-	
-}
+//static void vTaskRunPro(void *pvParameters)
+//{
+//
+//  while(1)
+//  {
+//     bsp_Idle();
+//     exit_select_position_flag();
+//     Main_Process();
+//   
+//     vTaskDelay(10);//(40)
+//  }
+//	
+//}
 /*
 *********************************************************************************************************
 *	函 数 名: vTaskMsgPro
@@ -94,131 +110,89 @@ static void vTaskRunPro(void *pvParameters)
 */
 static void vTaskMsgPro(void *pvParameters)
 {
-    BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为300ms */
-	uint32_t ulValue;
-    static uint8_t fun_long_key_flag,confirm_long_key_flag,child_lock_flag;
-   
-	
-    while(1)
+  
+   while(1)
     {
-		/*
-			第一个参数 ulBitsToClearOnEntry的作用（函数执行前）：
-		          ulNotifiedValue &= ~ulBitsToClearOnEntry
-		          简单的说就是参数ulBitsToClearOnEntry那个位是1，那么notification value
-		          的那个位就会被清零。
+	   if(g_ks.fun_key_flag == 1){
 
-		          这里ulBitsToClearOnEntry = 0x00000000就是函数执行前保留所有位。
-		
-		    第二个参数 ulBitsToClearOnExit的作用（函数退出前）：			
-				  ulNotifiedValue &= ~ulBitsToClearOnExit
-		          简单的说就是参数ulBitsToClearOnEntry那个位是1，那么notification value
-		          的那个位就会被清零。
+          if(FUN_KEY_VALUE()== KEY_UP){
+             g_ks.fun_key_flag++;
 
-				  这里ulBitsToClearOnExi = 0xFFFFFFFF就是函数退出前清楚所有位。
-		
-		    注：ulNotifiedValue表示任务vTaskMsgPro的任务控制块里面的变量。		
-		*/
-		
-		xResult = xTaskNotifyWait(0x00000000,      
-						          0xFFFFFFFF,      
-						          &ulValue,        /* 保存ulNotifiedValue到变量ulValue中 */
-						          xMaxBlockTime);  /* 最大允许延迟时间   30*/
-		
-		if( xResult == pdPASS )
-		{
-			/* 接收到消息，检测那个位被按下 */
-             
-			if((ulValue & FUN_KEY_0) != 0)
-			{
-                 if(fun_long_key_flag != 1)
-                   gpro_t.key_value = fun_key;
-                 
-                  fun_key_long_counter=0;
-                
-            }
-            else if((ulValue & CONFIRM_KEY_1) !=0){ 
+           if(g_ks.fun_key_long_flag == 1){
 
-                 if(confirm_long_key_flag != 1)
-                    gpro_t.key_value = confirm_short_key;
+//             if(gpro_t.child_lock_flag ==0){
+//                 gpro_t.child_lock_flag = 1;
+//                 Smg_Display_Temp_Degree_And_Char_L_Handler(ctl_t.disp_ntc_res_liner_temp_value);
+//                      
+//             }
+//             else{
+//                      
+//               gpro_t.child_lock_flag = 0;
+//               Smg_Display_Temp_Degree_Handler(ctl_t.disp_ntc_res_liner_temp_value);
+//            }
+                g_ks.fun_key_long_counter =0;
+                gpro_t.gTimer_pro_long_key_timer =0;
 
-                 
-                  confirm_long_key_counter=0;
-                
-            }
-            else if((ulValue & FUN_LONGK_KEY_CHILD_LOCK_2) != 0){ //child lock function 
-                
-                   if(gpro_t.child_lock_flag ==0){
-                       gpro_t.child_lock_flag = 1;
-                       child_lock_flag=1;
-                      
-                    }
-                    else{
-                       child_lock_flag= 2;
-                       gpro_t.child_lock_flag = 0;
-                       
+           }
+           else
+              gpro_t.key_value = fun_key ;
 
-                    }
-                   fun_long_key_flag=1;
+          }
+
+        }
+        else if(g_ks.ok_key_flag ==1){
+
+            if(CONFIRM_KEY_VALUE() == KEY_UP){
+               g_ks.ok_key_flag++;
+
+               if( g_ks.ok_key_long_flag ==1){
+
+                    g_ks.confirm_long_key_counter=0;
                    gpro_t.gTimer_pro_long_key_timer =0;
-                  
+
+               }
+               else{
+                 gpro_t.key_value = confirm_short_key;
+
+               }
+              
             }
-            else if((ulValue &  CONFIRM_LONG_KEY_3) != 0){
-
-                 gpro_t.key_value  = confirm_long_key;
-                 confirm_long_key_flag = 1;
-                 gpro_t.gTimer_pro_long_key_timer =0;
-             }
-            
-           
-       }
-	   else{
-
-
-         if(child_lock_flag==1){
-             child_lock_flag= 4;
-             Smg_Display_Temp_Degree_And_Char_L_Handler(ctl_t.disp_ntc_res_liner_temp_value);
 
          }
-         else if(child_lock_flag==2){
-
-               child_lock_flag =3;
-             Smg_Display_Temp_Degree_Handler(ctl_t.disp_ntc_res_liner_temp_value);
-
-         }
-
-          
-
-
-          if(gpro_t.child_lock_flag ==0){
+		
+         if(gpro_t.child_lock_flag ==0){
 
            if(gpro_t.key_value == fun_key || gpro_t.key_value == confirm_short_key ||gpro_t.key_value  == confirm_long_key){
             
              Key_Handler(gpro_t.key_value);
             gpro_t.key_value =0xff;//confirm_long_key_flag = 1
 
-           
-          }
+           }
+
+              
 
           }
 
-          if(gpro_t.gTimer_pro_long_key_timer >1 && (confirm_long_key_flag ==1 ||  fun_long_key_flag ==1)){
+          if(gpro_t.gTimer_pro_long_key_timer >1 && (g_ks.fun_key_long_flag ==1 ||g_ks.ok_key_long_flag ==1  )){
 
-                 if(confirm_long_key_flag ==1){
-                   confirm_long_key_flag =0;
-
-                 confirm_long_key_counter=0;
+                 if(g_ks.ok_key_long_flag ==1){
+                     g_ks.ok_key_long_flag =0;
 
                  }  
 
-                 if(fun_long_key_flag ==1){
-                    fun_long_key_flag =0;
-                    fun_key_long_counter=0;
+                 if(g_ks.fun_key_long_flag ==1){
+                    g_ks.fun_key_long_flag =0;
+                    
                  } 
-
-              }
-
           }
+
+            bsp_Idle();
+            exit_select_position_flag();
+            Main_Process();
+
+       
+
+       vTaskDelay(30);
              
       }
  }     
@@ -238,61 +212,47 @@ static void vTaskStart(void *pvParameters)
 		//bsp_KeyScan();
        if(FUN_KEY_VALUE()== KEY_DOWN ){
 
-             confirm_long_key_counter=0;
+             g_ks.confirm_long_key_counter=0;
+             g_ks.fun_key_long_counter++;
 
-        while(FUN_KEY_VALUE()== KEY_DOWN && fun_key_long_counter < 2012345){ //child lock is funtion
+          if(g_ks.fun_key_long_counter > 100){ //child lock is funtion
                
-               fun_key_long_counter++;
-               if(fun_key_long_counter > 990099){//990099(1.5s)//999999(1.2s)//900001(1s)//800001 //1800001(2s)//2960000
-                  fun_key_long_counter = 2900909;
-
-                xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
-                            FUN_LONGK_KEY_CHILD_LOCK_2,            /* 设置目标任务事件标志位bit0  */
-                            eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
-
+               g_ks.fun_key_long_counter=0;
+               g_ks.fun_key_long_flag = 1;
+               if(gpro_t.child_lock_flag ==0){
+                     gpro_t.child_lock_flag = 1;
+                     Smg_Display_Temp_Degree_And_Char_L_Handler(ctl_t.disp_ntc_res_liner_temp_value);
+                          
+                 }
+                 else{
+                          
+                   gpro_t.child_lock_flag = 0;
+                   Smg_Display_Temp_Degree_Handler(ctl_t.disp_ntc_res_liner_temp_value);
                 }
+                   gpro_t.gTimer_pro_long_key_timer =0;
 
          }
+         g_ks.fun_key_flag = 1;
 
-
-         if(fun_key_long_counter < 990099){
-
-             
-               xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
-					 FUN_KEY_0,            /* 设置目标任务事件标志位bit0  */
-					 eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
-
-
-         }
      }
 	 else if(CONFIRM_KEY_VALUE() == KEY_DOWN ){
+        
+         if(gpro_t.child_lock_flag ==0){
+
+            g_ks.fun_key_long_counter=0;
+            g_ks.confirm_long_key_counter++;
+     
+            if( g_ks.confirm_long_key_counter > 100){
+                g_ks.confirm_long_key_counter=0;
+                g_ks.ok_key_long_flag =1;
+                confirm_key_long_fun();
+                gpro_t.gTimer_pro_long_key_timer =0;
+            }
          
-            fun_key_long_counter=0;
-         while(CONFIRM_KEY_VALUE() == KEY_DOWN && confirm_long_key_counter < 2965000){
+            g_ks.ok_key_flag =1;
 
-               confirm_long_key_counter++;
-               if(confirm_long_key_counter > 900099){//999999(1.2s)//900099(1s) //800001//1800001(2s)//2960000
-                   confirm_long_key_counter = 2965900;
-               
-               xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
-                         CONFIRM_LONG_KEY_3,            /* 设置目标任务事件标志位bit0  */
-                         eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
-
-                }
-
-            
-
-
-         }
-         
-         if(confirm_long_key_counter < 2965900 ){//
-            
-           xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
-                         CONFIRM_KEY_1,            /* 设置目标任务事件标志位bit0  */
-                         eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
-
-          }
-       }
+        }
+      }
 
 
    
@@ -310,12 +270,12 @@ static void vTaskStart(void *pvParameters)
 static void AppTaskCreate (void)
 {
 
-	xTaskCreate( vTaskRunPro,     		/* 任务函数  */
-                 "vTaskRunPro",   		/* 任务名    */
-                 128,             		/* 任务栈大小，单位word，也就是4字节 */
-                 NULL,           		/* 任务参数  */
-                 1,               		/* 任务优先级*/
-                 &xHandleTaskRunPro);  /* 任务句柄  */
+//	xTaskCreate( vTaskRunPro,     		/* 任务函数  */
+//                 "vTaskRunPro",   		/* 任务名    */
+//                 128,             		/* 任务栈大小，单位word，也就是4字节 */
+//                 NULL,           		/* 任务参数  */
+//                 1,               		/* 任务优先级*/
+//                 &xHandleTaskRunPro);  /* 任务句柄  */
 
 
 
@@ -323,7 +283,7 @@ static void AppTaskCreate (void)
                  "vTaskMsgPro",   		/* 任务名    */
                  128,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 2,               		/* 任务优先级*/
+                 1,               		/* 任务优先级*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */
 	
 	
@@ -331,7 +291,7 @@ static void AppTaskCreate (void)
                  "vTaskStart",   		/* 任务名    */
                  128,            		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 3,              		/* 任务优先级*/
+                 2,              		/* 任务优先级*/
                  &xHandleTaskStart );   /* 任务句柄  */
 }
 
