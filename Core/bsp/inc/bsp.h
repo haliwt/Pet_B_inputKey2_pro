@@ -85,6 +85,8 @@ typedef struct{
    uint8_t fun_key_be_pressing_flag;
    uint8_t master_switch_control_flag;
    uint8_t child_lock_flag;
+
+   uint8_t relay_id_led ;
  
    uint8_t key_long_confirm_flag;
    uint8_t set_temp_value_success_flag;
@@ -120,6 +122,8 @@ void Main_Process(void);
 void exit_select_position_flag(void);
 
 void confirm_key_long_fun(void);
+
+void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag);
 
 
 #endif 

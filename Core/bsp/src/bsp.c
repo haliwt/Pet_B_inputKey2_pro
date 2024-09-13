@@ -2,14 +2,14 @@
 
 main_prcess_t gpro_t;
 
-static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag);
 
 
 
 
 
 
-uint8_t relay_id_led ;
+
+
 uint8_t display_keep_temp_value;
 uint8_t  disp_keep_temp_value ;
 
@@ -100,7 +100,7 @@ void Key_Handler(uint8_t key_value)
 
 		    case relay_a_tape_led:
 
-		        relay_id_led = relay_tape_led_on;
+		        gpro_t.relay_id_led = relay_tape_led_on;
 				ctl_t.gTimer_select_fun=0;
           
                 gpro_t.gTimer_counter_exit_select_fun =0;
@@ -110,7 +110,7 @@ void Key_Handler(uint8_t key_value)
 		   break;
 		 
 		    case relay_b_fan_led:
-				relay_id_led = relay_fan_led_on;
+				gpro_t.relay_id_led = relay_fan_led_on;
 				ctl_t.gTimer_select_fun=0;
 			
                 gpro_t.gTimer_counter_exit_select_fun =0;
@@ -120,7 +120,7 @@ void Key_Handler(uint8_t key_value)
 		    break;
 
 			case relay_c_kill_led:  // 
-				relay_id_led = relay_kill_led_on;
+				gpro_t.relay_id_led = relay_kill_led_on;
 				ctl_t.gTimer_select_fun=0;
 			
                 gpro_t.gTimer_counter_exit_select_fun =0;
@@ -131,7 +131,7 @@ void Key_Handler(uint8_t key_value)
 			case relay_keep_temp: //keep temperature value
 
 			   
-				relay_id_led = relay_keep_temp_led_on;
+				gpro_t.relay_id_led = relay_keep_temp_led_on;
 				ctl_t.gTimer_select_fun=0;
 			
 				gpro_t.gTimer_counter_exit_select_fun =0;
@@ -170,7 +170,7 @@ void Key_Handler(uint8_t key_value)
      }
 	 else{// confrim key be used to "confrm" key done .---> confirm wich led of by sure done.
 
-      switch(relay_id_led){
+      switch(gpro_t.relay_id_led){
 
 		 case relay_tape_led_on:
 
@@ -379,7 +379,7 @@ void Key_Handler(uint8_t key_value)
 void Main_Process(void)
 {
    
-    Relay_Tunr_OnOff_Fun(relay_id_led);
+    
 
 	switch(disp_keep_temp_value){
 
@@ -475,7 +475,7 @@ void Main_Process(void)
 *	返 回 值: 无
 *
 *********************************************************************************/
-static void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
+void Relay_Tunr_OnOff_Fun(uint8_t relay_id_led_flag)
 {
 
 

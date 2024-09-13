@@ -49,8 +49,8 @@ typedef struct _KEY_STATE{
     uint8_t  ok_key_long_flag; 
 
     
-    uint16_t confirm_long_key_counter;
-    uint16_t fun_key_long_counter;
+    uint8_t confirm_long_key_counter;
+    uint8_t fun_key_long_counter;
 
 
 
@@ -134,8 +134,10 @@ static void vTaskMsgPro(void *pvParameters)
                 gpro_t.gTimer_pro_long_key_timer =0;
 
            }
-           else
+           else  if(gpro_t.child_lock_flag ==0){
               gpro_t.key_value = fun_key ;
+
+           }
 
           }
 
@@ -162,16 +164,19 @@ static void vTaskMsgPro(void *pvParameters)
 		
          if(gpro_t.child_lock_flag ==0){
 
-           if(gpro_t.key_value == fun_key || gpro_t.key_value == confirm_short_key ||gpro_t.key_value  == confirm_long_key){
+           if(gpro_t.key_value == fun_key || gpro_t.key_value == confirm_short_key){
             
              Key_Handler(gpro_t.key_value);
             gpro_t.key_value =0xff;//confirm_long_key_flag = 1
 
            }
+           }
+           else{
 
-              
-
-          }
+              if(FUN_KEY_VALUE() == KEY_UP &&   gpro_t.child_lock_flag ==1 && g_ks.fun_key_long_flag ==0){
+                     g_ks.fun_key_long_counter=0;
+              }
+           }
 
           if(gpro_t.gTimer_pro_long_key_timer >1 && (g_ks.fun_key_long_flag ==1 ||g_ks.ok_key_long_flag ==1  )){
 
@@ -186,13 +191,16 @@ static void vTaskMsgPro(void *pvParameters)
                  } 
           }
 
-            bsp_Idle();
-            exit_select_position_flag();
+           
+            Relay_Tunr_OnOff_Fun(gpro_t.relay_id_led);
+           
             Main_Process();
+            exit_select_position_flag();
+            bsp_Idle();
 
        
 
-       vTaskDelay(30);
+       vTaskDelay(20);
              
       }
  }     
@@ -215,34 +223,39 @@ static void vTaskStart(void *pvParameters)
              g_ks.confirm_long_key_counter=0;
              g_ks.fun_key_long_counter++;
 
-          if(g_ks.fun_key_long_counter > 100){ //child lock is funtion
-               
+          if(g_ks.fun_key_long_counter > 80){ //child lock is funtion
                g_ks.fun_key_long_counter=0;
                g_ks.fun_key_long_flag = 1;
+               
                if(gpro_t.child_lock_flag ==0){
                      gpro_t.child_lock_flag = 1;
                      Smg_Display_Temp_Degree_And_Char_L_Handler(ctl_t.disp_ntc_res_liner_temp_value);
                           
                  }
-                 else{
-                          
+                 else{  
                    gpro_t.child_lock_flag = 0;
                    Smg_Display_Temp_Degree_Handler(ctl_t.disp_ntc_res_liner_temp_value);
                 }
-                   gpro_t.gTimer_pro_long_key_timer =0;
+                gpro_t.gTimer_pro_long_key_timer =0;
 
          }
-         g_ks.fun_key_flag = 1;
+       
+         
+
+         if(gpro_t.child_lock_flag ==0)
+              g_ks.fun_key_flag = 1;
 
      }
 	 else if(CONFIRM_KEY_VALUE() == KEY_DOWN ){
+
+           g_ks.fun_key_long_counter=0;
         
          if(gpro_t.child_lock_flag ==0){
 
             g_ks.fun_key_long_counter=0;
             g_ks.confirm_long_key_counter++;
      
-            if( g_ks.confirm_long_key_counter > 100){
+            if( g_ks.confirm_long_key_counter > 80){
                 g_ks.confirm_long_key_counter=0;
                 g_ks.ok_key_long_flag =1;
                 confirm_key_long_fun();

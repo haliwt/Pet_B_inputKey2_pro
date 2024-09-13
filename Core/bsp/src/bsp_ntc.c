@@ -346,14 +346,9 @@ void Read_NTC_Temperature_Value_Handler(void)
          ctl_t.temperature_value =0;
          ctl_t.temperature_decimal_point_value = 0;
 
-         if(gpro_t.child_lock_flag ==0){
 
-            Smg_Display_Temp_Degree_Handler(ctl_t.temperature_value);
-         }
-         else{
-            Smg_Display_Temp_Degree_And_Char_L_Handler(ctl_t.temperature_value);
-
-         }
+         Smg_Display_Temp_Degree_Handler(ctl_t.temperature_value);
+       
             
          ctl_t.thefirst_detected_temp_falg =0;
          ctl_t.gTimer_read_adc=0;
@@ -365,14 +360,8 @@ void Read_NTC_Temperature_Value_Handler(void)
     
    	 ctl_t.temp_degree = Binary_Search(R10K_Init_0_81_simple,temp_uint16_t_vlue,length_simple);
 
-     if(gpro_t.child_lock_flag ==0){
-	      Display_Speicial_Temperature_Value(ctl_t.temp_degree);
-      }
-      else{
-          Smg_Display_Temp_Degree_And_Char_L_Handler(ctl_t.temp_degree);
-
-
-      }
+     Display_Speicial_Temperature_Value(ctl_t.temp_degree);
+     
 
 	 
 	 if(relay_settemp_flag_state() == 1){
