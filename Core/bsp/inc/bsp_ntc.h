@@ -4,6 +4,8 @@
 
 
 #define DISP_VALUE            10
+#define ADC_Sample_Times      5//10// 60
+
 
 
 typedef enum{

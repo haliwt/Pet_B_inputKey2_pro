@@ -387,7 +387,7 @@ void Main_Process(void)
 
           
            
-			if((ctl_t.gTimer_read_adc >4) && ctl_t.thefirst_detected_temp_falg==1){
+			if((ctl_t.gTimer_read_adc >2) && ctl_t.thefirst_detected_temp_falg==1){
 			  ctl_t.gTimer_read_adc =0;
 		     
                Read_NTC_Temperature_Value_Handler();
@@ -396,10 +396,10 @@ void Main_Process(void)
                  
 		    }
 
-            if(ctl_t.thefirst_detected_temp_falg == 0 && ctl_t.gTimer_read_adc < 8){
+            if(ctl_t.thefirst_detected_temp_falg ==0 ){
                 ctl_t.thefirst_detected_temp_falg ++ ;  
                 Read_NTC_Temperature_Init_Handler();
-               
+               ctl_t.gTimer_read_adc =30;
             }
 
 

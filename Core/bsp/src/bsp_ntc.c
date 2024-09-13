@@ -4,7 +4,7 @@
 
 
 #define Zero_Degree           5828    
-#define ADC_Sample_Times      20// 60
+
 
 #define COMPENSATION_VALUE    1
 
@@ -37,15 +37,15 @@ static uint8_t error_range_calculate_value(uint8_t val);
 
 
 
-static void Read_Ntc_Decimal_Point_Numbers(void);
+//static void Read_Ntc_Decimal_Point_Numbers(void);
 
 static uint8_t Calculate_Display_Temperature_Value(const uint16_t *pt,uint16_t key,uint8_t length);
-static uint8_t Calculate_Display_Temperature_19_21_Value(const uint16_t *pt,uint16_t key,uint8_t length);
+//static uint8_t Calculate_Display_Temperature_19_21_Value(const uint16_t *pt,uint16_t key,uint8_t length);
 
 
 //static void Display_Speicial_Temperature_Value(uint8_t temp);
 
-static uint16_t Read_NTC_Temperature_Voltage_Init(void);
+//static uint16_t Read_NTC_Temperature_Voltage_Init(void);
 
 
 
@@ -195,28 +195,28 @@ static const uint8_t R10K_Init_0_81_simple[23]={
 };
 
 
-static uint16_t Read_NTC_Temperature_Voltage_Power_On(void)
-{
-      uint16_t read_ntc_value;
-	 
-	  read_ntc_value = Get_Adc_Voltage_Value(ADC_Sample_Times);
-	
-      
+//static uint16_t Read_NTC_Temperature_Voltage_Power_On(void)
+//{
+//      uint16_t read_ntc_value;
+//	 
+//	  read_ntc_value = Get_Adc_Voltage_Value(ADC_Sample_Times);
+//	
+//      
 
-	  return read_ntc_value;
-}
+//	  return read_ntc_value;
+//}
 
 
-static uint16_t Read_NTC_Temperature_Voltage_Init(void)
-{
-      uint16_t read_ntc_value;
-	 
-	  read_ntc_value = Get_Adc_Voltage_Value(100);
-	
-      
+//static uint16_t Read_NTC_Temperature_Voltage_Init(void)
+//{
+//      uint16_t read_ntc_value;
+//	 
+//	  read_ntc_value = Get_Adc_Voltage_Value(100);
+//	
+//      
 
-	  return read_ntc_value;
-}
+//	  return read_ntc_value;
+//}
 
 
 
@@ -277,17 +277,17 @@ static int8_t  Binary_Search(const uint8_t *array ,uint8_t key,uint8_t length)
     *
     *
 *********************************************************************/
-static void Read_Ntc_Decimal_Point_Numbers(void)
-{
-   
-   uint8_t temp_decimal_point;
-   temp_decimal_point = R10K_Init_0_81_simple[ctl_t.temperature_value] - R10K_Init_0_81_simple[ctl_t.temperature_value +1];
+//static void Read_Ntc_Decimal_Point_Numbers(void)
+//{
+//   
+//   uint8_t temp_decimal_point;
+//   temp_decimal_point = R10K_Init_0_81_simple[ctl_t.temperature_value] - R10K_Init_0_81_simple[ctl_t.temperature_value +1];
 
-   temp_decimal_point = temp_decimal_point +5;
+//   temp_decimal_point = temp_decimal_point +5;
 
-   ctl_t.temperature_decimal_point_value =  temp_decimal_point/10 ;
-   
-}
+//   ctl_t.temperature_decimal_point_value =  temp_decimal_point/10 ;
+//   
+//}
 
 /******************************************************************************
 	*
@@ -301,7 +301,7 @@ void Read_NTC_Temperature_Init_Handler(void)
 {
    
 	 ctl_t.ntc_voltage_value= Read_NTC_Temperature_Voltage();
-     if(ctl_t.ntc_voltage_value > 0xC1C || ctl_t.ntc_voltage_value ==0xC1C){ //hasn't ntc temperature probe
+     if((ctl_t.ntc_voltage_value > 0xC1C || ctl_t.ntc_voltage_value > 2900)||ctl_t.ntc_voltage_value <400){ //hasn't ntc temperature probe
         
          ctl_t.temperature_value =0;
          ctl_t.temperature_decimal_point_value =0;
@@ -341,7 +341,9 @@ void Read_NTC_Temperature_Value_Handler(void)
    
 	 #if 1
 	 ctl_t.ntc_voltage_value= Read_NTC_Temperature_Voltage();
-     if(ctl_t.ntc_voltage_value > 0xC1C || ctl_t.ntc_voltage_value ==0xC1C){ //hasn't ntc temperature probe
+
+     
+     if((ctl_t.ntc_voltage_value > 2900) || ctl_t.ntc_voltage_value < 400){ //hasn't ntc temperature probe
         
          ctl_t.temperature_value =0;
          ctl_t.temperature_decimal_point_value = 0;
