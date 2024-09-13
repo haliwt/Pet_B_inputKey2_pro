@@ -47,13 +47,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
        tm1++;
 	   tm2++;
 	   tm3++;
+	   ctl_t.gTimer_smg_turn_on ++;
 	   
-	    ctl_t.gTimer_smg_turn_on ++;
 	   if(tm2 > 9){
 		 	 tm2=0;
 		     gpro_t.gTimer_pro_key++;
 	         gpro_t.gTimer_pro_disp++;
 		     gpro_t.gTimer_pro_select++;
+             
             
 	     }
 	   

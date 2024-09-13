@@ -266,10 +266,7 @@ void Smg_Display_Temp_Degree_Handler(uint8_t temp_value)
 
 	  decimal_point =   ctl_t.temperature_decimal_point_value ;
    
- 
-  
-	
-	TM1650_Write_Data(0x68,segNumber[decade_temp]);//bit one  
+     TM1650_Write_Data(0x68,segNumber[decade_temp]);//bit one  
    
     if(gpro_t.child_lock_flag ==0){
     	TM1650_Write_Data(0x6A,segNumber[uint_temp]+seg_h);//bit two
@@ -388,12 +385,7 @@ void Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
 
         }
 
-
-
 }
-
-
-
 /******************************************************************************
  ** 
  ** Function Name: void Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
@@ -413,40 +405,43 @@ void Repeat_Smg_Display_Digital_Numbers_Changed(uint8_t numbers)
 
 	  decimal_point = 0;
    
- 
-   if(ctl_t.gTimer_smg_turn_on < 300){ //20*10 =200ms
+ #if 0
+   if(ctl_t.gTimer_smg_turn_on < 200){ //20*10 =200ms
 	    
-	     
-		
-		TM1650_Write_Data(0x68,segNumber[decade_temp]);//bit one  
+//	   TM1650_Write_Data(0x68,segNumber[decade_temp]);//bit one  
+//	   
+//       TM1650_Write_Data(0x6A,segNumber[uint_temp]+seg_h);//bit two
+//       TM1650_Write_Data(0x6C,segNumber[decimal_point]);//decimal_point
+         TM1650_Write_Data(0x48,0x00); //smg turn off 
+
+        
+    }
+	else if(ctl_t.gTimer_smg_turn_on >199  && ctl_t.gTimer_smg_turn_on < 1000){
+
+	    // TM1650_Write_Data(0x48,0x00); //smg turn off 
+	  TM1650_Write_Data(0x68,segNumber[decade_temp]);//bit one  
 	   
-        if(gpro_t.child_lock_flag ==0){
-    		TM1650_Write_Data(0x6A,segNumber[uint_temp]+seg_h);//bit two
-            TM1650_Write_Data(0x6C,segNumber[decimal_point]);//decimal_point
-
-        }
-        else{
-
-            TM1650_Write_Data(0x6A,segNumber[uint_temp]);//bit two
-            TM1650_Write_Data(0x6C,segL[0]);//decimal_point
-
-
-        }
-
-
-   	}
-	else if(ctl_t.gTimer_smg_turn_on >299  && ctl_t.gTimer_smg_turn_on < 601){
-
-	     TM1650_Write_Data(0x48,0x00);
+       TM1650_Write_Data(0x6A,segNumber[uint_temp]+seg_h);//bit two
+       TM1650_Write_Data(0x6C,segNumber[decimal_point]);//decimal_point
     }
 	else{
 	  ctl_t.gTimer_smg_turn_on =0;
 	 
 
 	}
-
+#endif 
 	
+     TM1650_Write_Data(0x48,0x00); //smg turn off 
+     osDelay(300);
+
+     TM1650_Write_Data(0x68,segNumber[decade_temp]);//bit one  
+	   
+     TM1650_Write_Data(0x6A,segNumber[uint_temp]+seg_h);//bit two
+     TM1650_Write_Data(0x6C,segNumber[decimal_point]);//decimal_point
+     
 	 TM1650_Write_Data(0x48,0x71);//初始化为7级灰度，开显示,power off TM1650_Set(0x48,0x30);
+	 osDelay(300);
+     TM1650_Write_Data(0x48,0x00); //smg turn off 
 
 }
 

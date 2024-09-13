@@ -385,7 +385,11 @@ void Main_Process(void)
 
 	   case 0: //works normal temperature value 
 
-           if(gpro_t.child_lock_flag == 0){ //display number "23.6"
+           switch(gpro_t.child_lock_flag){
+
+           case 0:
+
+           
 			if((ctl_t.gTimer_read_adc >4) && ctl_t.thefirst_detected_temp_falg==1){
 			  ctl_t.gTimer_read_adc =0;
 		     
@@ -400,8 +404,12 @@ void Main_Process(void)
                
             }
 
-           }
-           else{ //chilid lock disp "23L"
+           
+
+           break;
+
+           case 1: //display child lock "23L"
+         
 
                 if((ctl_t.gTimer_read_adc >4) && ctl_t.thefirst_detected_temp_falg==1){
                 ctl_t.gTimer_read_adc =0;
@@ -418,7 +426,9 @@ void Main_Process(void)
 
                 }
 
-            }
+            
+
+           break;
              
 			
            if(gpro_t.gTimer_display_relay_led > 3){
@@ -427,13 +437,15 @@ void Main_Process(void)
 			 
           	}
 
+          }
+
 		break;
 
 	   case 1: //
     
 		if(gpro_t.gTimer_pro_disp_temp <2){
 
-		   Repeat_Keep_Heat_Setup_Digital_Numbers(gpro_t.set_keep_temp_value);
+		   disp_set_temp_value_led_blink(gpro_t.set_keep_temp_value);
 		   
 		 }
 		else{
@@ -454,7 +466,7 @@ void Main_Process(void)
 
 	       if(gpro_t.gTimer_pro_disp_temp <2){
 	   	
-	          Repeat_Keep_Heat_Setup_Digital_Numbers(0);
+	          disp_set_temp_value_led_blink(0);
 	   
 		   }
 		   else{

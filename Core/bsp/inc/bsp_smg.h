@@ -7,7 +7,7 @@
 
 void Run_Keep_Heat_Setup_Digital_Numbers(uint8_t value);
 
-void Repeat_Keep_Heat_Setup_Digital_Numbers(uint8_t value);
+void disp_set_temp_value_led_blink(uint8_t value);
 
 
 
