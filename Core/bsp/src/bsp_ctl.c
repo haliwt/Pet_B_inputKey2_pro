@@ -108,84 +108,44 @@ static uint8_t relay_set_temp_flag_fun(void)
 uint8_t relay_keep_temp_run_fun(void)
 {
    
-	
-  //  ctl_t.disp_ntc_res_liner_temp_value = Disp_NtcRes_LinearValue(ctl_t.temperature_value);
+
     
 	if(relay_settemp_flag_state() ==1){ //has been set up temperature value 
 	 
          if(gpro_t.set_keep_temp_value > ctl_t.disp_ntc_res_liner_temp_value ){
 
+            ctl_t.relay_keep_temp_on_off_flag = keep_temp_open; //open 
+            if((gpro_t.set_keep_temp_value -2)> ctl_t.disp_ntc_res_liner_temp_value && ctl_t.again_open_relay_ptc ==1){ //WT.EDIT 2024.05.18
 
-                    ctl_t.relay_keep_temp_on_off_flag = keep_temp_open; //open 
+             
+                   ctl_t.temperature_decimal_point_value =0;
+                   KEEP_HEAT_LED_ON();  // ptc open 
+                   RELAY_KEEP_TEMP_SetHigh(); //open ptc heat relay .
+                   KEY_FUN_CONFIRM_LED_ON() ;  
+                   ADD_DEC_LED_OFF();
+                }
+                else{
 
-                   if(ctl_t.again_open_relay_ptc != 2){ //open
-                    
-                       ctl_t.again_open_relay_ptc++;
-                       ctl_t.open_has_been_open = 1;
-                       ctl_t.again_open=1;
-                       ctl_t.temperature_decimal_point_value =0;
-    			       KEEP_HEAT_LED_ON();  // ptc open 
-    	               RELAY_KEEP_TEMP_SetHigh();
-    				   KEY_FUN_CONFIRM_LED_ON() ;  
-    				   ADD_DEC_LED_OFF();
+                ctl_t.temperature_decimal_point_value =0;
+                KEEP_HEAT_LED_ON();  // ptc open 
+                RELAY_KEEP_TEMP_SetHigh();
+                KEY_FUN_CONFIRM_LED_ON() ;  
+                ADD_DEC_LED_OFF();
 
-                    }
-                    else{
-                      
-                        if((gpro_t.set_keep_temp_value -3)> ctl_t.disp_ntc_res_liner_temp_value &&  ctl_t.open_has_been_open ==0){ //WT.EDIT 2024.05.18
-
-                           ctl_t.again_open=1;
-                           ctl_t.temperature_decimal_point_value =0;
-                           KEEP_HEAT_LED_ON();  // ptc open 
-                           RELAY_KEEP_TEMP_SetHigh(); //open ptc heat relay .
-                           KEY_FUN_CONFIRM_LED_ON() ;  
-                           ADD_DEC_LED_OFF();
-
-
-
-                        }
-
-                      
-                       
-                   }
-
-                   if( ctl_t.again_open==0){
-
-
-                        Set_KeepTempValue_DispLed();
-
-
-                     }
-
-	    }
+              }
+        }
         else{
                ctl_t.relay_keep_temp_on_off_flag = keep_temp_close; //cloused 
-               if(ctl_t.set_keep_heat_tempeature_flag == 1){
+              
                  if(ctl_t.again_open_relay_ptc==0){
                     ctl_t.again_open_relay_ptc++;
                   }
-                  else if(ctl_t.again_open_relay_ptc==2){
-                      ctl_t.open_has_been_open = 0;
-
-                 }
+           
+                 
                  Set_KeepTempValue_DispLed();
                 
-                  ctl_t.again_open=0;
-                  
-                  
-			   }
-			   else{
-                 
-					KEEP_HEAT_LED_OFF();
-					RELAY_KEEP_TEMP_SetLow();
-					KEY_FUN_CONFIRM_LED_ON() ;
-					ADD_DEC_LED_OFF();
-			   }
-
-              }
-
-
-	 }
+         }
+    }
 	else{
         ctl_t.relay_keep_temp_on_off_flag = keep_temp_close; //open 
 		KEEP_HEAT_LED_OFF();

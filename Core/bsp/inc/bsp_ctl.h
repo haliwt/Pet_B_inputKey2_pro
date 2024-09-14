@@ -48,7 +48,7 @@ typedef struct _touchpad_t{
    uint8_t read_key_value;
    uint8_t run_process_tag;
    uint8_t keep_heat_flag;
-   uint8_t set_keep_heat_tempeature_flag;   //WT.EIDT .2024.05.17 new add item .
+
    uint8_t disp_ntc_res_liner_temp_value;
    uint8_t again_open_relay_ptc;
 
@@ -73,8 +73,8 @@ typedef struct _touchpad_t{
   
    uint8_t keep_heat_run_flag;
    uint8_t keep_heat_fun_digital_numbers;
-   uint8_t open_has_been_open;
-   uint8_t again_open;
+  
+  
  
   
   
@@ -85,7 +85,7 @@ typedef struct _touchpad_t{
    uint8_t gTimer_again_open_ptc;
    
 
-    uint8_t gTimer_keep_heat_led;
+    uint16_t gTimer_keep_heat_led;
     uint16_t gTimer_smg_turn_on ;
     
 

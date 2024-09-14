@@ -230,7 +230,7 @@ void Key_Handler(uint8_t key_value)
 
 			   case 1: //normal -> cancle has been set temperature value .
                 
-			     ctl_t.set_keep_heat_tempeature_flag=0; //WT.EDIT.2024.05.17
+			    // ctl_t.set_keep_heat_tempeature_flag=0; //WT.EDIT.2024.05.17
 			 	 gpro_t.set_temp_value_success_flag=0;
            
              
@@ -301,7 +301,7 @@ void Key_Handler(uint8_t key_value)
 			ADD_DEC_LED_OFF();
 		
 		   gpro_t.set_temp_value_success_flag = 1; //set keep temperature is complete.
-		   ctl_t.set_keep_heat_tempeature_flag = 1;   //WT.EIDT .2024.05.17 new add item .
+		   //ctl_t.set_keep_heat_tempeature_flag = 1;   //WT.EIDT .2024.05.17 new add item .
 		   ctl_t.again_open_relay_ptc=0;  //WT.EDIT .2024.05.20 the first times at once open PTC .
             
 		   gpro_t.long_key_flag =0; //repeat by pressed key_confirm .
@@ -400,11 +400,7 @@ void Main_Process(void)
             }
 
 
-           if(gpro_t.gTimer_display_relay_led > 3){
-			   gpro_t.gTimer_display_relay_led =0;
-			   Relay_Confirm_Turn_OnOff_Fun();   
-			 
-          	}
+         
 
 		break;
 
@@ -662,7 +658,7 @@ void confirm_key_long_fun(void)
 			ADD_DEC_LED_OFF();
 		
 		   gpro_t.set_temp_value_success_flag = 1; //set keep temperature is complete.
-		   ctl_t.set_keep_heat_tempeature_flag = 1;   //WT.EIDT .2024.05.17 new add item .
+		   //ctl_t.set_keep_heat_tempeature_flag = 1;   //WT.EIDT .2024.05.17 new add item .
 		   ctl_t.again_open_relay_ptc=0;  //WT.EDIT .2024.05.20 the first times at once open PTC .
             
 		   gpro_t.long_key_flag =0; //repeat by pressed key_confirm .

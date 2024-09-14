@@ -14,6 +14,7 @@
 
 #define KEEP_HEAT_LED_OFF()			do{KEEP_TEMP_LED_GPIO_Port->BSRR |= 1<<7;}while(0)//HAL_GPIO_WritePin(KEEP_TEMP_LED_GPIO_Port , KEEP_TEMP_LED_Pin , GPIO_PIN_SET)
 #define KEEP_HEAT_LED_ON()			do{KEEP_TEMP_LED_GPIO_Port->BRR = 1<<7;}while(0)	//HAL_GPIO_WritePin(KEEP_TEMP_LED_GPIO_Port , KEEP_TEMP_LED_Pin , GPIO_PIN_RESET)
+#define KEEP_HEAT_LED_TOG()          HAL_GPIO_TogglePin(KEEP_TEMP_LED_GPIO_Port, KEEP_TEMP_LED_Pin)
 
 
 #define FAN_LED_OFF()			      do{TAPE_LED_GPIO_Port->BSRR = 1<<5;}while(0)//HAL_GPIO_WritePin(TAPE_LED_GPIO_Port, TAPE_LED_Pin , GPIO_PIN_SET)

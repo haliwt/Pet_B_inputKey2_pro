@@ -10,8 +10,8 @@ void Relay_Init(void)
     ctl_t.relay_fan_flag =0;
     ctl_t.relay_kill_flag =0;
 
-    ctl_t.set_keep_heat_tempeature_flag =0 ; //WT.EIDT 2024.05.17
-
+   // ctl_t.set_keep_heat_tempeature_flag =0 ; //WT.EIDT 2024.05.17
+    gpro_t.set_temp_value_success_flag=0;
 
 }
 
@@ -82,7 +82,7 @@ void Relay_Confirm_Turn_OnOff_Fun(void)
         Relay_Kill_State();
    
        
-        Relay_Keep_Temp_State();  ////检查设置的温度值和实际检测到的温度值对比
+      //  Relay_Keep_Temp_State();  ////检查设置的温度值和实际检测到的温度值对比
     
     
 }
@@ -153,7 +153,8 @@ void SetRelay_TurnOn_Fan_Tape_Fun(void)
   
     ctl_t.relay_kill_flag =0;
 
-    ctl_t.set_keep_heat_tempeature_flag =0 ; //WT.EIDT 2024.05.17
+   // ctl_t.set_keep_heat_tempeature_flag =0 ; //WT.EIDT 2024.05.17
+    gpro_t.set_temp_value_success_flag=0;
 
      Relay_Confirm_Turn_OnOff_Fun();
 

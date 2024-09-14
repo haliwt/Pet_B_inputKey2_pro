@@ -54,7 +54,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		     gpro_t.gTimer_pro_key++;
 	         gpro_t.gTimer_pro_disp++;
 		     gpro_t.gTimer_pro_select++;
-             
+              ctl_t.gTimer_keep_heat_led++;
             
 	     }
 	   
@@ -76,13 +76,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		ctl_t.gTimer_select_fun++;
 		ctl_t.gTimer_keep_heat_fun++;
         ctl_t.gTimer_again_open_ptc++;
-        ctl_t.gTimer_keep_heat_led++;
+       
         
 		gpro_t.gTimer_pro_disp_temp++;
 		gpro_t.gTimer_display_relay_led ++;
 		gpro_t.gTimer_pro_det_dog++;
         gpro_t.gTimer_pro_long_key_timer++;
         gpro_t.gTimer_counter_exit_select_fun++;
+    
         
        
 		}

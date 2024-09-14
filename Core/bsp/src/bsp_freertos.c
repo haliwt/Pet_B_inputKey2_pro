@@ -118,27 +118,10 @@ static void vTaskMsgPro(void *pvParameters)
           if(FUN_KEY_VALUE()== KEY_UP){
              g_ks.fun_key_flag++;
 
-           if(g_ks.fun_key_long_flag == 1){
-
-//             if(gpro_t.child_lock_flag ==0){
-//                 gpro_t.child_lock_flag = 1;
-//                 Smg_Display_Temp_Degree_And_Char_L_Handler(ctl_t.disp_ntc_res_liner_temp_value);
-//                      
-//             }
-//             else{
-//                      
-//               gpro_t.child_lock_flag = 0;
-//               Smg_Display_Temp_Degree_Handler(ctl_t.disp_ntc_res_liner_temp_value);
-//            }
-                g_ks.fun_key_long_counter =0;
-                gpro_t.gTimer_pro_long_key_timer =0;
-
-           }
-           else  if(gpro_t.child_lock_flag ==0){
               g_ks.fun_key_long_counter=0;
               gpro_t.key_value = fun_key ;
 
-           }
+           
 
           }
 
@@ -148,13 +131,9 @@ static void vTaskMsgPro(void *pvParameters)
             if(CONFIRM_KEY_VALUE() == KEY_UP){
                g_ks.ok_key_flag++;
 
-               if( g_ks.ok_key_long_flag ==1){
+               if( g_ks.ok_key_long_flag ==0){
 
-                    g_ks.confirm_long_key_counter=0;
-                   gpro_t.gTimer_pro_long_key_timer =0;
-
-               }
-               else{
+            
                  g_ks.confirm_long_key_counter=0;
                  gpro_t.key_value = confirm_short_key;
 
@@ -172,16 +151,16 @@ static void vTaskMsgPro(void *pvParameters)
              Key_Handler(gpro_t.key_value);
             gpro_t.key_value =0xff;//confirm_long_key_flag = 1
 
-           }
+            }
            }
            else{
-
+              gpro_t.key_value =0xff;
               if(FUN_KEY_VALUE() == KEY_UP &&   gpro_t.child_lock_flag ==1 && g_ks.fun_key_long_flag ==0){
                      g_ks.fun_key_long_counter=0;
               }
            }
 
-          if(gpro_t.gTimer_pro_long_key_timer >1 && (g_ks.fun_key_long_flag ==1 ||g_ks.ok_key_long_flag ==1  )){
+          if(gpro_t.gTimer_pro_long_key_timer >0 && (g_ks.fun_key_long_flag ==1 ||g_ks.ok_key_long_flag ==1  )){
 
                  if(g_ks.ok_key_long_flag ==1){
                      g_ks.ok_key_long_flag =0;
@@ -194,10 +173,23 @@ static void vTaskMsgPro(void *pvParameters)
                  } 
           }
 
-           
-            Relay_Tunr_OnOff_Fun(gpro_t.relay_id_led);
+         
+             Relay_Tunr_OnOff_Fun(gpro_t.relay_id_led);
+            
            
             Main_Process();
+
+            if(gpro_t.gTimer_display_relay_led > 3){
+			   gpro_t.gTimer_display_relay_led =0;
+			   Relay_Confirm_Turn_OnOff_Fun();  
+               relay_keep_temp_run_fun();
+			 
+          	}
+       
+
+           
+
+            
             exit_select_position_flag();
             bsp_Idle();
 
@@ -226,12 +218,14 @@ static void vTaskStart(void *pvParameters)
              g_ks.confirm_long_key_counter=0;
              g_ks.fun_key_long_counter++;
 
-          if(g_ks.fun_key_long_counter > 80){ //child lock is funtion
+          if(g_ks.fun_key_long_counter > 20){ //child lock is funtion
                g_ks.fun_key_long_counter=0;
                g_ks.fun_key_long_flag = 1;
                
                if(gpro_t.child_lock_flag ==0){
                      gpro_t.child_lock_flag = 1;
+                     ctl_t.select_fun_led_blink_flag = 0;
+                     gpro_t.key_value =0xff;
                      Smg_Display_Temp_Degree_And_Char_L_Handler(ctl_t.disp_ntc_res_liner_temp_value);
                           
                  }
@@ -242,11 +236,13 @@ static void vTaskStart(void *pvParameters)
                 gpro_t.gTimer_pro_long_key_timer =0;
 
          }
-       
-         
 
-         if(gpro_t.child_lock_flag ==0)
-              g_ks.fun_key_flag = 1;
+         if(g_ks.fun_key_long_counter < 15 && gpro_t.child_lock_flag == 0 &&  g_ks.fun_key_long_flag == 0){
+            g_ks.fun_key_flag = 1;
+
+         }
+
+        
 
      }
 	 else if(CONFIRM_KEY_VALUE() == KEY_DOWN ){
@@ -256,15 +252,16 @@ static void vTaskStart(void *pvParameters)
          if(gpro_t.child_lock_flag ==0){
             g_ks.confirm_long_key_counter++;
      
-            if( g_ks.confirm_long_key_counter > 80){
+            if( g_ks.confirm_long_key_counter > 15){
                 g_ks.confirm_long_key_counter=0;
                 g_ks.ok_key_long_flag =1;
                 confirm_key_long_fun();
                 gpro_t.gTimer_pro_long_key_timer =0;
             }
-         
-            g_ks.ok_key_flag =1;
+            if(g_ks.confirm_long_key_counter <15){
+                g_ks.ok_key_flag =1;
 
+            }
         }
       }
 

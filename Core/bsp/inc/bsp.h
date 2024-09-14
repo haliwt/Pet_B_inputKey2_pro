@@ -105,6 +105,7 @@ typedef struct{
    uint8_t gTimer_display_relay_led ;
    uint8_t gTimer_pro_det_dog;
    uint8_t gTimer_counter_exit_select_fun;
+  
    
    
  }main_prcess_t;

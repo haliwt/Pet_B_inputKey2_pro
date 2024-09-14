@@ -369,25 +369,23 @@ void Read_NTC_Temperature_Value_Handler(void)
 	 if(relay_settemp_flag_state() == 1){
          if(gpro_t.set_keep_temp_value >   ctl_t.disp_ntc_res_liner_temp_value){
 
-                   if(ctl_t.again_open_relay_ptc != 2){ //open
+                  if(gpro_t.set_keep_temp_value > 17 ){
 
-                       ctl_t.again_open_relay_ptc++;
-                       ctl_t.open_has_been_open = 1;
-                       ctl_t.again_open=1;
-                       ctl_t.temperature_decimal_point_value =0;
-                    
-    			       KEEP_HEAT_LED_ON();  // ptc open 
-    	               RELAY_KEEP_TEMP_SetHigh();
-    				   KEY_FUN_CONFIRM_LED_ON() ;  
-    				   ADD_DEC_LED_OFF();
+                       if(ctl_t.again_open_relay_ptc == 1 && (gpro_t.set_keep_temp_value - 2)> ctl_t.disp_ntc_res_liner_temp_value ){ //open
 
+                          ctl_t.temperature_decimal_point_value =0;
+                        
+        			       KEEP_HEAT_LED_ON();  // ptc open 
+        	               RELAY_KEEP_TEMP_SetHigh();
+        				   KEY_FUN_CONFIRM_LED_ON() ;  
+        				   ADD_DEC_LED_OFF();
+
+                        }
                     }
                     else{
 
-                       if((gpro_t.set_keep_temp_value - 3)> ctl_t.disp_ntc_res_liner_temp_value && ctl_t.open_has_been_open ==0 ){ //WT.EDIT 2024.05.18
-
-                           ctl_t.again_open=1;
-                           ctl_t.temperature_decimal_point_value =0;
+                       
+                          ctl_t.temperature_decimal_point_value =0;
                       
                            KEEP_HEAT_LED_ON();  // ptc open 
                            RELAY_KEEP_TEMP_SetHigh(); //open ptc heat relay .
@@ -397,42 +395,15 @@ void Read_NTC_Temperature_Value_Handler(void)
 
                         }
                        
-                   }
-
-                   if(ctl_t.again_open==0){ //has been set temperature value ,control ptc of LED blink.
-
-
-                       Set_KeepTempValue_DispLed();
-
-
-                     }
-
-			  }
-              else{
-                   if(ctl_t.set_keep_heat_tempeature_flag == 1){
-
-                     if(ctl_t.again_open_relay_ptc == 0){ //open
-                        
-                          ctl_t.again_open_relay_ptc ++;
-                       }
-                     else if(ctl_t.again_open_relay_ptc == 2){
-                       ctl_t.open_has_been_open = 0;
-
-                     }
-                    
-                     Set_KeepTempValue_DispLed();
-                    
-                      ctl_t.again_open =0;
+         }
+         else{
                   
-                     
-    			   }
-    			   else{
-                     
-    					KEEP_HEAT_LED_OFF();
-    					RELAY_KEEP_TEMP_SetLow();
-    					KEY_FUN_CONFIRM_LED_ON() ;
-    					ADD_DEC_LED_OFF();
-    			   }
+             if(ctl_t.again_open_relay_ptc == 0){ //open
+                        
+                  ctl_t.again_open_relay_ptc ++;
+              }
+               Set_KeepTempValue_DispLed();
+    			   
 
              }
 
@@ -448,7 +419,7 @@ void Read_NTC_Temperature_Value_Handler(void)
 void Set_KeepTempValue_DispLed(void)
 {
 
-	if(ctl_t.set_keep_heat_tempeature_flag == 1){//WT.EIDT .2024.05.17 new add item .LED blink
+	if(relay_settemp_flag_state() == 1){//WT.EIDT .2024.05.17 new add item .LED blink
 
 	
         RELAY_KEEP_TEMP_SetLow();
@@ -457,21 +428,15 @@ void Set_KeepTempValue_DispLed(void)
 
        if(gpro_t.key_value != fun_key &&  ctl_t.select_fun_led_blink_flag == 0 ){
 
-    	   if(ctl_t.gTimer_keep_heat_led < 1 ){
+    	   if(ctl_t.gTimer_keep_heat_led >  50 ){
+               
+                ctl_t.gTimer_keep_heat_led=0;
 
-    			KEEP_HEAT_LED_OFF();
+    			KEEP_HEAT_LED_TOG();//KEEP_HEAT_LED_OFF();
     		}
-    		else if(ctl_t.gTimer_keep_heat_led  > 0 && ctl_t.gTimer_keep_heat_led <2){
-
-    			KEEP_HEAT_LED_ON();
-
-    		}
-    		else{
-
-    			ctl_t.gTimer_keep_heat_led =0;
-
-    		}
-
+            
+    		
+    		
         }
 
 	} 
