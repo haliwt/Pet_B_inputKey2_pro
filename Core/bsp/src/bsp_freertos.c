@@ -135,6 +135,7 @@ static void vTaskMsgPro(void *pvParameters)
 
            }
            else  if(gpro_t.child_lock_flag ==0){
+              g_ks.fun_key_long_counter=0;
               gpro_t.key_value = fun_key ;
 
            }
@@ -154,6 +155,7 @@ static void vTaskMsgPro(void *pvParameters)
 
                }
                else{
+                 g_ks.confirm_long_key_counter=0;
                  gpro_t.key_value = confirm_short_key;
 
                }
@@ -165,7 +167,8 @@ static void vTaskMsgPro(void *pvParameters)
          if(gpro_t.child_lock_flag ==0){
 
            if(gpro_t.key_value == fun_key || gpro_t.key_value == confirm_short_key){
-            
+             g_ks.fun_key_long_counter=0;
+             g_ks.confirm_long_key_counter=0;
              Key_Handler(gpro_t.key_value);
             gpro_t.key_value =0xff;//confirm_long_key_flag = 1
 
@@ -251,8 +254,6 @@ static void vTaskStart(void *pvParameters)
            g_ks.fun_key_long_counter=0;
         
          if(gpro_t.child_lock_flag ==0){
-
-            g_ks.fun_key_long_counter=0;
             g_ks.confirm_long_key_counter++;
      
             if( g_ks.confirm_long_key_counter > 80){
@@ -271,7 +272,7 @@ static void vTaskStart(void *pvParameters)
    
    
      
-      vTaskDelay(20);
+      vTaskDelay(40);
   }
 }
 /**********************************************************************************************************

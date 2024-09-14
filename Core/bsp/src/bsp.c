@@ -378,10 +378,7 @@ void Key_Handler(uint8_t key_value)
 */
 void Main_Process(void)
 {
-   
-    
-
-	switch(disp_keep_temp_value){
+   switch(disp_keep_temp_value){
 
 	   case 0: //works normal temperature value 
 
