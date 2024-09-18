@@ -186,10 +186,6 @@ static void vTaskMsgPro(void *pvParameters)
 			 
           	}
        
-
-           
-
-            
             exit_select_position_flag();
             bsp_Idle();
 
@@ -218,7 +214,7 @@ static void vTaskStart(void *pvParameters)
              g_ks.confirm_long_key_counter=0;
              g_ks.fun_key_long_counter++;
 
-          if(g_ks.fun_key_long_counter > 20){ //child lock is funtion
+          if(g_ks.fun_key_long_counter > 20 && gpro_t.child_lock_flag ==0){ //child lock is funtion
                g_ks.fun_key_long_counter=0;
                g_ks.fun_key_long_flag = 1;
                
@@ -229,13 +225,24 @@ static void vTaskStart(void *pvParameters)
                      Smg_Display_Temp_Degree_And_Char_L_Handler(ctl_t.disp_ntc_res_liner_temp_value);
                           
                  }
-                 else{  
-                   gpro_t.child_lock_flag = 0;
-                   Smg_Display_Temp_Degree_Handler(ctl_t.disp_ntc_res_liner_temp_value);
-                }
+//                 else{  
+//                   gpro_t.child_lock_flag = 0;
+//                   Smg_Display_Temp_Degree_Handler(ctl_t.disp_ntc_res_liner_temp_value);
+//                }
                 gpro_t.gTimer_pro_long_key_timer =0;
 
          }
+         else if(g_ks.fun_key_long_counter > 50  && gpro_t.child_lock_flag ==1){//40
+                 g_ks.fun_key_long_counter=0;
+                 gpro_t.child_lock_flag = 0;
+                 gpro_t.key_value =0xff;
+                 Smg_Display_Temp_Degree_Handler(ctl_t.disp_ntc_res_liner_temp_value);
+                 gpro_t.gTimer_pro_long_key_timer =0;
+
+
+         }
+
+         
 
          if(g_ks.fun_key_long_counter < 15 && gpro_t.child_lock_flag == 0 &&  g_ks.fun_key_long_flag == 0){
             g_ks.fun_key_flag = 1;
